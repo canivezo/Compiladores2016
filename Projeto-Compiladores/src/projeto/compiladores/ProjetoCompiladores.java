@@ -31,6 +31,16 @@ public class ProjetoCompiladores extends Application {
             }
         });
         
+        
+        
+        /*
+        
+        
+        teste
+        
+        
+        
+        */
         StackPane root = new StackPane();
         root.getChildren().add(btn);
         
