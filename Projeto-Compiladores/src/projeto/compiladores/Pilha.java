@@ -6,7 +6,6 @@
 package projeto.compiladores;
 
 /**
- *
  * @author Rubens
  */
 public class Pilha 
@@ -18,8 +17,7 @@ public class Pilha
     public Pilha()
     {
         this.posicao = -1;
-        this.pilha = new Object[1000];
-        
+        this.pilha = new Object[1000]; 
     }
     
     public boolean pilhaVazia()
@@ -31,4 +29,23 @@ public class Pilha
         else
             return false;
     }
+    
+    public void push(Object valor)
+    {
+        if(this.posicao < this.pilha.length -1)
+        {
+            this.pilha[++posicao] = valor;
+        }
+    }
+    
+    public Object pop()
+    {
+        if(pilhaVazia())
+        {
+            return null;
+        }
+        return this.pilha[this.posicao--];
+    }
+    
+    
 }
