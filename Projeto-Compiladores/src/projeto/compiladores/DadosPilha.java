@@ -16,7 +16,8 @@ public class DadosPilha {
     
     public DadosPilha()
     {
-       
+       this.valor = 0;
+       this.adress = 0;
     }    
     
     public int getValor() 
@@ -38,8 +39,5 @@ public class DadosPilha {
     {
         this.adress = adress;
     }
-    
-   
-   
     
 }

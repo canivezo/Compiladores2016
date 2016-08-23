@@ -19,17 +19,27 @@ public class Pilha
     
     public Pilha()
     {
-       
+       this.posicao = 0;
     }
     
     public boolean pilhaVazia()
     {
-        if(this.posicao < 0) // Pilha vazia
+        if(this.posicao < 1) // Pilha vazia
         {
             return true;
         }
         else
             return false;
+    }
+    
+    public int tamPilha()
+    {
+        if(!pilhaVazia())
+        {
+            return this.posicao;
+        }
+        else
+            return 0;
     }
     
     public void push(int valor, int end)
@@ -39,11 +49,12 @@ public class Pilha
             aux.setAdress(end);
             aux.setValor(valor);
             this.conteudo.add(aux);
-        
+            this.posicao++;
     }
     
     public DadosPilha pop()
     {
+        this.posicao--;
         return this.conteudo.remove(this.conteudo.size() -1);
     }
     
