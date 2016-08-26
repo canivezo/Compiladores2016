@@ -5,24 +5,26 @@
  */
 package projeto.compiladores;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author Rubens
  */
 public class Pilha 
 {
     
-    public Object[] pilha;
     public int posicao;
+    private List<DadosPilha> conteudo = new LinkedList<DadosPilha>();
     
     public Pilha()
     {
-        this.posicao = -1;
-        this.pilha = new Object[1000]; 
+       this.posicao = 0;
     }
     
     public boolean pilhaVazia()
     {
-        if(this.posicao < 0) // Pilha vazia
+        if(this.posicao < 1) // Pilha vazia
         {
             return true;
         }
@@ -30,22 +32,30 @@ public class Pilha
             return false;
     }
     
-    public void push(Object valor)
+    public int tamPilha()
     {
-        if(this.posicao < this.pilha.length -1)
+        if(!pilhaVazia())
         {
-            this.pilha[++posicao] = valor;
+            return this.posicao;
         }
+        else
+            return 0;
     }
     
-    public Object pop()
+    public void push(int valor, int end)
     {
-        if(pilhaVazia())
-        {
-            return null;
-        }
-        return this.pilha[this.posicao--];
+
+            DadosPilha aux = new DadosPilha();
+            aux.setAdress(end);
+            aux.setValor(valor);
+            this.conteudo.add(aux);
+            this.posicao++;
     }
     
+    public DadosPilha pop()
+    {
+        this.posicao--;
+        return this.conteudo.remove(this.conteudo.size() -1);
+    }
     
 }
