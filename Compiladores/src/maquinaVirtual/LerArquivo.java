@@ -10,7 +10,7 @@ public class LerArquivo
 		Arquivo lendo = new Arquivo();
 		try 
 		{
-			lendo.lerArquivo("C:/Users/murilosilva/Desktop/teste1.txt"); 
+			lendo.lerArquivo("C:\\Teste.txt"); 
 		} catch (Exception ex) 
 		{
 			System.out.println(ex.getMessage());
