@@ -14,14 +14,23 @@ public class Instrucao {
     
     protected nomeInstrucao instrucao;
     protected int linha;
-    public Instrucao(nomeInstrucao i, int l)
+    public Instrucao(nomeInstrucao i, int l) throws Exception
     {
         instrucao = i;
+        if(l < 0)
+        {
+            throw new Exception("linha negativa");
+        }
         linha = l;
     }
     
     public nomeInstrucao getInstrucao()
     {
         return instrucao;
+    }
+    
+    public int getLinha()
+    {
+        return linha;
     }
 }

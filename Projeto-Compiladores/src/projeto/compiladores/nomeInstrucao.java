@@ -10,8 +10,8 @@ package projeto.compiladores;
  * @author lucas
  */
 public enum nomeInstrucao {
-    ADD, SUB, MULT, DIVI, INV, AND, OR, NEG, CME, CMA, CEQ, CDIF, CMEQ, CMAQ, START, HLT, NULL, RD, PRN, 
-    LDC, LDV, STR, JMP, JMPF, CALL, RETURN,
+    ADD, SUB, MULT, DIVI, INV, AND, OR, NEG, CME, CMA, CEQ, CDIF, CMEQ, CMAQ, START, HLT, NULL, RD, PRN, RETURN,
+    LDC, LDV, STR, JMP, JMPF, CALL,
     ALLOC, DALLOC;
     
     public static int getInstructionType(nomeInstrucao p)
