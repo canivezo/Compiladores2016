@@ -33,4 +33,10 @@ public class Instrucao {
     {
         return linha;
     }
+    
+    @Override
+    public String toString()
+    {
+        return "\tLINE : ";
+    }
 }

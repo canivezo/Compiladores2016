@@ -95,32 +95,42 @@ public class Arquivo
             }
 	}
 
-	public Vector<String> parsearPalavras()
+	public Vector<Instrucao> parsearPalavras () throws Exception
 	{
-            Vector<String> instrucao = new Vector<String>();		
+            Vector<Instrucao> instrucoes = new Vector<Instrucao>();
+            int parametro1, parametro2 = 0;
             for(int i = 0; i < arquivo.size(); i++)
             {
                 String [] result = arquivo.get(i).split("\t");
                 if(NumeroDeAtributos(result[0]) == 0)  
                 {
-                    instrucao.add(result[0]);
+                    //instrucao.add(result[0]);
+                    InstrucaoSimples e = new InstrucaoSimples(nomeInstrucao.getNomeInstrucao(result[0]), i);
+                    instrucoes.add(e);
                 }
                 
                 if(NumeroDeAtributos(result[0]) == 1)  
                 {
-                    instrucao.add(result[0]);
-                    instrucao.add(result[1]);
+                    //instrucao.add(result[0]);
+                    //instrucao.add(result[1]);
+                    parametro1 = Integer.parseInt(result[1]);
+                    InstrucaoComposta e = new InstrucaoComposta(nomeInstrucao.getNomeInstrucao(result[0]), i, parametro1);
+                    instrucoes.add(e);
                 }
                 
                 if(NumeroDeAtributos(result[0]) == 2)  
                 {
-                    instrucao.add(result[0]);
+                    //instrucao.add(result[0]);
                     String [] aux = result[1].split(",");
-                    instrucao.add(aux[0]);
-                    instrucao.add(aux[1]);
+                    //instrucao.add(aux[0]);
+                    //instrucao.add(aux[1]);
+                    parametro1 = Integer.parseInt(aux[0]);
+                    parametro2 = Integer.parseInt(aux[1]);
+                    InstrucaoDuplamenteComposta e = new InstrucaoDuplamenteComposta(nomeInstrucao.getNomeInstrucao(result[0]), i, parametro1, parametro2);
+                    instrucoes.add(e);
                 }
             }
-            return instrucao;
+            return instrucoes;
 	}
 }
 
