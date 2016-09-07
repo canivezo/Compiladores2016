@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
  */
 public class LeitorDeArquivo 
 {
-    private char caracter;
+    private int caracter;
     InputStreamReader leituracaracteres;
     
         public LeitorDeArquivo(String path) throws IOException 
@@ -28,12 +28,19 @@ public class LeitorDeArquivo
             this.leituracaracteres = new InputStreamReader(abertura); //leitura de caracteres
         }
         
-        public char leituraCaracter()
+        public int leituraCaracter()
         {
             try
             {
-                this.caracter = (char)leituracaracteres.read(); //método read que retorna um inteiro que representa o caracter 
-                return caracter;
+                if(this.caracter != -1)
+                    {
+                    this.caracter = leituracaracteres.read(); //método read que retorna um inteiro que representa o caracter 
+                    return caracter;
+                    }
+                        else
+                            {
+                            return caracter;
+                            }
             }
             catch (Exception ex)
                     {
