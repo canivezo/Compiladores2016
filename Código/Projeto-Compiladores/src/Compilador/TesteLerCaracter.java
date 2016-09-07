@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projeto.lexico;
+package Compilador;
 
-import projeto.lexico.LeitorDeArquivo;
+import Compilador.LeitorDeArquivo;
 
 /**
  *
