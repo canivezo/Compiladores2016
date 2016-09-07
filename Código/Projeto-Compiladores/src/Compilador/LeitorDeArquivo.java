@@ -28,7 +28,7 @@ public class LeitorDeArquivo
             this.leituracaracteres = new InputStreamReader(abertura); //leitura de caracteres
         }
         
-        public char leitura()
+        public char leituraCaracter()
         {
             try
             {
