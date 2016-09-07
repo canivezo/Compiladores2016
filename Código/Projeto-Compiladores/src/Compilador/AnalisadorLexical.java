@@ -15,62 +15,68 @@ public class AnalisadorLexical {
     Vector<Token> vetorDeTokens;
     private int linha = 1;
     private int aux = 0;
+    private int leituraDoArquivo = 0;
+    private char caracterLido;
+    private LeitorDeArquivo arquivo;
     //leitor de arquivo
-    public AnalisadorLexical(String arquivo)
+    public AnalisadorLexical(String nomeDoArquivo) throws Exception
     {
         vetorDeTokens = new Vector<Token>();
-        for(int i = 0; i < arquivo.length(); i++)
+	arquivo = new LeitorDeArquivo(nomeDoArquivo);
+        leiaCaracter();
+        while(leituraDoArquivo != -1) // ainda precisa verficar se chegou ao fim do arquivo em outros pontos do código
         {
-            char caracterLido = leiaCaracter(arquivo);
             if(caracterLido == '{')
             {
                 while(caracterLido != '}' )
                 {
-                    if(caracterLido == '\n' || caracterLido == '\r') linha++;
+                    if(caracterLido == '\n' || caracterLido == '\r') 
+                    {
+                        linha++;
+                    }
+                    leiaCaracter();
                 }
                 continue;
             }
-            if(Character.isWhitespace(arquivo.charAt(i)))
+            if(Character.isWhitespace(caracterLido))
             {
-                if(caracterLido == '\n' || caracterLido == '\r') linha++;
+                if(caracterLido == '\n' || caracterLido == '\r') 
+                {
+                    linha++;
+                }
+                leiaCaracter();
                 continue;
             }
-            pegaToken(arquivo, caracterLido);
+            pegaToken();
         }
     }
     
-    public boolean isfimDoArquivo(String arquivo)
-    {
-        if(arquivo.length() == aux) return true;
-        return false;
-    }
-    
-    public Token pegaToken(String arquivo, char caracterLido) throws Exception
+    public Token pegaToken() throws Exception
     {
         if(Character.isDigit(caracterLido))
         {
-            return trataDigito(arquivo, caracterLido);
+            return trataDigito();
         }
         if(Character.isAlphabetic(caracterLido))
         {
-            return trataIdentificadorEPalavraReservada(arquivo, caracterLido);
+            return trataIdentificadorEPalavraReservada();
         }
         if(caracterLido ==  ':')
         {
-            return trataAtribuicao(arquivo, caracterLido);
+            return trataAtribuicao();
         }
         if(caracterLido == '+' || caracterLido == '-' || caracterLido == '*')
         {
-            return trataOperadorAritmetico(arquivo, caracterLido);
+            return trataOperadorAritmetico();
         }
         if(caracterLido == '+' || caracterLido == '-' || caracterLido == '*')
         {
-            return trataOperadorRelacional(arquivo, caracterLido);
+            return trataOperadorRelacional();
         }
-        return trataPontuacao(arquivo, caracterLido);
+        return trataPontuacao();
     }
     
-    public Token pegaToken()
+    public Token pegaToken(int i)
     {
         Token token = null;
         //leia caracter
@@ -78,25 +84,28 @@ public class AnalisadorLexical {
         return token;
     }
     
-    private char leiaCaracter(String arquivo)
+    private void leiaCaracter()
     {
-        aux++;
-        return arquivo.charAt((aux - 1));
+        leituraDoArquivo = arquivo.leituraCaracter();
+        if(leituraDoArquivo != -1)
+        {
+            caracterLido = (char) leituraDoArquivo;
+        }
     }
     
-    private Token trataDigito(String arquivo, char caracterLido)
+    private Token trataDigito()
     {
         Token token = null;
         return token;
     }
     
-    private Token trataIdentificadorEPalavraReservada(String arquivo, char caracterLido) throws Exception
+    private Token trataIdentificadorEPalavraReservada() throws Exception
     {
         String id;
         do
         {
              id = ""+caracterLido;
-             caracterLido = leiaCaracter(arquivo);
+             leiaCaracter();
         }
         while(Character.isDigit(caracterLido));
         switch(id)
@@ -131,26 +140,46 @@ public class AnalisadorLexical {
                 return new Token("sverdadeiro", id, linha);
             case "falso":
                 return new Token("sfalso", id, linha);
+            case "procedimento":
+                return new Token("sprocedimento", id, linha);
+            case "funcao":
+                return new Token("sfuncao", id, linha);
+            case "div":
+                return new Token("sdiv", id, linha);
+            case "e":
+                return new Token("e", id, linha);
+            case "ou":
+                return new Token("ou", id, linha);
+            case "nao":
+                return new Token("nao", id, linha);
         }
         return null;
     }
     
-    private Token trataAtribuicao(String arquivo, char caracterLido)
+    private Token trataAtribuicao() throws Exception
+    {
+        String atrib = ""+caracterLido;
+        leiaCaracter();
+        if(caracterLido == '=')
+        {
+            atrib = atrib+'='; 
+            leiaCaracter();
+            return new Token("satribuição", atrib, linha);
+        }
+        return new Token("sdoispontos", atrib, linha);
+    }
+    
+    private Token trataOperadorAritmetico()
     {
         return null;
     }
     
-    private Token trataOperadorAritmetico(String arquivo, char caracterLido)
+    private Token trataOperadorRelacional()
     {
         return null;
     }
     
-    private Token trataOperadorRelacional(String arquivo, char caracterLido)
-    {
-        return null;
-    }
-    
-    private Token trataPontuacao(String arquivo, char caracterLido)
+    private Token trataPontuacao()
     {
         return null;
     }

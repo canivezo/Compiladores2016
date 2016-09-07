@@ -21,33 +21,32 @@ public class LeitorDeArquivo
 {
     private int caracter;
     InputStreamReader leituracaracteres;
-    
-        public LeitorDeArquivo(String path) throws IOException 
+
+    public LeitorDeArquivo(String path) throws IOException 
+    {
+        FileInputStream abertura = new FileInputStream(path); //abertura seria o objeto responsáel pela abertura do arquivo
+        this.leituracaracteres = new InputStreamReader(abertura); //leitura de caracteres
+    }
+
+    public int leituraCaracter()
+    {
+        try
         {
-            FileInputStream abertura = new FileInputStream(path); //abertura seria o objeto responsáel pela abertura do arquivo
-            this.leituracaracteres = new InputStreamReader(abertura); //leitura de caracteres
-        }
-        
-        public int leituraCaracter()
-        {
-            try
+            if(this.caracter != -1)
             {
-                if(this.caracter != -1)
-                    {
-                    this.caracter = leituracaracteres.read(); //método read que retorna um inteiro que representa o caracter 
-                    return caracter;
-                    }
-                        else
-                            {
-                            return caracter;
-                            }
+                this.caracter = leituracaracteres.read(); //método read que retorna um inteiro que representa o caracter 
+                return caracter;
             }
-            catch (Exception ex)
-                    {
-                       System.out.println(ex.getMessage()); 
-                    }
-                   return 0; 
+            else
+            {
+                return caracter;
+            }
         }
-        
+        catch (Exception ex)
+        {
+            System.out.println(ex.getMessage()); 
+        }
+        return 0;
+    }
 }
 
