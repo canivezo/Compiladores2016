@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projeto.compiladores;
+package MaquinaVirtual;
 
 import java.util.LinkedList;
 import java.util.List;
