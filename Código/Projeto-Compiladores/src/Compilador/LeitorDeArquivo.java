@@ -19,17 +19,28 @@ import java.io.InputStreamReader;
  */
 public class LeitorDeArquivo 
 {
+    private char caracter;
+    InputStreamReader leituracaracteres;
+    
         public LeitorDeArquivo(String path) throws IOException 
         {
-            FileInputStream abertura = new FileInputStream("C:\\Users\\Murilo\\Desktop\\file.txt"); //abertura seria o objeto responsáel pela abertura do arquivo
-            InputStreamReader leituracaracteres = new InputStreamReader(abertura); //leitura de caracteres
-            int caracter = leituracaracteres.read(); //método read que retorna um inteiro que representa o caracter 
-
-            while( caracter!=-1)
-            {
-                System.out.print( (char) caracter);
-                caracter = leituracaracteres.read();
-            }
+            FileInputStream abertura = new FileInputStream(path); //abertura seria o objeto responsáel pela abertura do arquivo
+            this.leituracaracteres = new InputStreamReader(abertura); //leitura de caracteres
         }
+        
+        public char leitura()
+        {
+            try
+            {
+                this.caracter = (char)leituracaracteres.read(); //método read que retorna um inteiro que representa o caracter 
+                return caracter;
+            }
+            catch (Exception ex)
+                    {
+                       System.out.println(ex.getMessage()); 
+                    }
+                   return 0; 
+        }
+        
 }
 
