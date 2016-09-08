@@ -39,6 +39,7 @@ public class AnalisadorLexical {
                     if(leituraDoArquivo == -1)
                         throw new Exception("Erro, sem o } para terminar o comentario. Linha : "+linha);
                 }
+                leiaCaracter();
                 continue;
             }
             if(Character.isWhitespace(caracterLido))
@@ -106,10 +107,16 @@ public class AnalisadorLexical {
         }
     }
     
-    private Token trataDigito()
+    private Token trataDigito() throws Exception
     {
-        Token token = null;
-        return token;
+        String num = "";
+        do
+        {
+            num = num+caracterLido;
+            leiaCaracter();
+        }
+        while(Character.isDigit(caracterLido));
+        return new Token("snumero", num, linha);
     }
     
     private Token trataIdentificadorEPalavraReservada() throws Exception
@@ -177,7 +184,7 @@ public class AnalisadorLexical {
         {
             atrib = atrib+'='; 
             leiaCaracter();
-            return new Token("satribuição", atrib, linha);
+            return new Token("satribuicao", atrib, linha);
         }
         return new Token("sdoispontos", atrib, linha);
     }
