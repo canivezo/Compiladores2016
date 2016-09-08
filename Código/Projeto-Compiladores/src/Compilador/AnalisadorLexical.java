@@ -21,6 +21,7 @@ public class AnalisadorLexical {
     //leitor de arquivo
     public AnalisadorLexical(String nomeDoArquivo) throws Exception
     {
+        Token token = null;
         vetorDeTokens = new Vector<Token>();
 	arquivo = new LeitorDeArquivo(nomeDoArquivo);
         leiaCaracter();
@@ -35,23 +36,30 @@ public class AnalisadorLexical {
                         linha++;
                     }
                     leiaCaracter();
+                    if(leituraDoArquivo == -1)
+                        throw new Exception("Erro, sem o } para terminar o comentario. Linha : "+linha);
                 }
                 continue;
             }
             if(Character.isWhitespace(caracterLido))
             {
-                if(caracterLido == '\n' || caracterLido == '\r') 
+                if(caracterLido == '\n') 
                 {
                     linha++;
                 }
                 leiaCaracter();
                 continue;
             }
-            pegaToken();
+            token = nextToken();
+            if(token == null)
+            {
+                throw new Exception("Erro, palavra não pertence a linguagem. Linha : "+linha);
+            }
+            vetorDeTokens.add(token);
         }
     }
     
-    public Token pegaToken() throws Exception
+    public Token nextToken() throws Exception
     {
         if(Character.isDigit(caracterLido))
         {
@@ -74,6 +82,11 @@ public class AnalisadorLexical {
             return trataOperadorRelacional();
         }
         return trataPontuacao();
+    }
+    
+    public Vector<Token> pegaTokens()
+    {
+        return vetorDeTokens;
     }
     
     public Token pegaToken(int i)
@@ -101,13 +114,13 @@ public class AnalisadorLexical {
     
     private Token trataIdentificadorEPalavraReservada() throws Exception
     {
-        String id;
+        String id = "";
         do
         {
-             id = ""+caracterLido;
+             id = id+caracterLido;
              leiaCaracter();
         }
-        while(Character.isDigit(caracterLido));
+        while(Character.isAlphabetic(caracterLido));
         switch(id)
         {
             case "programa":
@@ -122,8 +135,8 @@ public class AnalisadorLexical {
                 return new Token("senquanto", id, linha);
             case "faca":
                 return new Token("sfaca", id, linha);
-            case "incio":
-                return new Token("sinício", id, linha);
+            case "inicio":
+                return new Token("sinicio", id, linha);
             case "fim":
                 return new Token("sfim", id, linha);
             case "escreva":
@@ -147,13 +160,13 @@ public class AnalisadorLexical {
             case "div":
                 return new Token("sdiv", id, linha);
             case "e":
-                return new Token("e", id, linha);
+                return new Token("se", id, linha);
             case "ou":
-                return new Token("ou", id, linha);
+                return new Token("sou", id, linha);
             case "nao":
-                return new Token("nao", id, linha);
+                return new Token("snao", id, linha);
         }
-        return null;
+        return new Token("sidentificador", id, linha);
     }
     
     private Token trataAtribuicao() throws Exception
@@ -171,18 +184,21 @@ public class AnalisadorLexical {
     
     private Token trataOperadorAritmetico() throws Exception
     {
-        leiaCaracter();
+        String atrib = ""+caracterLido;
         if(caracterLido == '+')
         {
-                return new Token("smais", atrib, linha);
+            leiaCaracter();    
+            return new Token("smais", atrib, linha);
         }
         else if(caracterLido == '-')
         {
-                return new Token("smenos", atrib, linha);
+            leiaCaracter();
+            return new Token("smenos", atrib, linha);
         }
         else 
         {
-                return new Token("smult", atrib, linha);
+            leiaCaracter();
+            return new Token("smult", atrib, linha);
         }
     }
     
@@ -193,26 +209,32 @@ public class AnalisadorLexical {
     
      private Token trataPontuacao() throws Exception
     {
-        leiaCaracter();
+        String atrib = ""+caracterLido;
         if(caracterLido == ';')
         {
+            leiaCaracter();
             return new Token("sponto_virgula", atrib, linha);
         }
-        else if(caracterLido == '(')
-        {           
+        if(caracterLido == '(')
+        {
+            leiaCaracter();
             return new Token("sabre_parenteses", atrib, linha);
         }
-        else if(caracterLido == ')')
-        {   
+        if(caracterLido == ')')
+        {
+            leiaCaracter();
             return new Token("sfecha_parenteses", atrib, linha);
         }
-        else if(caracterLido == ',')
-        {            
+        if(caracterLido == ',')
+        {
+            leiaCaracter();            
             return new Token("svirgula", atrib, linha);
         }
-        else //if(caracter[i] == '.')
-        {            
+        if(caracterLido == '.')
+        {
+            leiaCaracter();
             return new Token("sponto", atrib, linha); 
         }
+        return null;
     }
 }
