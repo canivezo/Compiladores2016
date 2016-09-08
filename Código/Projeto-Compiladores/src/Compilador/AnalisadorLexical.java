@@ -169,9 +169,28 @@ public class AnalisadorLexical {
         return new Token("sdoispontos", atrib, linha);
     }
     
-    private Token trataOperadorAritmetico()
+    private Token trataOperadorAritmetico() throws Exception
     {
-        return null;
+        String atrib = ""+caracterLido;
+        leiaCaracter();
+        if(caracterLido == '+')
+        {
+                atrib = atrib+"+";
+                leiaCaracter();
+                return new Token("smais", atrib, linha);
+        }
+        else if(caracterLido == '-')
+        {
+                atrib = atrib+"-";
+                leiaCaracter();
+                return new Token("smenos", atrib, linha);
+        }
+        else 
+        {
+                atrib = atrib+"*";
+                leiaCaracter();
+                return new Token("smult", atrib, linha);
+        }
     }
     
     private Token trataOperadorRelacional()
