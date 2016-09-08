@@ -171,24 +171,17 @@ public class AnalisadorLexical {
     
     private Token trataOperadorAritmetico() throws Exception
     {
-        String atrib = ""+caracterLido;
         leiaCaracter();
         if(caracterLido == '+')
         {
-                atrib = atrib+"+";
-                leiaCaracter();
                 return new Token("smais", atrib, linha);
         }
         else if(caracterLido == '-')
         {
-                atrib = atrib+"-";
-                leiaCaracter();
                 return new Token("smenos", atrib, linha);
         }
         else 
         {
-                atrib = atrib+"*";
-                leiaCaracter();
                 return new Token("smult", atrib, linha);
         }
     }
@@ -198,8 +191,28 @@ public class AnalisadorLexical {
         return null;
     }
     
-    private Token trataPontuacao()
+     private Token trataPontuacao() throws Exception
     {
-        return null;
+        leiaCaracter();
+        if(caracterLido == ';')
+        {
+            return new Token("sponto_virgula", atrib, linha);
+        }
+        else if(caracterLido == '(')
+        {           
+            return new Token("sabre_parenteses", atrib, linha);
+        }
+        else if(caracterLido == ')')
+        {   
+            return new Token("sfecha_parenteses", atrib, linha);
+        }
+        else if(caracterLido == ',')
+        {            
+            return new Token("svirgula", atrib, linha);
+        }
+        else //if(caracter[i] == '.')
+        {            
+            return new Token("sponto", atrib, linha); 
+        }
     }
 }
