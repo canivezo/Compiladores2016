@@ -42,6 +42,29 @@ public class AnalisadorLexical {
                 leiaCaracter();
                 continue;
             }
+            if(caracterLido == '/')
+            {
+                leiaCaracter();
+                if(caracterLido == '*')
+                {
+                    do
+                    {
+                        leiaCaracter();
+                        if(leituraDoArquivo == -1)
+                            throw new Exception("Erro, sem o } para terminar o comentario. Linha : "+linha);
+                        if(caracterLido == '*')
+                        {
+                            leiaCaracter();
+                            if(caracterLido == '/')
+                            {
+                                leiaCaracter();
+                                break;
+                            }
+                        }
+                    }
+                    while(leituraDoArquivo != -1);
+                }
+            }
             if(Character.isWhitespace(caracterLido))
             {
                 if(caracterLido == '\n') 
