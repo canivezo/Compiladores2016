@@ -44,89 +44,88 @@ public class Token {
         return ""+simbolo+"\n"+lexema+"\n"+linha;
     }
     
-    public int lexemaToCode(String lexema)
+    public int simboloToCode(String simbolo)
     {
         try
             {
-            switch (lexema)
+            switch (simbolo)
                 {
-                case "programa":
+                case "sprograma":
                     return 1;
-                case "inicio":
+                case "sinicio":
                     return 2;
-                case "fim":
+                case "sfim":
                     return 3;
-                case "procedimento":
+                case "sprocedimento":
                     return 4;
-                case "funcao":
+                case "sfuncao":
                     return 5;
-                case "se":
+                case "sse":
                     return 6;
-                case "entao":
+                case "sentao":
                     return 7;
-                case "senao":
+                case "ssenao":
                     return 8;
-                case "enquanto":
+                case "senquanto":
                     return 9;
-                case "faca":
+                case "sfaca":
                     return 10;
-                case ":=":
+                case "satribuicao":
                     return 11;
-                case "escreva":
+                case "sescreva":
                     return 12;
-                case "leia":
+                case "sleia":
                     return 13;
-                case "var":
+                case "svar":
                     return 14;
-                case "inteiro":
+                case "sinteiro":
                     return 15;
-                case "booleano":
+                case "sbooleano":
                     return 16;
-                case "identificador":
+                case "sidentificador":
                     return 17;
-                case "numero":
+                case "snumero":
                     return 18;
-                case ".":
+                case "sponto":
                     return 19;
-                case ";":
+                case "sponto_virgula":
                     return 20;
-                case ",":
+                case "svirgula":
                     return 21;
-                case "(":
+                case "sabre_parenteses":
                     return 22;
-                case ")":
+                case "sfecha_parenteses":
                     return 23;
-                case ">":
+                case "smaior":
                     return 24;
-                case ">=":
+                case "smaiorig":
                     return 25;
-                case "=":
+                case "sig":
                     return 26;
-                case "<":
+                case "smenor":
                     return 27;
-                case "<=":
+                case "smenorig":
                     return 28;
-                case "!=":
+                case "sdif":
                     return 29;
-                case "+":
+                case "smai":
                     return 30;
-                case "-":
+                case "smenos":
                     return 31;
-                case "*":
+                case "smult":
                     return 32;
-                case "Div":
+                case "sdiv":
                     return 33;
-                case "e":
+                case "se":
                     return 34;
-                case "ou":
+                case "sou":
                     return 35;
-                case "nao":
+                case "snao":
                     return 36;
-                case ":":
+                case "sdoipontos":
                     return 37;
                 }
             }
-        
             catch(Exception ex)
                 {
                 System.out.println(ex.getMessage()); 
