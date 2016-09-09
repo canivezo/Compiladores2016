@@ -16,7 +16,7 @@ public class TesteDeToken {
         Token toke = null;
         try
         {
-            toke = new Token(null, "oi", 1);
+            toke = new Token("snumero", "12", 1);
             System.out.println(""+toke);
         }
         catch(Exception e)

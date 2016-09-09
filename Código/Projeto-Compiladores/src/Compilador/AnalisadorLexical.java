@@ -78,7 +78,7 @@ public class AnalisadorLexical {
         {
             return trataOperadorAritmetico();
         }
-        if(caracterLido == '+' || caracterLido == '-' || caracterLido == '*')
+        if(caracterLido == '>' || caracterLido == '=' || caracterLido == '!' || caracterLido == '<')
         {
             return trataOperadorRelacional();
         }
@@ -90,12 +90,11 @@ public class AnalisadorLexical {
         return vetorDeTokens;
     }
     
-    public Token pegaToken(int i)
+    public Token pegaToken(int i) throws Exception
     {
-        Token token = null;
-        //leia caracter
-        
-        return token;
+        if(vetorDeTokens.size() < (i - 1) || (i - 1) < 0)
+            throw new Exception("Posicao invalida");
+        return vetorDeTokens.get(i);
     }
     
     private void leiaCaracter()
@@ -209,8 +208,43 @@ public class AnalisadorLexical {
         }
     }
     
-    private Token trataOperadorRelacional()
+    private Token trataOperadorRelacional() throws Exception
     {
+        String operador = ""+caracterLido;
+        if(caracterLido == '=')
+        {
+            leiaCaracter();
+            return new Token("sig", operador, linha);
+        }
+        if(caracterLido == '>')
+        {
+            leiaCaracter();
+            if(caracterLido == '=')
+            {
+                operador = operador+caracterLido;
+                leiaCaracter();
+                return new Token("smaiorig", operador, linha);
+            }
+            return new Token("smaior", operador, linha);
+        }
+        if(caracterLido == '<')
+        {
+            leiaCaracter();
+            if(caracterLido == '=')
+            {
+                operador = operador+caracterLido;
+                leiaCaracter();
+                return new Token("smenorig", operador, linha);
+            }
+            return new Token("smenor", operador, linha);
+        }
+        leiaCaracter();
+        if(caracterLido == '=')
+        {
+            operador = operador+caracterLido;
+            leiaCaracter();
+            return new Token("sdif", operador, linha);
+        }
         return null;
     }
     

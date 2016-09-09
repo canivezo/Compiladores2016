@@ -5,6 +5,8 @@
  */
 package Compilador;
 
+import java.util.Vector;
+
 /**
  *
  * @author lucas
@@ -13,7 +15,8 @@ public class TesteDeAnalisadorLexical {
     
     public static void main(String [] args)
     {
-        AnalisadorLexical teste;
+        Vector<Token> i;
+        AnalisadorLexical teste = null;
         try
         {
             teste = new AnalisadorLexical("C:\\Users\\lucas\\Desktop\\Lexico\\teste4.txt");
@@ -22,6 +25,11 @@ public class TesteDeAnalisadorLexical {
         {
             e.printStackTrace();
             System.out.println(""+e.getMessage());
+        }
+        i = teste.pegaTokens();
+        for(int j = 0; j < i.size(); j++)
+        {
+            System.out.println("===============================\n"+i.get(j)+"\n===============================\n");
         }
     }
 }
