@@ -108,7 +108,7 @@ public class Token {
                     return 28;
                 case "sdif":
                     return 29;
-                case "smai":
+                case "smais":
                     return 30;
                 case "smenos":
                     return 31;
@@ -122,7 +122,7 @@ public class Token {
                     return 35;
                 case "snao":
                     return 36;
-                case "sdoipontos":
+                case "sdoispontos":
                     return 37;
                 }
             }
