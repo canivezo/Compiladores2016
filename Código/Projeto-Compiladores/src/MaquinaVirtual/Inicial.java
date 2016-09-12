@@ -12,7 +12,8 @@ package MaquinaVirtual;
 public class Inicial {
     public static void main(String[] args) {
         Interface inicial = new Interface();
-        inicial.setVisible(true);
+        inicial.setLocationRelativeTo(null);
+        inicial.setVisible(true); 
     }
     
 }

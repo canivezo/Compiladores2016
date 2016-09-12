@@ -5,6 +5,15 @@
  */
 package MaquinaVirtual;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author 12649190
@@ -14,8 +23,18 @@ public class Interface extends javax.swing.JFrame {
     /**
      * Creates new form Interface
      */
+    private String urlArquivo;
+
+
+    
     public Interface() {
         initComponents();
+    }
+    
+    //Getter e Setter do caminho do arquivo.
+    public String getUrlArquivo() 
+    {
+        return urlArquivo;
     }
 
     /**
@@ -27,17 +46,23 @@ public class Interface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        seletorDeArquivo = new javax.swing.JFileChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         Instrucoes = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         BarraDeMenu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+
+        seletorDeArquivo.setFileFilter(new FiltroDeArquivo());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,6 +134,15 @@ public class Interface extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Instruções");
 
+        jButton1.setText("Breakpoint");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Continuar");
+
         jMenu1.setText("Arquivo");
         jMenu1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,6 +164,15 @@ public class Interface extends javax.swing.JFrame {
         BarraDeMenu.add(jMenu1);
 
         jMenu2.setText("Executar");
+
+        jMenuItem3.setText("Compilar Código");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
         BarraDeMenu.add(jMenu2);
 
         setJMenuBar(BarraDeMenu);
@@ -150,6 +193,12 @@ public class Interface extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(78, 78, 78))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(237, 237, 237)
+                .addComponent(jButton1)
+                .addGap(28, 28, 28)
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,7 +211,11 @@ public class Interface extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addGap(19, 19, 19))
         );
 
         pack();
@@ -173,10 +226,42 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // Abrir seletor de Arquivo.
-        SeletorArquivo seletor = new SeletorArquivo();
-        seletor.setVisible(true);
+     // Abrir seletor de Arquivo.
+     seletorDeArquivo.setVisible(true);
+     int returnVal = seletorDeArquivo.showOpenDialog(this);
+     if (returnVal == JFileChooser.APPROVE_OPTION) 
+     {
+        File file = seletorDeArquivo.getSelectedFile();
+        try 
+            {
+            // What to do with the file, e.g. display it in a TextArea
+            System.out.println(file.getAbsolutePath());
+            this.urlArquivo = file.getAbsolutePath();
+            } 
+             catch (Exception ex) 
+               {
+               System.out.println("problem accessing file"+file.getAbsolutePath());
+               }
+     } 
+     else 
+         {
+         System.out.println("File access cancelled by user.");
+         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        if(urlArquivo != null)
+        {
+        abrirArquivoFonte(urlArquivo);
+        }
+        else
+           JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -216,14 +301,57 @@ public class Interface extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar BarraDeMenu;
     private javax.swing.JTable Instrucoes;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JFileChooser seletorDeArquivo;
     // End of variables declaration//GEN-END:variables
+
+            //funcao para abrir arquivo
+    private void abrirArquivoFonte (String path)
+    {
+         Arquivo lendo = null;
+        Vector <Instrucao> i = null;
+        try 
+        {
+            lendo = new Arquivo(path); 
+        } catch (Exception ex) 
+        {
+            System.out.println(ex.getMessage());
+        }
+        try {
+            i = lendo.parsearPalavras();
+        } catch (Exception ex) {
+            Logger.getLogger(TesteDeArquivo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println(i.get(0));
+    }
+
+
+
+
+
 }
+
+ class FiltroDeArquivo extends javax.swing.filechooser.FileFilter {
+        @Override
+        public boolean accept(File file) 
+        {
+            return file.isDirectory() || file.getAbsolutePath().endsWith(".txt");
+        }
+        @Override
+        public String getDescription() {
+            // This description will be displayed in the dialog,
+            // hard-coded = ugly, should be done via I18N
+            return "Text documents (*.txt)";
+        }
+    } 
