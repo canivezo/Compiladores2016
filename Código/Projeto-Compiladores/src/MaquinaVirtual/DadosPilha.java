@@ -11,8 +11,8 @@ package MaquinaVirtual;
  */
 public class DadosPilha {
     
-    public int valor;
     public int adress;
+    public int valor;
     
     public DadosPilha()
     {

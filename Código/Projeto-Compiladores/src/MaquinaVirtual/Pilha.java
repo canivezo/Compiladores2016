@@ -42,14 +42,13 @@ public class Pilha
             return 0;
     }
     
-    public void push(int valor, int end)
+    public void push(int end, int valor)
     {
-
             DadosPilha aux = new DadosPilha();
             aux.setAdress(end);
             aux.setValor(valor);
             this.conteudo.add(aux);
-            this.posicao++;
+            this.posicao++; 
     }
     
     public DadosPilha pop()
