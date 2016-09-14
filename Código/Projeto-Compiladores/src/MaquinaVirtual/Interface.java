@@ -6,8 +6,6 @@
 package MaquinaVirtual;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,18 +22,20 @@ public class Interface extends javax.swing.JFrame {
     /**
      * Creates new form Interface
      */
+    
+    // Variaveis
     private String urlArquivo;
     DefaultTableModel tab;
     Pilha pilha = new Pilha();
 
-
     
+    //Construtor da classe
     public Interface() 
     {
         initComponents();
     }
     
-    //Getter e Setter do caminho do arquivo.
+    //Getter do caminho do arquivo.
     public String getUrlArquivo() 
     {
         return urlArquivo;
@@ -260,8 +260,12 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        tabelaPilhaRemove();
+        try {
+            // TODO add your handling code here:
+            tabelaPilhaRemove();
+        } catch (Exception ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -333,7 +337,8 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JTable tabelaPilha;
     // End of variables declaration//GEN-END:variables
 
-            //funcao para abrir arquivo
+    
+        //funcao para abrir arquivo
     private void abrirArquivoFonte (String path)
     {
          Arquivo lendo = null;
@@ -353,19 +358,26 @@ public class Interface extends javax.swing.JFrame {
         System.out.println(i.get(0));
     }
 
-
+        //Push da pilha mostrando na tabela
     public void tabelaPilhaAdd(int end, int val)
     {
         pilha.push(end, val);
         tab = (DefaultTableModel) tabelaPilha.getModel();
         tab.addRow(new Integer[]{end,val});
     }
-
-    public void tabelaPilhaRemove()
+        
+    
+        //Pop da pilha removendo da tabela
+    public void tabelaPilhaRemove() throws Exception
     {
-        DadosPilha ret = pilha.pop();
-        tab.removeRow(tab.getRowCount()-1);
-        System.out.println(ret.getAdress()+", "+ret.getValor());
+        if(!pilha.pilhaVazia())
+            {
+            DadosPilha retorno = pilha.pop();
+            tab.removeRow(tab.getRowCount()-1);
+            System.out.println(retorno.getAdress()+", "+retorno.getValor());
+            }
+            else
+                throw new Exception("Erro, pilha vazia");
     }
 
 
