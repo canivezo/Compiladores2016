@@ -23,7 +23,8 @@ public class AnalisadorSintatico
         lexico = new AnalisadorLexical(caminhoArquivo);
         vetorDeTokens = lexico.pegaTokens();
         finalDoVetor = vetorDeTokens.size();
-        token = lexico.pegaToken(posicaoAtualNoVetor);  //Recebe primeiro token
+        token = vetorDeTokens.get(posicaoAtualNoVetor);  //Recebe primeiro token
+        System.out.println("Simbolo: "+token.getSimbolo()+" Lexema: "+token.getLexema());
         
         if(token.simboloToCode() == 1)  //sprograma
             {
@@ -39,13 +40,13 @@ public class AnalisadorSintatico
                         {
                         System.out.println("Sucesso!");
                         }
-                        else erro.erroSintatico();
+                        else erro.erroSintatico(token.getLinha());
                     }
-                    else erro.erroSintatico();
+                    else erro.erroSintatico(token.getLinha());
                 }
-                else erro.erroSintatico();
+                else erro.erroSintatico(token.getLinha());
             }
-            else erro.erroSintatico();
+            else erro.erroSintatico(token.getLinha());
     }
     
     private void proximoToken() throws Exception
@@ -53,7 +54,8 @@ public class AnalisadorSintatico
         if(posicaoAtualNoVetor <= finalDoVetor)
         {
         posicaoAtualNoVetor++;
-        token = lexico.pegaToken(posicaoAtualNoVetor);
+        token = vetorDeTokens.get(posicaoAtualNoVetor);
+        System.out.println("Simbolo: "+token.getSimbolo()+" Lexema: "+token.getLexema());
         }
         else
         throw new Exception("Erro, Final do vetor de tokens atingido.");
@@ -69,27 +71,27 @@ public class AnalisadorSintatico
     
     public void analisaEtVariaveis () throws Exception
     {
-        if(token.simboloToCode() == 14)
+        if(token.simboloToCode() == 14) //svar
         {
             proximoToken();
-            if(token.simboloToCode() == 17)
+            if(token.simboloToCode() == 17) //sidentificador
             {
-                while(token.simboloToCode() == 17)
+                while(token.simboloToCode() == 17)  //sidentificador
                 {
                     analisaVariaveis();
-                    if(token.simboloToCode() == 20)
+                    if(token.simboloToCode() == 20)  //spontovirgula
                     {
                         proximoToken();
                     }
                     else
                     {
-                        erro.erroSemantico();
+                        erro.erroSintatico(token.getLinha());
                     }
                 }
             }
             else
             {
-                erro.erroSemantico();
+                erro.erroSintatico(token.getLinha());
             }
         }
     }
@@ -103,7 +105,7 @@ public class AnalisadorSintatico
     {
         if((token.simboloToCode() != 15) && (token.simboloToCode() != 16))
         {
-            erro.erroSintatico();
+            erro.erroSintatico(token.getLinha());
         }
             else
             {
@@ -128,7 +130,7 @@ public class AnalisadorSintatico
                     }
                     else
                     {
-                        erro.erroSintatico();
+                        erro.erroSintatico(token.getLinha());
                     }
                 }
                 else
@@ -140,7 +142,7 @@ public class AnalisadorSintatico
         }
         else
         {
-          erro.erroSintatico();  
+          erro.erroSintatico(token.getLinha());  
         }
     }
     
@@ -238,7 +240,7 @@ public class AnalisadorSintatico
         }
         else
         {
-            erro.erroSintatico();
+            erro.erroSintatico(token.getLinha());
         }
     }
     

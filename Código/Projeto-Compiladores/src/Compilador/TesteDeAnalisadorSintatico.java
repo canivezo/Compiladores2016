@@ -20,7 +20,7 @@ public class TesteDeAnalisadorSintatico
         AnalisadorSintatico teste = null;
         try
         {
-            teste = new AnalisadorSintatico("C:\\Users\\lucas\\Desktop\\Lexico\\teste3.txt");
+            teste = new AnalisadorSintatico("C:\\Users\\Rubens\\Desktop\\Lexico\\teste10.txt");
         }
         catch(Exception e)
         {

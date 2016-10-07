@@ -12,7 +12,7 @@ package Compilador;
 public class Erro 
 {
     String msgErro;
-    int linhaErro = 0;
+    int linha = 0;
     int type;
     
     
@@ -20,17 +20,17 @@ public class Erro
     {
     }
     
-    public void erroLexico ()
+    public void erroLexico (int linhaErro)
     {
         System.out.println("Erro Lexico identificado na linha: " +linhaErro);
     }
     
-    public void erroSintatico ()
+    public void erroSintatico (int linhaErro)
     {
         System.out.println("Erro Sintatico identificado na linha: " +linhaErro);
     }
     
-    public void erroSemantico ()
+    public void erroSemantico (int linhaErro)
     {
         System.out.println("Erro Semantico identificado na linha: " +linhaErro);       
     }
