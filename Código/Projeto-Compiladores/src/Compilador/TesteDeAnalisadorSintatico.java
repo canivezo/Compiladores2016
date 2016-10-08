@@ -16,11 +16,10 @@ public class TesteDeAnalisadorSintatico
     
     public static void main(String [] args)
     {
-        Vector<Token> i;
         AnalisadorSintatico teste = null;
         try
         {
-            teste = new AnalisadorSintatico("C:\\Users\\Rubens\\Desktop\\Lexico\\teste10.txt");
+            teste = new AnalisadorSintatico("C:\\Users\\Rubens\\Desktop\\Sintatico\\teste1.txt");
         }
         catch(Exception e)
         {
