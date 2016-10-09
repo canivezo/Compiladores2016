@@ -149,7 +149,7 @@ public class AnalisadorLexical {
              id = id+caracterLido;
              leiaCaracter();
         }
-        while(Character.isAlphabetic(caracterLido));
+        while(Character.isDigit(caracterLido) || Character.isAlphabetic(caracterLido));
         switch(id)
         {
             case "programa":

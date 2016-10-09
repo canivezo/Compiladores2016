@@ -19,7 +19,7 @@ public class TesteDeAnalisadorLexical {
         AnalisadorLexical teste = null;
         try
         {
-            teste = new AnalisadorLexical("C:\\Users\\lucas\\Desktop\\Lexico\\teste3.txt");
+            teste = new AnalisadorLexical("C:\\Users\\Rubens\\Desktop\\Sintatico\\teste1.txt");
             i = teste.pegaTokens();
             for(int j = 0; j < i.size(); j++)
             {
