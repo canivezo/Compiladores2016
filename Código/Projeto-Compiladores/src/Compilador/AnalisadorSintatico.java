@@ -483,9 +483,9 @@ public class AnalisadorSintatico
         
     }
     
-    public void analisaChamadaFuncao ()
+    public void analisaChamadaFuncao () throws Exception
     {
-        
+        proximoToken();
     }
         
 }
