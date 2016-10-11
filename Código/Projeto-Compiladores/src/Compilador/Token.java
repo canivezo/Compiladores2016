@@ -44,7 +44,7 @@ public class Token {
         return "Símbolo\t: "+simbolo+"\nLexema\t: "+lexema+"\nCódigo\t: "+simboloToCode()+"\nLinha\t: "+linha;
     }
     
-    public int simboloToCode(String simbolo)
+    public static int simboloToCode(String simbolo)
     {
         try
         {

@@ -11,57 +11,71 @@ import java.util.Vector;
  */
 public class AnalisadorSintatico
 {
-    Token token = null;
-    Erro erro = new Erro();
-    Vector<Token> vetorDeTokens;
-    int posicaoAtualNoVetor = 0;
-    int finalDoVetor = 0;
-    AnalisadorLexical lexico;
-
+    private Token token = null;
+    private Erro erro = new Erro();
+    private Vector<Token> vetorDeTokens;
+    private int posicaoAtualNoVetor = 0;
+    private int finalDoVetor = 0;
+    private AnalisadorLexical lexico;
+    
+    private void proximoToken() throws Exception
+    {
+        if(posicaoAtualNoVetor < finalDoVetor)
+        {
+            token = vetorDeTokens.get(posicaoAtualNoVetor);
+            System.out.println("Simbolo: "+token.getSimbolo()+" Lexema: "+token.getLexema());
+            posicaoAtualNoVetor++;
+        }
+        else
+        {
+            throw new Exception("Erro, Final do vetor de tokens atingido.");
+        }
+    }
+    
     public AnalisadorSintatico(String caminhoArquivo) throws Exception
     {
         lexico = new AnalisadorLexical(caminhoArquivo);
         vetorDeTokens = lexico.pegaTokens();
         finalDoVetor = vetorDeTokens.size();
-        token = vetorDeTokens.get(posicaoAtualNoVetor);  //Recebe primeiro token
+        proximoToken();
         System.out.println("Simbolo: "+token.getSimbolo()+" Lexema: "+token.getLexema());
         
-        if(token.simboloToCode() == 1)  //sprograma
-            {
+        if(token.simboloToCode() == Token.simboloToCode("sprograma"))  //sprograma
+        {
             proximoToken();
-            if(token.simboloToCode() == 17)  //sidentificador
-                {
+            if(token.simboloToCode() == Token.simboloToCode("sidentificador"))  //sidentificador
+            {
                 //insereTabela no semantico
                 proximoToken();
-                if(token.simboloToCode() == 20) //spontovirgula
-                    {
+                if(token.simboloToCode() == Token.simboloToCode("spontovirgula")) //spontovirgula
+                {
                     analisaBloco();
-                    if(token.simboloToCode() == 19)  //sponto
-                        {
+                    if(token.simboloToCode() == Token.simboloToCode("sponto"))  //sponto
+                    {
                         System.out.println("Sucesso!");
-                        }
-                        else erro.erroSintatico(token.getLinha());
                     }
-                    else erro.erroSintatico(token.getLinha());
+                    else 
+                    {
+                        erro.erroSintatico(token.getLinha());
+                    }
                 }
-                else erro.erroSintatico(token.getLinha());
+                else 
+                {
+                    erro.erroSintatico(token.getLinha());
+                }
             }
-            else erro.erroSintatico(token.getLinha());
-    }
-    
-    private void proximoToken() throws Exception
-    {
-        if(posicaoAtualNoVetor <= finalDoVetor)
-        {
-        posicaoAtualNoVetor++;
-        token = vetorDeTokens.get(posicaoAtualNoVetor);
-        System.out.println("Simbolo: "+token.getSimbolo()+" Lexema: "+token.getLexema());
+            else
+            {
+                erro.erroSintatico(token.getLinha());
+            }
         }
-        else
-        throw new Exception("Erro, Final do vetor de tokens atingido.");
+        else 
+        {
+            erro.erroSintatico(token.getLinha());
+        }
     }
     
-    public void analisaBloco () throws Exception
+    public void analisaBloco() throws Exception
     {
         proximoToken();
         analisaEtVariaveis();
@@ -71,15 +85,15 @@ public class AnalisadorSintatico
     
     public void analisaEtVariaveis () throws Exception
     {
-        if(token.simboloToCode() == 14) //svar
+        if(token.simboloToCode() == Token.simboloToCode("svar")) //svar
         {
             proximoToken();
-            if(token.simboloToCode() == 17) //sidentificador
+            if(token.simboloToCode() == Token.simboloToCode("sidentificador")) //sidentificador
             {
-                while(token.simboloToCode() == 17)  //sidentificador
+                while(token.simboloToCode() == Token.simboloToCode("sidentificador"))  //sidentificador
                 {
                     analisaVariaveis();
-                    if(token.simboloToCode() == 20)  //spontovirgula
+                    if(token.simboloToCode() == Token.simboloToCode("spontovirgula"))  //spontovirgula
                     {
                         proximoToken();
                     }
@@ -100,60 +114,60 @@ public class AnalisadorSintatico
     {
         do
         {
-        if(token.simboloToCode() == 17)  //sidentificador
-        {
-            proximoToken();
-            if((token.simboloToCode() == 21) || (token.simboloToCode() == 37)) //svirgula ou sdoispontos
+            if(token.simboloToCode() == Token.simboloToCode("sidentificador"))  //sidentificador
             {
-                if(token.simboloToCode() == 21) //svirgula
+                proximoToken();
+                if((token.simboloToCode() == Token.simboloToCode("svirgula")) || (token.simboloToCode() == Token.simboloToCode("sdoispontos")))
                 {
-                    proximoToken();
-                    if(token.simboloToCode() == 37)  //sdoispontos
+                    if(token.simboloToCode() == Token.simboloToCode("svirgula")) //svirgula
                     {
-                        erro.erroSintatico(token.getLinha());
+                        proximoToken();
+                        if(token.simboloToCode() == Token.simboloToCode("sdoispontos"))  //sdoispontos
+                        {
+                            erro.erroSintatico(token.getLinha());
+                        }
                     }
+                }
+                else 
+                {
+                    erro.erroSintatico(token.getLinha());
                 }
             }
             else 
-                {
-                erro.erroSintatico(token.getLinha());
-                }
-        }
-        else 
             {
-            erro.erroSintatico(token.getLinha());
+                erro.erroSintatico(token.getLinha());
             }
         }
-        while(token.simboloToCode() != 37);  //sdoispontos
-    proximoToken();
-    analisaTipo();
+        while(token.simboloToCode() != Token.simboloToCode("sdoispontos"));  //sdoispontos
+        proximoToken();
+        analisaTipo();
     }
     
-    public void analisaTipo () throws Exception
+    public void analisaTipo() throws Exception
     {
-        if((token.simboloToCode() != 15) && (token.simboloToCode() != 16))  //sinteiro e sbooleano
+        if((token.simboloToCode() != Token.simboloToCode("sinteiro")) && (token.simboloToCode() != Token.simboloToCode("sbooleano")))  //sinteiro e sbooleano
         {
             erro.erroSintatico(token.getLinha());
         }
-            else
-            {
-            // Coloca_tipo_tabela(token.lexema)
+        else
+        {
+            //Coloca_tipo_tabela(token.lexema)
             proximoToken();
-            }
+        }
     }
     
-    public void analisaComandos () throws Exception
+    public void analisaComandos() throws Exception
     {
-        if(token.simboloToCode() == 2)  //sinicio
+        if(token.simboloToCode() == Token.simboloToCode("sinicio"))  //sinicio
         {
             proximoToken();
             analisaComandoSimples();
-            while(token.simboloToCode()!= 3)  //sfim  
+            while(token.simboloToCode()!= Token.simboloToCode("sfim"))  //sfim  
             {
-                if(token.simboloToCode() == 20)  //spontovirgula
+                if(token.simboloToCode() == Token.simboloToCode("spontovirgula"))  //spontovirgula
                 {
                     proximoToken();
-                    if(token.simboloToCode() != 3)  //sfim
+                    if(token.simboloToCode() != Token.simboloToCode("sfim"))  //sfim
                     {
                         analisaComandoSimples();
                     }
@@ -170,54 +184,38 @@ public class AnalisadorSintatico
         }
         else
         {
-          erro.erroSintatico(token.getLinha());  
+            erro.erroSintatico(token.getLinha());  
         }
     }
     
     public void analisaComandoSimples () throws Exception
     {
-        if(token.simboloToCode() == 17)  // sidentificador
+        switch(token.simboloToCode())
         {
-            analisaAtribChProcedimento();
-        }
-        else
-        {
-            if(token.simboloToCode() == 6) //sse
-            {
+            case 17://sidentificador
+                analisaAtribChProcedimento();
+                break;
+            case 6://sse
                 analisaSe();
-            }
-            else
-            {
-                if(token.simboloToCode() == 9)  //senquanto
-                {
-                    analisaEnquanto();
-                }
-                else
-                {
-                    if(token.simboloToCode() == 13)  //sleia
-                    {
-                        analisaLeia();
-                    }
-                    else
-                    {
-                        if(token.simboloToCode() == 12)  //sescreva
-                        {
-                            analisaEscreva();
-                        }
-                        else
-                        {
-                            analisaComandos();
-                        }
-                    }
-                }
-            }
+                break;
+            case 9://senquanto
+                analisaEnquanto();
+                break;
+            case 13://sleia
+                analisaLeia();
+                break;
+            case 12://sescreva
+                analisaEscreva();
+                break;
+            default:
+                analisaComandos();           
         }
     }
     
     public void analisaAtribChProcedimento () throws Exception   
     {
         proximoToken();
-        if(token.simboloToCode() == 11)  // satribuicao
+        if(token.simboloToCode() == Token.simboloToCode("satribuicao"))  // satribuicao
         {
             analisaAtribuicao();
         }
@@ -227,17 +225,39 @@ public class AnalisadorSintatico
         }
     }
     
-    public void analisaAtribuicao ()
-    {
-        
-    }
-    
-    public void analisaLeia () throws Exception
+    public void analisaAtribuicao () throws Exception
     {
         proximoToken();
-        if(token.simboloToCode() == 17)  // sidentificador
+        analisaExpressao();
+    }
+    
+    public void analisaLeia() throws Exception
+    {
+        proximoToken();
+        if(token.simboloToCode() == Token.simboloToCode("sabreparenteses"))  //sabreparenteses
         {
-            //pesquisa_declvar_tabela(token.lexema) SEMANTICO
+            proximoToken();
+            if(token.simboloToCode() == Token.simboloToCode("sidentificador")) //sidentificador
+            {
+                //SEMANTICO
+                proximoToken();
+                if(token.simboloToCode() == Token.simboloToCode("sfechaparenteses"))  //sfechaparenteses
+                {
+                    proximoToken();
+                }
+                else
+                {
+                    erro.erroSintatico(token.getLinha());
+                }
+            }
+            else
+            {
+                erro.erroSintatico(token.getLinha());
+            }
+        }
+        else
+        {
+            erro.erroSintatico(token.getLinha());
         }
             
     }
@@ -245,14 +265,14 @@ public class AnalisadorSintatico
     public void analisaEscreva () throws Exception
     {
         proximoToken();
-        if(token.simboloToCode() == 22)  //sabreparenteses
+        if(token.simboloToCode() == Token.simboloToCode("sabreparenteses"))  //sabreparenteses
         {
             proximoToken();
-            if(token.simboloToCode() == 17) //sidentificador
+            if(token.simboloToCode() == Token.simboloToCode("sidentificador")) //sidentificador
             {
                 //SEMANTICO
                 proximoToken();
-                if(token.simboloToCode() == 23)  //sfechaparenteses
+                if(token.simboloToCode() == Token.simboloToCode("sfechaparenteses"))  //sfechaparenteses
                 {
                     proximoToken();
                 }
@@ -277,7 +297,7 @@ public class AnalisadorSintatico
         //SEMANTICO
         proximoToken();
         analisaExpressao();
-        if(token.simboloToCode() == 10) //sfaca
+        if(token.simboloToCode() == Token.simboloToCode("sfaca")) //sfaca
         {
             //SEMANTICO
             proximoToken();
@@ -285,20 +305,20 @@ public class AnalisadorSintatico
             //SEMANTICO
         }
         else
-            {
+        {
             erro.erroSintatico(token.getLinha());
-            }
+        }
     }
     
-    public void analisaSe () throws Exception
+    public void analisaSe() throws Exception
     {
         proximoToken();
         analisaExpressao();
-        if(token.simboloToCode() == 7)  //sentao
+        if(token.simboloToCode() == Token.simboloToCode("sentao"))  //sentao
         {
             proximoToken();
             analisaComandoSimples();
-            if(token.simboloToCode() == 8)  //ssenao
+            if(token.simboloToCode() == Token.simboloToCode("ssenao"))  //ssenao
             {
                 proximoToken();
                 analisaComandoSimples();
@@ -313,28 +333,28 @@ public class AnalisadorSintatico
     public void analisaSubRotinas () throws Exception
     {
         int flag = 0;
-        if((token.simboloToCode() == 4) || (token.simboloToCode() == 5))  //sprocedimento ou sfuncao
+        if((token.simboloToCode() == Token.simboloToCode("sprocedimento")) || (token.simboloToCode() == Token.simboloToCode("sfuncao")))  //sprocedimento ou sfuncao
         {
             //SEMANTICO
         }
-        while((token.simboloToCode() == 4) || (token.simboloToCode() == 5))  //sprocedimento ou sfuncao
+        while((token.simboloToCode() == Token.simboloToCode("sprocedimento")) || (token.simboloToCode() == Token.simboloToCode("sfuncao")))  //sprocedimento ou sfuncao
         {
-            if(token.simboloToCode() == 4)  //sprocedimento
+            if(token.simboloToCode() == Token.simboloToCode("sprocedimento"))  //sprocedimento
             {
                 analisaDeclaracaoProcedimento();
             }
             else
-                {
-                    analisaDeclaracaoFuncao();
-                }
-            if(token.simboloToCode() == 20)  //spontovirgula
-                {
+            {
+                analisaDeclaracaoFuncao();
+            }
+            if(token.simboloToCode() == Token.simboloToCode("spontovirgula"))  //spontovirgula
+            {
                 proximoToken();
-                }
-                else
-                    {
-                    erro.erroSintatico(token.getLinha());
-                    }
+            }
+            else
+            {
+                erro.erroSintatico(token.getLinha());
+            }
         }
         if(flag == 1)
         {
@@ -346,50 +366,59 @@ public class AnalisadorSintatico
     {
         proximoToken();
         //SEMANTICO
-        if(token.simboloToCode() == 17)  //sidentificador
-           {
+        if(token.simboloToCode() == Token.simboloToCode("sidentificador"))  //sidentificador
+        {
             //SEMANTICO
             proximoToken();
-            if(token.simboloToCode() == 20)  //spontovirgula
-                {
+            if(token.simboloToCode() == Token.simboloToCode("spontovirgula"))  //spontovirgula
+            {
                 analisaBloco();
-                }
-                else
-                   {
-                   erro.erroSintatico(token.getLinha());
-                   }
-           }
+            }
             else
-                {
+            {
                 erro.erroSintatico(token.getLinha());
-                }
+            }
+        }
+        else
+        {
+            erro.erroSintatico(token.getLinha());
+        }
     }
     
     public void analisaDeclaracaoFuncao () throws Exception
     {
         proximoToken();
         //SEMANTICO
-        if(token.simboloToCode() == 17)  //sidentificador
+        if(token.simboloToCode() == Token.simboloToCode("sidentificador"))  //sidentificador
         {
             //SEMANTICO
             proximoToken();
-            if(token.simboloToCode() == 37)  //sdoispontos
+            if(token.simboloToCode() == Token.simboloToCode("sdoispontos"))  //sdoispontos
             {
                 proximoToken();
-                if((token.simboloToCode() == 15) || (token.simboloToCode() == 16))  //sinteiro ou sbooleano
+                if((token.simboloToCode() == Token.simboloToCode("sinteiro")) || (token.simboloToCode() == Token.simboloToCode("sbooleano")))  //sinteiro ou sbooleano
                 {
-                   //SEMANTICO
-                   proximoToken();
-                   if(token.simboloToCode() == 20)  //spontovirgula
-                   {
-                       analisaBloco();
-                   } //DUVIDA Se existe um else aqui
+                    //SEMANTICO
+                    proximoToken();
+                    if(token.simboloToCode() == Token.simboloToCode("spontovirgula"));  //spontovirgula
+                    {
+                        analisaBloco();
+                    } //DUVIDA Se existe um else aqui
                 }
-                else erro.erroSintatico(token.getLinha());
+                else 
+                {
+                    erro.erroSintatico(token.getLinha());
+                }
             }
-            else erro.erroSintatico(token.getLinha());
+            else 
+            {
+                erro.erroSintatico(token.getLinha());
+            }
         }
-        else erro.erroSintatico(token.getLinha());
+        else 
+        {
+            erro.erroSintatico(token.getLinha());
+        }
     }
     
     public void analisaExpressao () throws Exception
@@ -427,7 +456,7 @@ public class AnalisadorSintatico
         }
     }
     
-    public void analisaFator () throws Exception
+    public void analisaFator() throws Exception
     {
         if(token.simboloToCode() == 17)  //sidentificador
         {
