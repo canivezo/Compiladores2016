@@ -40,13 +40,13 @@ public class AnalisadorSintatico
                         {
                         System.out.println("Sucesso!");
                         }
-                        else erro.erroSintatico(token.getLinha());
+                        else erro.erroSintatico(token.getLinha(),1);
                     }
-                    else erro.erroSintatico(token.getLinha());
+                    else erro.erroSintatico(token.getLinha(),2);
                 }
-                else erro.erroSintatico(token.getLinha());
+                else erro.erroSintatico(token.getLinha(),3);
             }
-            else erro.erroSintatico(token.getLinha());
+            else erro.erroSintatico(token.getLinha(),4);
     }
     
     private void proximoToken() throws Exception
@@ -85,13 +85,13 @@ public class AnalisadorSintatico
                     }
                     else
                     {
-                        erro.erroSintatico(token.getLinha());
+                        erro.erroSintatico(token.getLinha(),2);
                     }
                 }
             }
             else
             {
-                erro.erroSintatico(token.getLinha());
+                erro.erroSintatico(token.getLinha(),3);
             }
         }
     }
@@ -110,18 +110,18 @@ public class AnalisadorSintatico
                     proximoToken();
                     if(token.simboloToCode() == 37)  //sdoispontos
                     {
-                        erro.erroSintatico(token.getLinha());
+                        erro.erroSintatico(token.getLinha(),5);
                     }
                 }
             }
             else 
                 {
-                erro.erroSintatico(token.getLinha());
+                erro.erroSintatico(token.getLinha(),6);
                 }
         }
         else 
             {
-            erro.erroSintatico(token.getLinha());
+            erro.erroSintatico(token.getLinha(),3);
             }
         }
         while(token.simboloToCode() != 37);  //sdoispontos
@@ -133,7 +133,7 @@ public class AnalisadorSintatico
     {
         if((token.simboloToCode() != 15) && (token.simboloToCode() != 16))  //sinteiro e sbooleano
         {
-            erro.erroSintatico(token.getLinha());
+            erro.erroSintatico(token.getLinha(),7);
         }
             else
             {
@@ -160,14 +160,14 @@ public class AnalisadorSintatico
                 }
                 else
                     {
-                        erro.erroSintatico(token.getLinha());
+                        erro.erroSintatico(token.getLinha(),2);
                     }
             }
             proximoToken();
         }
         else
         {
-          erro.erroSintatico(token.getLinha());  
+          erro.erroSintatico(token.getLinha(),8);  
         }
     }
     
@@ -221,27 +221,27 @@ public class AnalisadorSintatico
         if(token.simboloToCode() == 22)  // sabreparenteses
         {
             proximoToken();
-            if(token.simboloToCode() == 17)
+            if(token.simboloToCode() == 17)  //sidentificador
             {
                 //pesquisa_declvar_tabela(token.lexema) SEMANTICO
                 proximoToken();
-                if(token.simboloToCode() == 23)
+                if(token.simboloToCode() == 23)  //sfechaparenteses
                 {
                     proximoToken();
                 }
                 else
                 {
-                    erro.erroSintatico(token.getLinha());
+                    erro.erroSintatico(token.getLinha(),10);
                 }
             }
             else
             {
-                erro.erroSintatico(token.getLinha());
+                erro.erroSintatico(token.getLinha(),3);
             }
         }
         else
         {
-            erro.erroSintatico(token.getLinha());
+            erro.erroSintatico(token.getLinha(),9);
         }
             
     }
@@ -262,17 +262,17 @@ public class AnalisadorSintatico
                 }
                 else
                 {
-                    erro.erroSintatico(token.getLinha());
+                    erro.erroSintatico(token.getLinha(),10);
                 }
             }
             else
             {
-                erro.erroSintatico(token.getLinha());
+                erro.erroSintatico(token.getLinha(),3);
             }
         }
         else
         {
-            erro.erroSintatico(token.getLinha());
+            erro.erroSintatico(token.getLinha(),9);
         }
     }
     
@@ -290,7 +290,7 @@ public class AnalisadorSintatico
         }
         else
             {
-            erro.erroSintatico(token.getLinha());
+            erro.erroSintatico(token.getLinha(),11);
             }
     }
     
@@ -310,7 +310,7 @@ public class AnalisadorSintatico
         }
         else
         {
-            erro.erroSintatico(token.getLinha());
+            erro.erroSintatico(token.getLinha(),12);
         }
     }
     
@@ -337,7 +337,7 @@ public class AnalisadorSintatico
                 }
                 else
                     {
-                    erro.erroSintatico(token.getLinha());
+                    erro.erroSintatico(token.getLinha(),2);
                     }
         }
         if(flag == 1)
@@ -360,12 +360,12 @@ public class AnalisadorSintatico
                 }
                 else
                    {
-                   erro.erroSintatico(token.getLinha());
+                   erro.erroSintatico(token.getLinha(),2);
                    }
            }
             else
                 {
-                erro.erroSintatico(token.getLinha());
+                erro.erroSintatico(token.getLinha(),3);
                 }
     }
     
@@ -389,11 +389,11 @@ public class AnalisadorSintatico
                        analisaBloco();
                    } //DUVIDA Se existe um else aqui
                 }
-                else erro.erroSintatico(token.getLinha());
+                else erro.erroSintatico(token.getLinha(),7);
             }
-            else erro.erroSintatico(token.getLinha());
+            else erro.erroSintatico(token.getLinha(),5);
         }
-        else erro.erroSintatico(token.getLinha());
+        else erro.erroSintatico(token.getLinha(),3);
     }
     
     public void analisaExpressao () throws Exception
@@ -464,7 +464,7 @@ public class AnalisadorSintatico
                         }
                         else
                         {
-                            erro.erroSintatico(token.getLinha());
+                            erro.erroSintatico(token.getLinha(),10);
                         }
                     }
                     else
@@ -475,8 +475,9 @@ public class AnalisadorSintatico
                         }
                         else
                         {
-                            erro.erroSintatico(token.getLinha());
+                            erro.erroSintatico(token.getLinha(),13);
                         }
+                        erro.erroSintatico(token.getLinha(),9);
                     }
                 }
             }
