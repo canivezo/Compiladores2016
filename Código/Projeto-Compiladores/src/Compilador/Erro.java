@@ -23,16 +23,19 @@ public class Erro
     public void erroLexico (int linhaErro)
     {
         System.out.println("Erro Lexico identificado na linha: " +linhaErro);
+        System.exit(0);
     }
     
     public void erroSintatico (int linhaErro)
     {
         System.out.println("Erro Sintatico identificado na linha: " +linhaErro);
+        System.exit(0);
     }
     
     public void erroSemantico (int linhaErro)
     {
-        System.out.println("Erro Semantico identificado na linha: " +linhaErro);       
+        System.out.println("Erro Semantico identificado na linha: " +linhaErro);
+        System.exit(0);
     }
     
    
