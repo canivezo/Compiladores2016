@@ -425,7 +425,7 @@ public class AnalisadorSintatico
     public void analisaTermo () throws Exception
     {
         analisaFator();
-        while((token.simboloToCode() == 32) || (token.simboloToCode() == 33) || (token.simboloToCode() == 6))  //smult ou sdiv ou sse
+        while((token.simboloToCode() == 32) || (token.simboloToCode() == 33) || (token.simboloToCode() == 34))  //smult ou sdiv ou se
         {
             proximoToken();
             analisaFator();
