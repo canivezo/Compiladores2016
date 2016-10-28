@@ -25,8 +25,9 @@ public class Interface extends javax.swing.JFrame {
     
     // Variaveis
     private String urlArquivo;
-    DefaultTableModel tab;
+    DefaultTableModel tabPilha, tabInstrucao;
     Pilha pilha = new Pilha();
+    int nume = 256;
 
     
     //Construtor da classe
@@ -52,7 +53,7 @@ public class Interface extends javax.swing.JFrame {
 
         seletorDeArquivo = new javax.swing.JFileChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
-        Instrucoes = new javax.swing.JTable();
+        tabelaInstrucao = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaPilha = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -70,7 +71,7 @@ public class Interface extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        Instrucoes.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaInstrucao.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -93,13 +94,13 @@ public class Interface extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(Instrucoes);
-        if (Instrucoes.getColumnModel().getColumnCount() > 0) {
-            Instrucoes.getColumnModel().getColumn(0).setResizable(false);
-            Instrucoes.getColumnModel().getColumn(1).setResizable(false);
-            Instrucoes.getColumnModel().getColumn(2).setResizable(false);
-            Instrucoes.getColumnModel().getColumn(3).setResizable(false);
-            Instrucoes.getColumnModel().getColumn(4).setResizable(false);
+        jScrollPane1.setViewportView(tabelaInstrucao);
+        if (tabelaInstrucao.getColumnModel().getColumnCount() > 0) {
+            tabelaInstrucao.getColumnModel().getColumn(0).setResizable(false);
+            tabelaInstrucao.getColumnModel().getColumn(1).setResizable(false);
+            tabelaInstrucao.getColumnModel().getColumn(2).setResizable(false);
+            tabelaInstrucao.getColumnModel().getColumn(3).setResizable(false);
+            tabelaInstrucao.getColumnModel().getColumn(4).setResizable(false);
         }
 
         tabelaPilha.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -280,8 +281,9 @@ public class Interface extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        tabelaPilhaAdd(1515,9999);
-        tabelaPilhaAdd(6767,8765);
+        tabelaPilhaAdd(nume++,nume-5);
+        tabelaInstrucaoAdd();
+        //tabelaPilhaAdd(nume++,nume-4);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -321,7 +323,6 @@ public class Interface extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar BarraDeMenu;
-    private javax.swing.JTable Instrucoes;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -334,6 +335,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JFileChooser seletorDeArquivo;
+    private javax.swing.JTable tabelaInstrucao;
     private javax.swing.JTable tabelaPilha;
     // End of variables declaration//GEN-END:variables
 
@@ -346,13 +348,17 @@ public class Interface extends javax.swing.JFrame {
         try 
         {
             lendo = new Arquivo(path); 
-        } catch (Exception ex) 
+        } 
+        catch (Exception ex) 
         {
             System.out.println(ex.getMessage());
         }
-        try {
+        try 
+        {
             i = lendo.parsearPalavras();
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) 
+        {
             Logger.getLogger(TesteDeArquivo.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println(i.get(0));
@@ -361,24 +367,30 @@ public class Interface extends javax.swing.JFrame {
         //Push da pilha mostrando na tabela
     public void tabelaPilhaAdd(int end, int val)
     {
-        pilha.push(end, val);
-        tab = (DefaultTableModel) tabelaPilha.getModel();
-        tab.addRow(new Integer[]{end,val});
+        pilha.push(end, val);  //empilha
+        tabPilha = (DefaultTableModel) tabelaPilha.getModel();
+        tabPilha.addRow(new Integer[]{end,val});
     }
         
-    
         //Pop da pilha removendo da tabela
     public void tabelaPilhaRemove() throws Exception
     {
         if(!pilha.pilhaVazia())
-            {
+        {
             DadosPilha retorno = pilha.pop();
-            tab.removeRow(tab.getRowCount()-1);
+            tabPilha.removeRow(tabPilha.getRowCount()-1);
             System.out.println(retorno.getAdress()+", "+retorno.getValor());
-            }
-            else
-                throw new Exception("Erro, pilha vazia");
+        }
+        else
+            throw new Exception("Erro, pilha vazia");
     }
+    
+    public void tabelaInstrucaoAdd()
+    {
+        tabInstrucao = (DefaultTableModel) tabelaInstrucao.getModel();
+        tabInstrucao.addRow(new String[]{"1","Mov","atr1","atr2","teste"});
+    }
+    
 
 
 }
