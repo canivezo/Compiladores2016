@@ -21,16 +21,13 @@ public class TesteDeArquivo {
         Vector <Instrucao> i = null;
         try 
         {
-            lendo = new Arquivo("C:\\Users\\lucas\\Documents\\teste.txt"); 
-        } catch (Exception ex) 
+            lendo = new Arquivo("C:\\Users\\lucas\\Documents\\teste2.txt"); 
+            i = lendo.parsearPalavras();
+        } 
+        catch (Exception ex) 
         {
             System.out.println(ex.getMessage());
         }
-        try {
-            i = lendo.parsearPalavras();
-        } catch (Exception ex) {
-            Logger.getLogger(TesteDeArquivo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println(i.get(0));
+       // System.out.println(i.get(0));
     }
 }

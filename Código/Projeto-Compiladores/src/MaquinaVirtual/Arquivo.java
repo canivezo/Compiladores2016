@@ -56,9 +56,9 @@ public class Arquivo
                }
             } 
 	}
-	private static int NumeroDeAtributos(String comando) 
+	private static int numeroDeAtributos(String comando) 
 	{
-            switch (comando.toUpperCase()) 
+            switch (comando) 
             {
                 case "ADD":   return 0;
                 case "SUB":   return 0;
@@ -102,14 +102,14 @@ public class Arquivo
             for(int i = 0; i < arquivo.size(); i++)
             {
                 String [] result = arquivo.get(i).split("\t");
-                if(NumeroDeAtributos(result[0]) == 0)  
+                if(numeroDeAtributos(result[0]) == 0)  
                 {
                     //instrucao.add(result[0]);
                     InstrucaoSimples e = new InstrucaoSimples(nomeInstrucao.getNomeInstrucao(result[0]), i);
                     instrucoes.add(e);
                 }
                 
-                if(NumeroDeAtributos(result[0]) == 1)  
+                if(numeroDeAtributos(result[0]) == 1)  
                 {
                     //instrucao.add(result[0]);
                     //instrucao.add(result[1]);
@@ -118,7 +118,7 @@ public class Arquivo
                     instrucoes.add(e);
                 }
                 
-                if(NumeroDeAtributos(result[0]) == 2)  
+                if(numeroDeAtributos(result[0]) == 2)  
                 {
                     //instrucao.add(result[0]);
                     String [] aux = result[1].split(",");
