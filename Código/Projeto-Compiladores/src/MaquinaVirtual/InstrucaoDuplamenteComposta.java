@@ -41,4 +41,10 @@ public class InstrucaoDuplamenteComposta extends Instrucao{
     {
         return param2;
     }
+    
+    @Override
+    public String toString()
+    {
+        return "\nINTRUCAO\t:\t"+instrucao.name()+"\nPARAM1\t\t:\t"+param1+"\nPARAM2\t\t:\t"+param2+"\nLINE\t\t:\t"+linha+"\n";
+    }
 }

@@ -37,6 +37,6 @@ public class Instrucao {
     @Override
     public String toString()
     {
-        return "\tLINE : ";
+        return "\nINTRUCAO\t:\t"+instrucao.name()+"\nLINE\t\t:\t"+linha+"\n";
     }
 }

@@ -28,6 +28,6 @@ public class TesteDeArquivo {
         {
             System.out.println(ex.getMessage());
         }
-       // System.out.println(i.get(0));
+        System.out.println(i);
     }
 }

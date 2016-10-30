@@ -98,32 +98,55 @@ public class Arquivo
 	public Vector<Instrucao> parsearPalavras () throws Exception
 	{
             Vector<Instrucao> instrucoes = new Vector<Instrucao>();
+            Vector<Label> labels = new Vector<Label>();
             int parametro1, parametro2 = 0;
             for(int i = 0; i < arquivo.size(); i++)
             {
-                String [] result = arquivo.get(i).split("\t");
+                String [] l = arquivo.get(i).split("\t");
+                String toRes = "";
+                if(!l[0].equals(""))
+                {
+                    labels.add(new Label(i, l[0]));
+                }
+                
+                for(int j = 1; j < l.length; j++)
+                {    
+                    toRes += l[j];
+                    toRes += "\t";
+                }
+                
+                String [] result = toRes.split("\t");
                 if(numeroDeAtributos(result[0]) == 0)  
                 {
-                    //instrucao.add(result[0]);
                     InstrucaoSimples e = new InstrucaoSimples(nomeInstrucao.getNomeInstrucao(result[0]), i);
                     instrucoes.add(e);
                 }
                 
                 if(numeroDeAtributos(result[0]) == 1)  
                 {
-                    //instrucao.add(result[0]);
-                    //instrucao.add(result[1]);
-                    parametro1 = Integer.parseInt(result[1]);
+                    if(result[0].equals("JMP") || result[0].equals("JMPF") || result[0].equals("CALL"))
+                    {
+                       int j;
+                       for(j = 0; j < labels.capacity();j++)
+                       {
+                           if(labels.get(j).getLabel().equals(result[1]))
+                               break;
+                       }
+                       if(j == labels.capacity())
+                           throw new Exception("label invalido");
+                       parametro1 = labels.get(j).getLinha();
+                    }
+                    else
+                    {
+                        parametro1 = Integer.parseInt(result[1]); 
+                    }
                     InstrucaoComposta e = new InstrucaoComposta(nomeInstrucao.getNomeInstrucao(result[0]), i, parametro1);
                     instrucoes.add(e);
                 }
                 
                 if(numeroDeAtributos(result[0]) == 2)  
                 {
-                    //instrucao.add(result[0]);
                     String [] aux = result[1].split(",");
-                    //instrucao.add(aux[0]);
-                    //instrucao.add(aux[1]);
                     parametro1 = Integer.parseInt(aux[0]);
                     parametro2 = Integer.parseInt(aux[1]);
                     InstrucaoDuplamenteComposta e = new InstrucaoDuplamenteComposta(nomeInstrucao.getNomeInstrucao(result[0]), i, parametro1, parametro2);

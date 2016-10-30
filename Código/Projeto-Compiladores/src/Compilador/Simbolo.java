@@ -15,26 +15,36 @@ public class Simbolo
     private Token token;
     private int expressionType;
     
-    public Simbolo(int expressionType, int type, Token token)
+    public Simbolo(int expType, int typ, Token tok) throws Exception
     {
-        this.expressionType = expressionType;
-        this.type = type;
-        this.token = token;
+        setExpressionType(expType);
+        setType(typ);
+        setToken(tok);
     }
     
-    public void setexpressionType(int expressionType)
+    /**
+     * 
+     * @param e assume 0 não pode estar em uma expressão, 
+     *          1 para expressões booleanas 
+     *          e 2 para expressóes do tipo inteiro. 
+     */
+    public void setExpressionType(int e) throws Exception
     {
-        this.expressionType = expressionType;
+        if(e < 0 || e > 2)
+            throw new Exception("Tipo da expressao do simbolo invalido");
+        this.expressionType = e;
     }
    
-    public int getexpressionType()
+    public int getExpressionType()
     {
         return expressionType;
     }
     
-    public void setToken(Token token)
+    public void setToken(Token t) throws Exception
     {
-        this.token = token;
+        if(t == null)
+            throw new Exception("Token do simbolo invalido");
+        this.token = t;
     }
     
     public Token getToken()
@@ -42,9 +52,20 @@ public class Simbolo
         return token;
     }
     
-    public void setType(int type)
+    /**
+     * 
+     * @param t pode assumir os valores a seguir conforme os tipos:
+     * 1 - para booleano
+     * 2 - para inteiro
+     * 3 - para funcao
+     * 4 - para procedimento
+     * 5 - para programa
+     */
+    public void setType(int t) throws Exception
     {
-        this.type = type;
+        if(t < 0 || t > 5)
+            throw new Exception("Tipo do simbolo invalido");
+        this.type = t;
     }
     
     public int getType()

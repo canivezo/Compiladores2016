@@ -58,9 +58,10 @@ public enum nomeInstrucao {
             case "CALL":  return CALL;
 
             case "ALLOC": return ALLOC;
-            case "DALLOC":return DALLOC;
+            case "DALLOC": return DALLOC;
 
             case "RETURN":return RETURN;
+            case "NULL": return NULL;
             
             default: throw new Exception("Invalido");
         }

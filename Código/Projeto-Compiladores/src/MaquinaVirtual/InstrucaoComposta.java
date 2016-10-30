@@ -31,4 +31,10 @@ public class InstrucaoComposta extends Instrucao{
     {
         return param1;
     }
+    
+    @Override
+    public String toString()
+    {
+        return "\nINTRUCAO\t:\t"+instrucao.name()+"\nPARAM1\t\t:\t"+param1+"\nLINE\t\t:\t"+linha+"\n";
+    }
 }
