@@ -486,11 +486,12 @@ public class AnalisadorSintatico
     
     public void analisaChamadaProcedimento ()
     {
-        
+        //SEMANTICO
     }
     
     public void analisaChamadaFuncao () throws Exception
     {
+        //SEMANTICO
         proximoToken();
     }
         
