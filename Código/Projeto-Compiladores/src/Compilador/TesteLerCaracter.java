@@ -20,20 +20,18 @@ public class TesteLerCaracter
         LeitorDeArquivo leendo = null;
         try 
         {
-            leendo = new LeitorDeArquivo("C:\\Users\\Rubens\\Documents\\Arqui.txt");
-            int clido = leendo.leituraCaracter();
+           leendo = new LeitorDeArquivo("C:\\Users\\Rubens\\Documents\\Arqui.txt");
+           int clido = leendo.leituraCaracter();
            while(clido != -1)
            {
                System.out.print((char)clido);
                clido = leendo.leituraCaracter();
            }
             System.out.println("");
-        } catch (Exception ex) 
+        } 
+        catch (Exception ex) 
         {
             System.out.println(ex.getMessage());
         }
-        
-        
     }
-    
 }
