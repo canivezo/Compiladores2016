@@ -14,7 +14,7 @@ import Compilador.*;
  */
 public class TabelaDeSimbolos 
 {
-        Token token = new Token();
+        Token token = null;
         protected Vector<Simbolo> TabelaDeSimbolos = new Vector<Simbolo>();
 
         public void setTabelaDeSimbolos(Vector<Simbolo> TabelaDeSimbolos) 

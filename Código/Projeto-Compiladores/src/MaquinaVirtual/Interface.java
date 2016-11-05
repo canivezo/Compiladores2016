@@ -6,11 +6,15 @@
 package MaquinaVirtual;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,22 +28,21 @@ public class Interface extends javax.swing.JFrame {
      */
     
     // Variaveis
+    private static final Interface janelaP = new Interface();
     private String urlArquivo;
+    private Arquivo arquivo = null;
     DefaultTableModel tabPilha, tabInstrucao;
     Pilha pilha = new Pilha();
-    int nume = 256;
+    int nume = 256, tamanhoArq =0;
+    private int caracter = 0;
+    private InputStreamReader leituracaracteres;
 
     
     //Construtor da classe
     public Interface() 
     {
+        this.urlArquivo = null;
         initComponents();
-    }
-    
-    //Getter do caminho do arquivo.
-    public String getUrlArquivo() 
-    {
-        return urlArquivo;
     }
 
     /**
@@ -58,14 +61,20 @@ public class Interface extends javax.swing.JFrame {
         tabelaPilha = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel5 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        jLabel6 = new javax.swing.JLabel();
         BarraDeMenu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        BotaoAbrirArqv = new javax.swing.JMenuItem();
+        BotaoSalvarArqv = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        BotaoCompilar = new javax.swing.JMenuItem();
 
         seletorDeArquivo.setFileFilter(new FiltroDeArquivo());
 
@@ -94,6 +103,7 @@ public class Interface extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaInstrucao.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(tabelaInstrucao);
         if (tabelaInstrucao.getColumnModel().getColumnCount() > 0) {
             tabelaInstrucao.getColumnModel().getColumn(0).setResizable(false);
@@ -140,6 +150,13 @@ public class Interface extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Instruções");
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane3.setViewportView(jTextArea1);
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel5.setText("Break Point's");
+
         jButton1.setText("Breakpoint");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,6 +171,13 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane4.setViewportView(jTextArea2);
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel6.setText("Saida");
+
         jMenu1.setText("Arquivo");
         jMenu1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,28 +185,28 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        jMenuItem1.setText("Abrir arquivo");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        BotaoAbrirArqv.setText("Abrir arquivo");
+        BotaoAbrirArqv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                BotaoAbrirArqvActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(BotaoAbrirArqv);
 
-        jMenuItem2.setText("Salvar arquivo");
-        jMenu1.add(jMenuItem2);
+        BotaoSalvarArqv.setText("Salvar arquivo");
+        jMenu1.add(BotaoSalvarArqv);
 
         BarraDeMenu.add(jMenu1);
 
         jMenu2.setText("Executar");
 
-        jMenuItem3.setText("Compilar Código");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        BotaoCompilar.setText("Compilar Código");
+        BotaoCompilar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                BotaoCompilarActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem3);
+        jMenu2.add(BotaoCompilar);
 
         BarraDeMenu.add(jMenu2);
 
@@ -193,40 +217,67 @@ public class Interface extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(206, 206, 206)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(78, 78, 78))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(237, 237, 237)
-                .addComponent(jButton1)
-                .addGap(28, 28, 28)
-                .addComponent(jButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 628, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(267, 267, 267)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(104, 104, 104)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel6)
+                        .addGap(100, 100, 100)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(82, 82, 82)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(19, 19, 19))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jButton1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton2))
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         pack();
@@ -236,29 +287,37 @@ public class Interface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu1ActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void BotaoAbrirArqvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoAbrirArqvActionPerformed
      // Abrir seletor de Arquivo.
      seletorDeArquivo.setVisible(true);
      int returnVal = seletorDeArquivo.showOpenDialog(this);
      if (returnVal == JFileChooser.APPROVE_OPTION) 
      {
-        File file = seletorDeArquivo.getSelectedFile();
-        try 
-            {
+     File file = seletorDeArquivo.getSelectedFile();
+         try 
+         {
             // What to do with the file, e.g. display it in a TextArea
             System.out.println(file.getAbsolutePath());
-            this.urlArquivo = file.getAbsolutePath();
-            } 
-             catch (Exception ex) 
-               {
-               System.out.println("problem accessing file"+file.getAbsolutePath());
-               }
+             this.urlArquivo = file.getAbsolutePath();
+          } 
+          catch (Exception ex) 
+          {
+             System.out.println("problem accessing file"+file.getAbsolutePath());
+          }
+          try 
+          {
+             inicializarTabelaArquivo(urlArquivo);
+          } 
+          catch (FileNotFoundException ex) 
+          {
+             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+          }
      } 
      else 
          {
-         System.out.println("File access cancelled by user.");
+            System.out.println("File access cancelled by user.");
          }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_BotaoAbrirArqvActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
@@ -269,15 +328,15 @@ public class Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void BotaoCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCompilarActionPerformed
         // TODO add your handling code here:
         if(urlArquivo != null)
         {
-        abrirArquivoFonte(urlArquivo);
+        
         }
         else
            JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_BotaoCompilarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -316,24 +375,31 @@ public class Interface extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Interface().setVisible(true);
+                janelaP.setVisible(true);
+                janelaP.setLocationRelativeTo(null);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar BarraDeMenu;
+    private javax.swing.JMenuItem BotaoAbrirArqv;
+    private javax.swing.JMenuItem BotaoCompilar;
+    private javax.swing.JMenuItem BotaoSalvarArqv;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JFileChooser seletorDeArquivo;
     private javax.swing.JTable tabelaInstrucao;
     private javax.swing.JTable tabelaPilha;
@@ -341,27 +407,84 @@ public class Interface extends javax.swing.JFrame {
 
     
         //funcao para abrir arquivo
-    private void abrirArquivoFonte (String path)
+    private void inicializarTabelaArquivo (String path) throws FileNotFoundException
     {
-         Arquivo lendo = null;
-        Vector <Instrucao> i = null;
-        try 
+        //declarações
+        int leituraCaracter =0, linha =1, fim=0;
+        char caracterLido = '0';
+        InputStreamReader leituracaracteres = null;
+        String str1 = "", str2 = "",str3 = "", str4 = "", str5 = "";
+        String condfim = new String("HLT");
+        FileInputStream abertura = new FileInputStream(path); //abertura seria o objeto responsáel pela abertura do arquivo
+        this.leituracaracteres = new InputStreamReader(abertura);
+        tabInstrucao = (DefaultTableModel) tabelaInstrucao.getModel();
+        
+        while(fim != 1)
         {
-            lendo = new Arquivo(path); 
-        } 
-        catch (Exception ex) 
-        {
-            System.out.println(ex.getMessage());
+                str1 = "";
+                str2 = "";
+                str3 = "";
+                str4 = "";
+                str5 = "";
+            leituraCaracter = lerCaracter();
+            if(leituraCaracter == -1)
+            {
+                fim = 1;
+                break;
+            }
+            caracterLido = (char) leituraCaracter;
+            if(caracterLido == '\n' || caracterLido == '\r')
+            {
+                linha++;
+            }
+            else
+            {
+                str1 = String.valueOf(linha);
+                while(Character.isWhitespace(caracterLido) == false)
+                    {
+                        System.out.println(caracterLido);
+                        str2 =  str2 + caracterLido;
+                        caracterLido = (char) lerCaracter();
+                    }
+                if(caracterLido != '\n')
+                    {
+                    caracterLido = (char) lerCaracter(); 
+                    while(Character.isWhitespace(caracterLido) == false)
+                        {
+                            System.out.println(caracterLido);
+                            str3 = str3 + caracterLido;
+                            caracterLido = (char) lerCaracter();
+                        }
+                    if(caracterLido != '\n')
+                        {
+                            caracterLido = (char) lerCaracter(); 
+                            while(Character.isWhitespace(caracterLido) == false)
+                                {
+                                    System.out.println(caracterLido);
+                                    str4 =  str4 + caracterLido;
+                                    caracterLido = (char) lerCaracter();
+                                }
+                            if(caracterLido != '\n')
+                            {
+                                caracterLido = (char) lerCaracter();
+                                while(caracterLido != '\n')
+                                {
+                                    System.out.println(caracterLido);
+                                    str5 =  str5 + caracterLido;
+                                    caracterLido = (char) lerCaracter();
+                                }
+                            }
+                        }
+                    }
+                linha++;
+                if(str2.equals(condfim))
+                {
+                    System.out.println("chegou ao fim");
+                    fim = 1;
+                }
+                tabInstrucao.addRow(new String[]{str1,str2,str3,str4,str5});
+            }
         }
-        try 
-        {
-            i = lendo.parsearPalavras();
-        } 
-        catch (Exception ex) 
-        {
-            Logger.getLogger(TesteDeArquivo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println(i.get(0));
     }
 
         //Push da pilha mostrando na tabela
@@ -389,6 +512,28 @@ public class Interface extends javax.swing.JFrame {
     {
         tabInstrucao = (DefaultTableModel) tabelaInstrucao.getModel();
         tabInstrucao.addRow(new String[]{"1","Mov","atr1","atr2","teste"});
+    }
+    
+    public int lerCaracter()
+    {
+        try
+        {
+            if(this.caracter != -1)
+            {
+                this.caracter = leituracaracteres.read(); //método read que retorna um inteiro que representa o caracter 
+                return caracter;
+            }
+            else
+            {
+                tamanhoArq = 1;
+                return caracter;
+            }
+        }
+        catch (Exception ex)
+        {
+            System.out.println(ex.getMessage()); 
+        }
+        return 0;
     }
     
 
