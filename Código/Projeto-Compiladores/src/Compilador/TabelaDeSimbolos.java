@@ -13,46 +13,97 @@ import java.util.Vector;
  */
 public class TabelaDeSimbolos 
 {
-        Token token = null;
-        protected Vector<Simbolo> TabelaDeSimbolos = new Vector<Simbolo>();
-
-        public void setTabelaDeSimbolos(Vector<Simbolo> TabelaDeSimbolos) 
+        Vector<Simbolo> simbolos;
+    
+        public TabelaDeSimbolos()
         {
-		this.TabelaDeSimbolos = TabelaDeSimbolos;
-	}
-        
-	public Vector<Simbolo> getTabelaDeSimbolos() 
-        {
-		return TabelaDeSimbolos;
-	}
- 
-        public void adicionaSimbolo(int expType, int typ, Token token) throws Exception
-        {
-		TabelaDeSimbolos.add(new Simbolo(expType, typ, token)); // Adiciona o elemento especificado no final da lista.
-	}
-        
-        public void excluiSimbolo(Simbolo s)
-        {
-                TabelaDeSimbolos.remove(s);
-        }
-        public void insereTipo(String typ) 
-        {
-                TabelaDeSimbolos.get(TabelaDeSimbolos.size() - 1).getType()=typ;
+            simbolos = new Vector<Simbolo>();
         }
         
-        public void verificaEscopo()
+        public void adicionaSimbolo(Simbolo simbolo) throws Exception
         {
+            if(simbolo == null)
+                throw new Exception("simbolo invalido");
             
+            simbolos.add(simbolo);
+	}
+        
+        public Simbolo getSimbolo(int i) throws Exception
+        {
+            if(i < 0 || i >= simbolos.size())
+                throw new Exception("posicao na tabela invalida");
+            
+            return simbolos.get(i);
         }
         
-        public int verificaTabela(String lexema) 
+        public Simbolo getSimbolo(Token t) throws Exception
         {
-            for (int i = TabelaDeSimbolos.size() - 1; i >= 0; i--) 
+            Token aux;
+            //
+            //Faz ao contrário para retornar o símbolo mais próximo ao escopo.
+            //
+            for(int i = simbolos.size(); i >= 0; i--)
             {
-                if (TabelaDeSimbolos.get(i).getToken().equals(lexema)) 
+                aux = simbolos.get(i).getToken();
+                if(aux.getLexema().equals(t.getLexema()) && aux.getSimbolo().equals(t.getSimbolo()))
                 {
-                    return i;
+                    return simbolos.get(i);
                 }
             }
+            
+            throw new Exception("Simbolo nao encontrado");
+        }
+        
+        public void excluiSimbolo(int i) throws Exception
+        {
+            if(i < 0 || i >= simbolos.size())
+                throw new Exception("posicao na tabela invalida");
+            
+            simbolos.remove(i);
+        }
+       
+        public void excluiSimbolo(Token t) throws Exception
+        {
+            Token aux;
+            //
+            //Faz ao contrário para retornar o símbolo mais próximo ao escopo.
+            //
+            for(int i = (simbolos.size() - 1); i >= 0; i--)
+            {
+                aux = simbolos.get(i).getToken();
+                if(aux.getLexema().equals(t.getLexema()) && aux.getSimbolo().equals(t.getSimbolo()))
+                {
+                    simbolos.remove(i);
+                }
+            }
+            throw new Exception("Simbolo nao encontrado");
+        }
+       
+        public void excluiSimbolo(Simbolo s) throws Exception
+        {
+            Simbolo aux;
+            for(int i = (simbolos.size() - 1); i >= 0; i--)
+            {
+                aux = simbolos.get(i);
+                if(aux.getToken().getLexema().equals(s.getToken().getLexema()) && aux.getToken().getSimbolo().equals(s.getToken().getSimbolo()))    
+                {
+                    //
+                    //Independente do tipo, a tabela apenas remove um simbolo que seja igual...
+                    //
+                    simbolos.remove(i);
+                }
+            }
+            
+            throw new Exception("Simbolo nao encontrado");
+        }
+        
+        public boolean verificaTabela()
+        {
+            return false;
+        }
+        
+        public boolean verificarEscopo()
+        {
+            return false;
         }
 }
