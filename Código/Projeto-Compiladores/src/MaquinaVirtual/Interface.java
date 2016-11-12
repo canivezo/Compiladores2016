@@ -85,14 +85,14 @@ public class Interface extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Linha", "Instrução", "Atr 1", "Atr 2", "Comentário"
+                "Linha", "Instrução", "Atr 1", "Atr 2"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -110,7 +110,6 @@ public class Interface extends javax.swing.JFrame {
             tabelaInstrucao.getColumnModel().getColumn(1).setResizable(false);
             tabelaInstrucao.getColumnModel().getColumn(2).setResizable(false);
             tabelaInstrucao.getColumnModel().getColumn(3).setResizable(false);
-            tabelaInstrucao.getColumnModel().getColumn(4).setResizable(false);
         }
 
         tabelaPilha.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -413,7 +412,7 @@ public class Interface extends javax.swing.JFrame {
         int leituraCaracter =0, linha =1, fim=0;
         char caracterLido = '0';
         InputStreamReader leituracaracteres = null;
-        String str1 = "", str2 = "",str3 = "", str4 = "", str5 = "";
+        String str1 = "", str2 = "",str3 = "", str4 = "";
         String condfim = new String("HLT");
         FileInputStream abertura = new FileInputStream(path); //abertura seria o objeto responsáel pela abertura do arquivo
         this.leituracaracteres = new InputStreamReader(abertura);
@@ -425,7 +424,6 @@ public class Interface extends javax.swing.JFrame {
                 str2 = "";
                 str3 = "";
                 str4 = "";
-                str5 = "";
             leituraCaracter = lerCaracter();
             if(leituraCaracter == -1)
             {
@@ -449,7 +447,7 @@ public class Interface extends javax.swing.JFrame {
                 if(caracterLido != '\n')
                     {
                     caracterLido = (char) lerCaracter(); 
-                    while(Character.isWhitespace(caracterLido) == false)
+                    while(Character.isDigit(caracterLido) == true || Character.isAlphabetic(caracterLido) == true)
                         {
                             System.out.println(caracterLido);
                             str3 = str3 + caracterLido;
@@ -464,16 +462,6 @@ public class Interface extends javax.swing.JFrame {
                                     str4 =  str4 + caracterLido;
                                     caracterLido = (char) lerCaracter();
                                 }
-                            if(caracterLido != '\n')
-                            {
-                                caracterLido = (char) lerCaracter();
-                                while(caracterLido != '\n')
-                                {
-                                    System.out.println(caracterLido);
-                                    str5 =  str5 + caracterLido;
-                                    caracterLido = (char) lerCaracter();
-                                }
-                            }
                         }
                     }
                 linha++;
@@ -482,7 +470,7 @@ public class Interface extends javax.swing.JFrame {
                     System.out.println("chegou ao fim");
                     fim = 1;
                 }
-                tabInstrucao.addRow(new String[]{str1,str2,str3,str4,str5});
+                tabInstrucao.addRow(new String[]{str1,str2,str3,str4});
             }
         }
     }
