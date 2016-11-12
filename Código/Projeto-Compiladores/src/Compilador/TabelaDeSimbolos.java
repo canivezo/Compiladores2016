@@ -20,6 +20,11 @@ public class TabelaDeSimbolos
             simbolos = new Vector<Simbolo>();
         }
         
+        public int getSize()
+        {
+            return simbolos.size();
+        }
+        
         public void adicionaSimbolo(Simbolo simbolo) throws Exception
         {
             if(simbolo == null)
@@ -97,13 +102,23 @@ public class TabelaDeSimbolos
             throw new Exception("Simbolo nao encontrado");
         }
         
-        public boolean verificaTabela()
+        public boolean verificaTabela(Simbolo s)
         {
+            for(int i = 0; i < simbolos.size(); i++)
+            {
+                if(simbolos.get(i).equals(s)) // se o simbolo existir retorna true
+                    return true;
+            }
             return false;
         }
         
-        public boolean verificarEscopo()
+        public boolean verificarEscopo(Simbolo s)
         {
+            for(int i = (simbolos.size() - 1); i >= 0; i--)
+            {
+                if(simbolos.get(i).equals(s)) // se o simbolo existir retorna true
+                    return true;
+            }
             return false;
         }
 }

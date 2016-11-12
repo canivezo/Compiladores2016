@@ -11,14 +11,20 @@ package Compilador;
  */
 public class Simbolo 
 {
-    private int type;
+    private Type tipo = null;
     private Token token;
     private int expressionType;
     
-    public Simbolo(int expType, int typ, Token tok) throws Exception
+    public Simbolo(int expType, Type t, Token tok) throws Exception
     {
         setExpressionType(expType);
-        setType(typ);
+        setType(t);
+        setToken(tok);
+    }
+    
+    public Simbolo(int expType, Token tok) throws Exception
+    {
+        setExpressionType(expType);
         setToken(tok);
     }
     
@@ -61,16 +67,35 @@ public class Simbolo
      * 4 - para procedimento
      * 5 - para programa
      */
-    public void setType(int t) throws Exception
+    public void setType(Type t) throws Exception
     {
-        if(t < 0 || t > 5)
+        if(t == null)
             throw new Exception("Tipo do simbolo invalido");
-        this.type = t;
+        
+        tipo = t;
     }
     
-    public int getType()
+    public Type getType()
     {
-        return type;
+        return tipo;
+    }
+    
+    /**
+    * Este método retorna se esse símnolo é o mesmo que outro símbolo.
+    * Não compara o campo type.
+    */
+    @Override
+    public boolean equals(Object o)
+    {
+        if(o.getClass() == this.getClass())
+        {
+            Simbolo s = (Simbolo) o;
+            if(s.getToken().getSimbolo().equals(this.token.getSimbolo()) && s.getToken().getSimbolo().equals(this.token.getSimbolo()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
