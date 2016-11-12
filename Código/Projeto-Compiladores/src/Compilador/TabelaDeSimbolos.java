@@ -118,8 +118,16 @@ public class TabelaDeSimbolos
          */
         public boolean verificarEscopo(Simbolo s)
         {
+            Type t;
             for(int i = (simbolos.size() - 1); i >= 0; i--)
             {
+                t = simbolos.get(i).getType();
+                if(t != null)
+                {
+                    if(t.getClass() == Rotina.class)
+                        break;
+                }
+                
                 if(simbolos.get(i).equals(s)) // se o simbolo existir retorna true
                     return true;
             }
