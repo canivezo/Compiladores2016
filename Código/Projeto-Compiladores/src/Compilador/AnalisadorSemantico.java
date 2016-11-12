@@ -17,24 +17,68 @@ public class AnalisadorSemantico {
         
     }
     
-    public void adicionaProcedimento ()
+    public void insereTabela()
     {
         
     }
     
-    public void adicionaFuncao ()
+    public boolean pesquisaDuplicVar()
+    {
+        return false;
+    }
+    
+    public void colocaTipoTabela()
     {
         
     }
     
-    public void adicionaVar ()
+    public void colocaTipoFuncTabela()
     {
         
     }
     
-    public void finalizaEscopo ()
+    public boolean pesquisaDeclVarTabela()
+    {
+        return false;
+    }
+    
+    public boolean pesquisaDeclVarFunc()
+    {
+        return false;
+    }
+    
+    public boolean pesquisaDeclProc()
+    {
+        return false;
+    }
+    
+    public Type getSimboloType()
+    {
+        return null;
+    }
+    
+    public void setSimboloType(Simbolo s, String tipo)
     {
         
     }
     
+    public void comecaExpressao()
+    {
+        
+    }
+    
+    public void operadorNaExpressao()
+    {
+        
+    }
+    
+    public void simboloNaExpressao()
+    {
+        
+    }
+    
+    public void terminaExpressao()
+    {
+        
+    }
 }

@@ -111,7 +111,11 @@ public class TabelaDeSimbolos
             }
             return false;
         }
-        
+        /**
+         * Pesquisa somente dentro do escopo da rotina.
+         * @param s
+         * @return 
+         */
         public boolean verificarEscopo(Simbolo s)
         {
             for(int i = (simbolos.size() - 1); i >= 0; i--)
