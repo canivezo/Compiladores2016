@@ -13,18 +13,25 @@ public class Simbolo
 {
     private Type tipo = null;
     private Token token;
-    private int expressionType;
+    //private int expressionType;
     
-    public Simbolo(int expType, Type t, Token tok) throws Exception
+    public Simbolo(Type t, Token tok) throws Exception
     {
-        setExpressionType(expType);
+        if(t == null)
+            throw new Exception("Tipo invalido");
+        
+        if(tok == null)
+            throw new Exception("Token invalido");
+        
         setType(t);
         setToken(tok);
     }
     
-    public Simbolo(int expType, Token tok) throws Exception
+    public Simbolo(Token tok) throws Exception
     {
-        setExpressionType(expType);
+        if(tok == null)
+            throw new Exception("Token invalido");
+        
         setToken(tok);
     }
     
@@ -32,9 +39,10 @@ public class Simbolo
      * 
      * @param e assume 0 não pode estar em uma expressão, 
      *          1 para expressões booleanas 
-     *          e 2 para expressóes do tipo inteiro. 
+     *          e 2 para expressóes do tipo inteiro.
+     *          nao utilizado por enquanto
      */
-    public void setExpressionType(int e) throws Exception
+    /*public void setExpressionType(int e) throws Exception
     {
         if(e < 0 || e > 2)
             throw new Exception("Tipo da expressao do simbolo invalido");
@@ -44,7 +52,7 @@ public class Simbolo
     public int getExpressionType()
     {
         return expressionType;
-    }
+    }*/
     
     public void setToken(Token t) throws Exception
     {
