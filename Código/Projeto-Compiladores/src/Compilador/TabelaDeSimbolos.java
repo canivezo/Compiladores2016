@@ -147,24 +147,21 @@ public class TabelaDeSimbolos
      * @param r 
      * @return 
      */
-    public boolean verificaEscopo(Simbolo s, Simbolo r)
+    public boolean verificaEscopo(Simbolo s)
     {
         Type t;
-        for(int i = (simbolos.size() - 1); i >= 0; i--)
+        int n;
+        int i = (simbolos.size() - 1);
+        do
         {
             t = simbolos.get(i).getType();
-            if(t != null)
-            {
-                if(t.getClass() == Rotina.class)
-                {
-                    if(s.equals(r))
-                        break;
-                }
-            }
-
-            if(simbolos.get(i).equals(s)) // se o simbolo existir retorna true
+            n = simbolos.get(i).getNivel();
+            if(simbolos.get(i).equals(s))
                 return true;
+            
+            i--;
         }
+        while(n <= s.getNivel() && i >= 0);
         return false;
     }
 }

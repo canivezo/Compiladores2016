@@ -12,23 +12,43 @@ package Compilador;
 public class AnalisadorSemantico {
 
     private TabelaDeSimbolos tabelaDeSimbolos;
-    private Simbolo rotina;
     private int label = 0;
+    private int posPilha = 0;
+    private int nivel = -1;
     
     public AnalisadorSemantico() 
     {
         tabelaDeSimbolos = new TabelaDeSimbolos();
     }
     
+    /*
+    * No caso de procedimentos, o simbolo é inserido com o tipo.
+    */
     public void insereTabela(Simbolo s) throws Exception
     {
+        //Deve setar o nivel neste ponto.
+        s.setNivel(nivel);
+        if(s.getType() != null)
+        {
+            switch(s.getType().getType())
+            {
+                //se definir um proc ou func ou programa, deve incrementar o nivel.
+                case "proc":
+                case "programa":
+                   nivel++;
+                   break;
+                default:
+                    throw new Exception("tipo invalido");
+            }
+        }
         tabelaDeSimbolos.adicionaSimbolo(s);
     }
     
     public boolean pesquisaDuplicVar(Token t) throws Exception
     {
         Simbolo s = new Simbolo(t);
-        return tabelaDeSimbolos.verificaEscopo(s, rotina);
+        s.setNivel(nivel);
+        return tabelaDeSimbolos.verificaEscopo(s);
     }
     
     public void colocaTipoTabela(Type t) throws Exception
@@ -37,7 +57,9 @@ public class AnalisadorSemantico {
         while(i >= 0 && tabelaDeSimbolos.getSimbolo(i).getType() == null)
         {
             i--;
-            tabelaDeSimbolos.getSimbolo(i).setType(t);
+            Type tipo = new Var(t.getType(), posPilha);
+            tabelaDeSimbolos.getSimbolo(i).setType(tipo);
+            posPilha++;
         }
     }
     
@@ -105,6 +127,30 @@ public class AnalisadorSemantico {
     {
         Simbolo s = new Simbolo(t);
         return tabelaDeSimbolos.getSimbolo(s).getType();
+    }
+    
+    public void finalizaEscopo() throws Exception
+    {
+        Simbolo aux;
+        int count = tabelaDeSimbolos.getSize() - 1;
+        int dealloc = 0;
+        while(count >= 0)
+        {
+            aux = tabelaDeSimbolos.getSimbolo(count);
+            if(aux != null)
+            {
+                //Se retirar uma variável, decrementa a pilha.
+                if(aux.getType().getClass() == Var.class)
+                {
+                    dealloc++;
+                }
+            }
+            tabelaDeSimbolos.excluiSimbolo(count);
+        }
+        posPilha = posPilha - dealloc;
+        //gerar o dealloc
+        //o nivel é decrementado já que acabou uma funcao
+        nivel--;
     }
     
     public void setSimboloType(Simbolo s, String tipo) throws Exception

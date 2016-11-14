@@ -13,7 +13,7 @@ public class Simbolo
 {
     private Type tipo = null;
     private Token token;
-    //private int expressionType;
+    private int nivel;
     
     public Simbolo(Type t, Token tok) throws Exception
     {
@@ -36,23 +36,20 @@ public class Simbolo
     }
     
     /**
-     * 
-     * @param e assume 0 não pode estar em uma expressão, 
-     *          1 para expressões booleanas 
-     *          e 2 para expressóes do tipo inteiro.
-     *          nao utilizado por enquanto
+     * @param n pode ser qualquer valor acima de -2
      */
-    /*public void setExpressionType(int e) throws Exception
+    public void setNivel(int n) throws Exception
     {
-        if(e < 0 || e > 2)
-            throw new Exception("Tipo da expressao do simbolo invalido");
-        this.expressionType = e;
+        if(n < -1)
+            throw new Exception("Nivel invalido");
+        
+        nivel = n;
     }
    
-    public int getExpressionType()
+    public int getNivel()
     {
-        return expressionType;
-    }*/
+        return nivel;
+    }
     
     public void setToken(Token t) throws Exception
     {
