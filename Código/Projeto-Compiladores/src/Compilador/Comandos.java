@@ -39,5 +39,4 @@ public class Comandos
     public static final String PRINT = "PRN";
     public static final String CALL = "CALL";
     public static final String RETURN = "RETURN";
-    
 }
