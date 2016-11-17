@@ -18,6 +18,7 @@ public class AnalisadorLexical {
     private int leituraDoArquivo = 0;
     private char caracterLido;
     private LeitorDeArquivo arquivo;
+    private Erro erro = new Erro();
     //leitor de arquivo
     public AnalisadorLexical(String nomeDoArquivo) throws Exception
     {
@@ -37,7 +38,7 @@ public class AnalisadorLexical {
                     }
                     leiaCaracter();
                     if(leituraDoArquivo == -1)
-                        throw new Exception("Erro, sem o } para terminar o comentario. Linha : "+linha);
+                        erro.erroLexico(linha, 14);
                 }
                 leiaCaracter();
                 continue;
@@ -51,7 +52,7 @@ public class AnalisadorLexical {
                     {
                         leiaCaracter();
                         if(leituraDoArquivo == -1)
-                            throw new Exception("Erro, sem o } para terminar o comentario. Linha : "+linha);
+                            erro.erroLexico(linha, 14);
                         if(caracterLido == '*')
                         {
                             leiaCaracter();
@@ -77,7 +78,7 @@ public class AnalisadorLexical {
             token = nextToken();
             if(token == null)
             {
-                throw new Exception("Erro, palavra não pertence a linguagem. Linha : "+linha);
+                erro.erroLexico(linha, 15);
             }
             vetorDeTokens.add(token);
         }
@@ -116,7 +117,7 @@ public class AnalisadorLexical {
     public Token pegaToken(int i) throws Exception
     {
         if(vetorDeTokens.size() < (i - 1) || (i - 1) < 0)
-            throw new Exception("Posicao invalida");
+            erro.erroLexico(linha, 16);
         return vetorDeTokens.get(i);
     }
     

@@ -73,6 +73,12 @@ public class Erro
                return "Falta 'entao'";
            case 13:
                return "Falta 'verdeiro' ou 'falso'";
+           case 14:
+               return "Erro, sem o } para terminar o comentario.";
+           case 15:
+               return "Erro, palavra não pertence a linguagem.";
+           case 16:
+               return "Posicao invalida";
        }
        return "Erro nao encontrado";
    }
