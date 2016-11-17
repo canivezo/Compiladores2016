@@ -5,6 +5,8 @@
  */
 package Compilador;
 
+import javax.swing.JOptionPane;
+
 /**
  * 
  * @author Rubens
@@ -20,22 +22,25 @@ public class Erro
     {
     }
     
-    public void erroLexico (int linhaErro, int cod)
+    public void erroLexico (int linhaErro, int cod) throws Exception
     {
+        JOptionPane.showMessageDialog(null, "Erro de compilação", "Erro", JOptionPane.ERROR_MESSAGE);
         System.out.println("Erro Lexico identificado na linha: " +linhaErro+ "  Descrição: "+codErro(cod));
-        System.exit(0);
+        throw new Exception("Erro léxico. Descrição: "+codErro(cod));
     }
     
-    public void erroSintatico (int linhaErro, int cod)
+    public void erroSintatico (int linhaErro, int cod) throws Exception
     {
+        JOptionPane.showMessageDialog(null, "Erro de compilação", "Erro", JOptionPane.ERROR_MESSAGE);
         System.out.println("Erro Sintatico identificado na linha: " +linhaErro+ "  Descrição: "+codErro(cod));
-        System.exit(0);
+        throw new Exception("Erro sintático. Descrição: "+codErro(cod));
     }
     
-    public void erroSemantico (int linhaErro, int cod)
+    public void erroSemantico (int linhaErro, int cod) throws Exception
     {
+        JOptionPane.showMessageDialog(null, "Erro de compilação", "Erro", JOptionPane.ERROR_MESSAGE);
         System.out.println("Erro Semantico identificado na linha: " +linhaErro+ "  Descrição: "+codErro(cod));
-        System.exit(0);
+        throw new Exception("Erro semântico. Descrição: "+codErro(cod));
     }
     
    public String codErro (int cod)
