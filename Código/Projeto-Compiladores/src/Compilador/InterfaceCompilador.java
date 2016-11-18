@@ -32,6 +32,7 @@ public class InterfaceCompilador extends javax.swing.JFrame {
     
     public InterfaceCompilador() {
         initComponents();
+        
     }
 
     /**
@@ -133,17 +134,17 @@ public class InterfaceCompilador extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(botaoCompilar)
-                .addGap(22, 22, 22))
+                .addContainerGap())
         );
 
         pack();
@@ -241,6 +242,7 @@ public class InterfaceCompilador extends javax.swing.JFrame {
                 JANELAC.setVisible(true);
                 JANELAC.setLocationRelativeTo(null);
                 JANELAC.setTitle("Compilador MLR");
+                JANELAC.setResizable(false);
             }
         });
     }
