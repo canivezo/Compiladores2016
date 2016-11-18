@@ -12,18 +12,34 @@ package Compilador;
 public class AnalisadorSemantico {
 
     private TabelaDeSimbolos tabelaDeSimbolos;
+    private VerificaExpressao exp;
     private int label = 0;
     private int posPilha = 0;
-    private int nivel = -1;
+    private int nivel = 0;
     
     public AnalisadorSemantico() 
     {
         tabelaDeSimbolos = new TabelaDeSimbolos();
+        exp = new VerificaExpressao();
     }
     
-    /*
-    * No caso de procedimentos, o simbolo é inserido com o tipo.
-    */
+    /**
+     * Retorna o valor do label disponível e incrementa o label dentro do semântico.
+     * As chamadas de se e enquanto precisam do label.
+     * @return 
+     */
+    public int getLabel()
+    {
+        int i = label;
+        label++;
+        return i;
+    }
+    
+    /**
+     * No caso de procedimentos e do programa, o simbolo é inserido com o tipo.
+     * @param s
+     * @throws Exception 
+     */
     public void insereTabela(Simbolo s) throws Exception
     {
         //Deve setar o nivel neste ponto.
@@ -51,21 +67,30 @@ public class AnalisadorSemantico {
         return tabelaDeSimbolos.verificaEscopo(s);
     }
     
+    /**
+     * Coloca tipos na tabela de simbolos
+     * @param t
+     * @throws Exception 
+     */
     public void colocaTipoTabela(Type t) throws Exception
     {
-        int i = tabelaDeSimbolos.getSize();
-        while(i >= 0 && tabelaDeSimbolos.getSimbolo(i).getType() == null)
+        int i = tabelaDeSimbolos.getSize() - 1;
+        //Zero tabela é o próprio programa
+        while(i > 0 && tabelaDeSimbolos.getSimbolo(i).getType() == null)
         {
-            i--;
             Type tipo = new Var(t.getType(), posPilha);
             tabelaDeSimbolos.getSimbolo(i).setType(tipo);
             posPilha++;
+            i--;
         }
     }
     
     /**
-    * Deve ser chamado depois da declaraçao de uma função
-    */
+     * Adiciona o tipo da função.
+     * Deve ser chamado depois da declaraçao de uma função.
+     * @param tipo
+     * @throws Exception 
+     */
     public void colocaTipoFuncTabela(String tipo) throws Exception
     {
        int i = tabelaDeSimbolos.getSize();

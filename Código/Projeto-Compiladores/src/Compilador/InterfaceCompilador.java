@@ -152,27 +152,27 @@ public class InterfaceCompilador extends javax.swing.JFrame {
     private void fileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileChooserActionPerformed
         // TODO add your handling code here:
      
-     int returnVal = seletorDeArquivos.showOpenDialog(this);
-     if (returnVal == JFileChooser.APPROVE_OPTION) 
-     {
-     File file = seletorDeArquivos.getSelectedFile();
-         try 
-         {
-            // What to do with the file, e.g. display it in a TextArea
-             System.out.println(file.getAbsolutePath());
-             this.urlArquivo = file.getAbsolutePath();
-             editorTexto.setEnabled(true);
-             leitorDeArquivo(file);
-          } 
-          catch (Exception ex) 
-          {
-             System.out.println("problem accessing file"+file.getAbsolutePath());
-          }
-     } 
-     else 
-         {
+        int returnVal = seletorDeArquivos.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) 
+        {
+            File file = seletorDeArquivos.getSelectedFile();
+            try 
+            {
+                // What to do with the file, e.g. display it in a TextArea
+                System.out.println(file.getAbsolutePath());
+                this.urlArquivo = file.getAbsolutePath();
+                editorTexto.setEnabled(true);
+                leitorDeArquivo(file);
+            } 
+            catch (Exception ex) 
+            {
+                System.out.println("problem accessing file"+file.getAbsolutePath());
+            }
+        } 
+        else 
+        {
             System.out.println("File access cancelled by user.");
-         }
+        }
          
     }//GEN-LAST:event_fileChooserActionPerformed
 
@@ -184,13 +184,13 @@ public class InterfaceCompilador extends javax.swing.JFrame {
             arquivoTemp.close();
         } 
         catch (IOException ex) 
-            {
-                Logger.getLogger(InterfaceCompilador.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        {
+            Logger.getLogger(InterfaceCompilador.class.getName()).log(Level.SEVERE, null, ex);
+        }
         catch (Exception e) 
-            {
-		e.printStackTrace();
-            }
+        {
+            e.printStackTrace();
+        }
         
         try
         {
@@ -264,37 +264,37 @@ public class InterfaceCompilador extends javax.swing.JFrame {
     
     public void leitorDeArquivo (File arquivo)
     {
-    FileInputStream fileStream = null;
-    String texto = "";
-    
-    try
-    {
-        fileStream = new FileInputStream(arquivo);
-        int conteudo;
-        while ((conteudo = fileStream.read()) != -1)
+        FileInputStream fileStream = null;
+        String texto = "";
+
+        try
         {
-            texto += (char) conteudo;
+            fileStream = new FileInputStream(arquivo);
+            int conteudo;
+            while ((conteudo = fileStream.read()) != -1)
+            {
+                texto += (char) conteudo;
+            }
         }
-    }
-    catch(IOException e)
-    {
-        e.printStackTrace();
-    }
-    finally 
-    {
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally 
+        {
             try {
                 if (fileStream != null) 
-                    {
-                    fileStream.close();
-                    }
-                } 
-                catch (IOException ex) 
                 {
-                ex.printStackTrace();
+                    fileStream.close();
                 }
-    }
-    editorTexto.setText(texto);
-    //editorTexto.setLineWrap(true);
+            } 
+            catch (IOException ex) 
+            {
+                ex.printStackTrace();
+            }
+        }
+        editorTexto.setText(texto);
+        //editorTexto.setLineWrap(true);
     }
 
 }
