@@ -22,7 +22,7 @@ public class TestePilha
         for(int a=0; a<5; a++)
         {
             pilha.push(a, a);
-            System.out.println("Empilhando: end: "+pilha.tamPilha()+" valor: "+a);
+            System.out.println("Empilhando: end: "+(pilha.tamPilha())+" valor: "+a);
         }
         //Tamanho da pilha
         System.out.println("Tamanho da pilha: "+pilha.tamPilha());

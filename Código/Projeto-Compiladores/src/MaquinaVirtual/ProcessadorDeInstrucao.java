@@ -51,6 +51,11 @@ public class ProcessadorDeInstrucao {
         return saida;
     }
     
+    public void setSaida()
+    {
+        saida = null;
+    }
+    
     public boolean isFim()
     {
         if(fim) 
