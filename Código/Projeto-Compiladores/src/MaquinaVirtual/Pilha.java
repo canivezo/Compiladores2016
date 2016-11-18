@@ -16,6 +16,7 @@ public class Pilha
     
     public int posicao;
     private List<DadosPilha> conteudo = new LinkedList<DadosPilha>();
+    private DadosPilha ret;
     
     public Pilha()
     {
@@ -55,6 +56,18 @@ public class Pilha
     {
         this.posicao--;
         return this.conteudo.remove(this.conteudo.size() -1);
+    }
+    
+    public int getEnd()
+    {
+        ret = conteudo.remove(this.conteudo.size()-1);
+        return ret.getAdress();
+    }
+    
+    public int getValor()
+    {
+        ret = conteudo.remove(this.conteudo.size()-1);
+        return ret.getValor();
     }
     
 }

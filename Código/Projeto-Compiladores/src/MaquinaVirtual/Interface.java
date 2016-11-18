@@ -36,12 +36,15 @@ public class Interface extends javax.swing.JFrame {
     int nume = 256, tamanhoArq =0;
     private int caracter = 0;
     private InputStreamReader leituracaracteres;
+    private ProcessadorDeInstrucao processador;
 
     
     //Construtor da classe
     public Interface() 
     {
         this.urlArquivo = null;
+        tabPilha = (DefaultTableModel) tabelaPilha.getModel();
+        tabInstrucao = (DefaultTableModel) tabelaInstrucao.getModel();
         initComponents();
     }
 
@@ -64,8 +67,8 @@ public class Interface extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        botaoBreak = new javax.swing.JButton();
+        botaoContinuar = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
@@ -156,17 +159,17 @@ public class Interface extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Break Point's");
 
-        jButton1.setText("Breakpoint");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botaoBreak.setText("Breakpoint");
+        botaoBreak.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                botaoBreakActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Continuar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        botaoContinuar.setText("Continuar");
+        botaoContinuar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                botaoContinuarActionPerformed(evt);
             }
         });
 
@@ -229,8 +232,8 @@ public class Interface extends javax.swing.JFrame {
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(botaoBreak, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                            .addComponent(botaoContinuar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3))
@@ -271,9 +274,9 @@ public class Interface extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jButton1)
+                                        .addComponent(botaoBreak)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButton2))
+                                        .addComponent(botaoContinuar))
                                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE))
                 .addContainerGap(50, Short.MAX_VALUE))
@@ -318,31 +321,49 @@ public class Interface extends javax.swing.JFrame {
          }
     }//GEN-LAST:event_BotaoAbrirArqvActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void botaoBreakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoBreakActionPerformed
         try {
             // TODO add your handling code here:
             tabelaPilhaRemove();
         } catch (Exception ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_botaoBreakActionPerformed
 
+    /**
+     * 
+     * @param evt 
+     */
     private void BotaoCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCompilarActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here
+        
         if(urlArquivo != null)
         {
-        
+            try 
+            {
+                processador = new ProcessadorDeInstrucao(urlArquivo);
+            } catch (Exception ex) 
+            {
+                Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            int i = 0;
+            while(processador.getInstrucoes().size() > i || !processador.isFim())
+            {
+                processador.runInstruction();
+                pilha = processador.getPilha();
+                tabPilha.addRow(new Integer[]{pilha.getEnd(),pilha.getValor()});
+                i++;
+            }
         }
         else
            JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_BotaoCompilarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void botaoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoContinuarActionPerformed
         // TODO add your handling code here:
-        tabelaPilhaAdd(nume++,nume-5);
-        tabelaInstrucaoAdd();
-        //tabelaPilhaAdd(nume++,nume-4);
-    }//GEN-LAST:event_jButton2ActionPerformed
+        //tabelaPilhaAdd(endereço,valor);
+        //tabelaInstrucaoAdd();
+    }//GEN-LAST:event_botaoContinuarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -385,8 +406,8 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JMenuItem BotaoAbrirArqv;
     private javax.swing.JMenuItem BotaoCompilar;
     private javax.swing.JMenuItem BotaoSalvarArqv;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton botaoBreak;
+    private javax.swing.JButton botaoContinuar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
@@ -498,7 +519,6 @@ public class Interface extends javax.swing.JFrame {
     
     public void tabelaInstrucaoAdd()
     {
-        tabInstrucao = (DefaultTableModel) tabelaInstrucao.getModel();
         tabInstrucao.addRow(new String[]{"1","Mov","atr1","atr2","teste"});
     }
     

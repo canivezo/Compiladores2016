@@ -13,7 +13,8 @@ public class ProcessadorDeInstrucao {
     
     private Vector<Instrucao> m_instrucoes = null;
     private Pilha m_pilha = null;
-    int m_instrucao;
+    private boolean fim = false;
+    int m_instrucao = 0;
     /**
      * 
      * @param instrucoes inicializa o vetor de instruções na classe.
@@ -42,11 +43,19 @@ public class ProcessadorDeInstrucao {
         return m_pilha;
     }
     
+    public boolean isFim()
+    {
+        if(fim) 
+            return true;
+        
+        return false;
+    }
+    
     public void runInstruction()
     {
-        if(!(m_instrucao < 0 || m_instrucao > m_instrucoes.capacity()))
+        if(!(m_instrucao < 0 || m_instrucao < m_instrucoes.size()))
         {
-            
+            m_instrucao++;
         }
         else
         {
@@ -175,7 +184,7 @@ public class ProcessadorDeInstrucao {
     
     private void hlt()
     {
-        
+        fim = true;
     }
     
     private void nul()
