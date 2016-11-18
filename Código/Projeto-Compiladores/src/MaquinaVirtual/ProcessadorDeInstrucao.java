@@ -312,10 +312,58 @@ public class ProcessadorDeInstrucao {
     
     private void executaExpressaoComposta(InstrucaoComposta instrucao)
     {
+        nomeInstrucao i = instrucao.getInstrucao();
+        if(i == nomeInstrucao.ADD)  ldc(instrucao.getParam1());
+        if(i == nomeInstrucao.SUB)  ldv(instrucao.getParam1());
+        if(i == nomeInstrucao.MULT) str(instrucao.getParam1());
+        if(i == nomeInstrucao.DIVI) jmp(instrucao.getParam1());
+        if(i == nomeInstrucao.INV)  jmpf(instrucao.getParam1());
+        if(i == nomeInstrucao.AND)  call(instrucao.getParam1());
+    }
+    
+    private void ldc(int param)
+    {
+        
+    }
+    
+    private void ldv(int param)
+    {
+        
+    }
+    
+    private void str(int param)
+    {
+        
+    }
+    
+    private void jmp(int param)
+    {
+        
+    }
+    
+    private void jmpf(int param)
+    {
+        
+    }
+    
+    private void call(int param)
+    {
         
     }
     
     private void executaExpressaoDuplamenteComposta(InstrucaoDuplamenteComposta instrucao)
+    {
+        nomeInstrucao i = instrucao.getInstrucao();
+        if(i == nomeInstrucao.ALLOC) alloc(instrucao.getParam1(), instrucao.getParam2());
+        if(i == nomeInstrucao.DALLOC) dalloc(instrucao.getParam1(), instrucao.getParam2());
+    }
+    
+    private void alloc(int p1, int p2)
+    {
+        
+    }
+    
+    private void dalloc(int p1, int p2)
     {
         
     }
