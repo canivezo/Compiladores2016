@@ -335,14 +335,13 @@ public class Interface extends javax.swing.JFrame {
      * @param evt 
      */
     private void BotaoCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCompilarActionPerformed
-        // TODO add your handling code here
-        
         if(urlArquivo != null)
         {
             try 
             {
                 processador = new ProcessadorDeInstrucao(urlArquivo);
-            } catch (Exception ex) 
+            } 
+            catch (Exception ex) 
             {
                 Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -351,7 +350,8 @@ public class Interface extends javax.swing.JFrame {
             {
                 processador.runInstruction();
                 pilha = processador.getPilha();
-                //tabPilha.addRow(new Integer[]{pilha.getEnd(),pilha.getValor()});
+                zerarTabPilha(pilha.tamPilha());
+                preencherTabPilha(pilha.tamPilha());
                 i++;
             }
         }
@@ -360,9 +360,28 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_BotaoCompilarActionPerformed
 
     private void botaoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoContinuarActionPerformed
-        // TODO add your handling code here:
-        //tabelaPilhaAdd(endereço,valor);
-        //tabelaInstrucaoAdd();
+        if(urlArquivo != null)
+            {
+            if(!processador.isFim())
+                {
+                try 
+                {
+                    processador = new ProcessadorDeInstrucao(urlArquivo);
+                } 
+                catch (Exception ex) 
+                {
+                    Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                processador.runInstruction();
+                pilha = processador.getPilha();
+                zerarTabPilha(pilha.tamPilha());
+                preencherTabPilha(pilha.tamPilha());
+                }
+                else
+                JOptionPane.showMessageDialog(null, "Compilação chegou ao fim!", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_botaoContinuarActionPerformed
 
     /**
@@ -516,6 +535,22 @@ public class Interface extends javax.swing.JFrame {
         }
         else
             throw new Exception("Erro, pilha vazia");
+    }
+    
+    public void zerarTabPilha(int tam)
+    {
+        for(int a=0; a<tam; a++)
+        {
+            tabPilha.removeRow(tabPilha.getRowCount()-1);
+        }
+    }
+    
+    public void preencherTabPilha(int tam)
+    {
+        for(int a=tam; a>0; a--)
+        {
+            tabPilha.addRow(new Integer[]{pilha.getEnd(a),pilha.getValor(a)});
+        }
     }
     
     public void tabelaInstrucaoAdd()

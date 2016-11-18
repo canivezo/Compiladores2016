@@ -16,6 +16,7 @@ public class Pilha
     
     public int posicao = 0;
     private ArrayList<DadosPilha> conteudo = new ArrayList<DadosPilha>();
+    private DadosPilha aux = new DadosPilha();
     
     /**
      *
@@ -39,7 +40,7 @@ public class Pilha
     {
         if(!pilhaVazia())
         {
-            return this.posicao;
+            return conteudo.size();
         }
         else
             return 0;
@@ -47,17 +48,14 @@ public class Pilha
     
     public void push(int end, int valor)
     {
-            DadosPilha aux = new DadosPilha();
             aux.setAdress(end);
             aux.setValor(valor);
-            this.conteudo.add(aux);
-            this.posicao++; 
+            conteudo.add(aux);
     }
     
     public DadosPilha pop()
     {
-        this.posicao--;
-        return this.conteudo.remove(this.conteudo.size() -1);
+        return conteudo.remove(conteudo.size() -1);
     }
     
     public int getEnd(int pos)
@@ -75,7 +73,6 @@ public class Pilha
     public void setValor(int pos, int val)
     {
         int a = conteudo.get(conteudo.size()-pos).adress;
-        DadosPilha aux = new DadosPilha();
         aux.setAdress(a);
         aux.setValor(val);
         conteudo.set(conteudo.size()-pos, aux);
