@@ -43,9 +43,9 @@ public class Interface extends javax.swing.JFrame {
     public Interface() 
     {
         this.urlArquivo = null;
+        initComponents();
         tabPilha = (DefaultTableModel) tabelaPilha.getModel();
         tabInstrucao = (DefaultTableModel) tabelaInstrucao.getModel();
-        initComponents();
     }
 
     /**
@@ -351,7 +351,7 @@ public class Interface extends javax.swing.JFrame {
             {
                 processador.runInstruction();
                 pilha = processador.getPilha();
-                tabPilha.addRow(new Integer[]{pilha.getEnd(),pilha.getValor()});
+                //tabPilha.addRow(new Integer[]{pilha.getEnd(),pilha.getValor()});
                 i++;
             }
         }
@@ -397,6 +397,7 @@ public class Interface extends javax.swing.JFrame {
             public void run() {
                 janelaP.setVisible(true);
                 janelaP.setLocationRelativeTo(null);
+                janelaP.setResizable(false);
             }
         });
     }

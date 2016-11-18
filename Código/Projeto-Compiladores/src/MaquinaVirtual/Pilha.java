@@ -5,8 +5,8 @@
  */
 package MaquinaVirtual;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
+
 
 /**
  * @author Rubens
@@ -14,10 +14,12 @@ import java.util.List;
 public class Pilha 
 {
     
-    public int posicao;
-    private List<DadosPilha> conteudo = new LinkedList<DadosPilha>();
-    private DadosPilha ret;
+    public int posicao = 0;
+    private ArrayList<DadosPilha> conteudo = new ArrayList<DadosPilha>();
     
+    /**
+     *
+     */
     public Pilha()
     {
        this.posicao = 0;
@@ -58,16 +60,25 @@ public class Pilha
         return this.conteudo.remove(this.conteudo.size() -1);
     }
     
-    public int getEnd()
+    public int getEnd(int pos)
     {
-        ret = conteudo.remove(this.conteudo.size()-1);
-        return ret.getAdress();
+        return conteudo.get(conteudo.size()-pos).getAdress();
     }
     
-    public int getValor()
+    public int getValor(int pos)
     {
-        ret = conteudo.remove(this.conteudo.size()-1);
-        return ret.getValor();
+        return conteudo.get(conteudo.size()-pos).getValor();
+
+    }
+    
+    
+    public void setValor(int pos, int val)
+    {
+        int a = conteudo.get(conteudo.size()-pos).adress;
+        DadosPilha aux = new DadosPilha();
+        aux.setAdress(a);
+        aux.setValor(val);
+        conteudo.set(conteudo.size()-pos, aux);
     }
     
 }
