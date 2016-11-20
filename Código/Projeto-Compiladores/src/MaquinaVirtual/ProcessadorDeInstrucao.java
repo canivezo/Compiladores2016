@@ -364,7 +364,7 @@ public class ProcessadorDeInstrucao {
     
     private void call(int param)
     {
-        m_pilha.push(m_pilha.tamPilha(), varSegura);
+        m_pilha.push(m_pilha.tamPilha(), varSegura +1);
         varSegura = param;
     }
     
