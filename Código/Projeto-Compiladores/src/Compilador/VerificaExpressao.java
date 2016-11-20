@@ -12,6 +12,10 @@ import java.util.Vector;
  * @author lucas
  */
 public class VerificaExpressao {
+
+    private Exception Exception(String inválido) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     private interface vetorExp<Generic> {
         public Generic getExp();
@@ -63,8 +67,32 @@ public class VerificaExpressao {
         }
     }
     
+    private class ExpNum implements vetorExp<Token>{
+
+        private Token token;
+
+        public ExpNum(Token t)
+        {
+            setExp(t);
+        }
+        
+        public Token getExp()
+        {
+            return token;
+        }
+
+        public void setExp(Token t)
+        {
+            token = t;
+        }
+    }
+    
+    //Pós fixa
     private Vector<vetorExp> expressao;
+    //Pilha de operadores
     private Vector<Token> pilha;
+    
+    private boolean wasBool = false;
     
     public VerificaExpressao()
     {
@@ -119,7 +147,7 @@ public class VerificaExpressao {
     {   
         if(i == 22 || i == 23) return 8; // abre e fecha parentesis.
         
-        if(i == 36 || i == 0) return 7; //Nao e NEG. O zero seria um menos como um operador de sinal, INV.
+        if(i == 36 || i == 0) return 7; //Nao e INV. O zero seria um menos como um operador de sinal, INV.
         
         if(i == 32 || i == 33) return 5; //+ e -.
         
@@ -138,9 +166,92 @@ public class VerificaExpressao {
      * Percorre a this.expressao e gera todo o código.
      * Deve verificar também a validade da expressão.
      */
-    private void geraExp()
+    private void geraExp() throws Exception
     {
-        
+        //seta essa variável se o resultado for booleano
+        int pos = 0;
+        while(pos < expressao.size())
+        {
+            if(expressao.get(pos).getClass() == ExpOp.class)
+            {
+                ExpOp op = (ExpOp) expressao.get(pos);
+                switch(op.getExp().simboloToCode())
+                {
+                    case 0: // inv
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.INV);
+                        break;
+                    case 24:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.CMA);
+                        break;
+                    case 25:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.CMAQ);    
+                        break;
+                    case 26:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.CEQ);
+                        break;
+                    case 27:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.CME);
+                        break;
+                    case 28:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.CMEQ);
+                        break;
+                    case 29:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.CDIF);
+                        break;
+                    case 30:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.ADD);
+                        break;
+                    case 31:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.SUB);
+                        break;
+                    case 32:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.MULT);
+                        break;
+                    case 33:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.DIVI);
+                        break;
+                    case 34:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.AND); 
+                        break;
+                    case 35:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.OR);
+                        break;
+                    case 36:
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.NEG);
+                    default:
+                        throw Exception("Inválido");
+                }
+            }
+            else //Não é operador. snumero ou sidentificador
+            {
+                if(expressao.get(pos).getClass() == ExpNum.class)
+                {
+                    ExpNum num = (ExpNum) expressao.get(pos);
+                    if(num.getExp().simboloToCode() == 18)
+                    {
+                       GeradorDeCodigo.getInstance().geraComando(Comandos.LDC, num.getExp().getLexema());
+                    }
+                    else
+                    {
+                        if(num.getExp().simboloToCode() == 38) // verdadeiro
+                        {
+                            GeradorDeCodigo.getInstance().geraComando(Comandos.LDC, 1);
+                        }
+                        else //falso
+                        {
+                            GeradorDeCodigo.getInstance().geraComando(Comandos.LDC, 0);
+                        }
+                    }
+                }
+                else
+                {
+                    ExpSimb sim = (ExpSimb) expressao.get(pos);
+                    GeradorDeCodigo.getInstance().geraComando(Comandos.LDV, sim.getExp().getType().getInfo());
+                }
+            }
+            pos++;
+        }
+        wasBool = true;
     }
     
     /**
@@ -157,7 +268,7 @@ public class VerificaExpressao {
     }
     
     /**
-     * 
+     * Adiciona um Símbolo na expressão
      * @param s
      * @throws Exception 
      */
@@ -168,6 +279,20 @@ public class VerificaExpressao {
         
         expressao.add(new ExpSimb(s));
     }
+    
+    /**
+     * Adiciona um Numero na expressão
+     * @param s
+     * @throws Exception 
+     */
+    public void adicionaFatorNaExpressao(Token t) throws Exception
+    {
+        if(expressao == null) 
+            throw new Exception("adicionando na expressao sem começar uma");
+        
+        expressao.add(new ExpNum(t));
+    }
+    
     /**
      * Adiciona os operadores na pilha e em alguns casos na expressão.
      * @param t
@@ -193,7 +318,9 @@ public class VerificaExpressao {
                 
                 while(pilha.get(posPilha).simboloToCode() != 22) // enquanto não acha o abre parênteses
                 {
-                    aux = pilha.get(posPilha);  
+                    //rever
+                    aux = pilha.remove(posPilha);
+                    expressao.add(new ExpOp(aux));
                     posPilha--;
                     if(posPilha < 0)
                         throw new Exception("Fecha parentesis nao encontrado. Expresao invalida");
@@ -232,5 +359,13 @@ public class VerificaExpressao {
         //chama o gerador de Expressão
         geraExp();
         expressao = null;
+    }
+    
+    /**
+     * @return true se for booleana e false se não.
+     */
+    public boolean wasBooleanExp()
+    {
+        return wasBool;
     }
 }

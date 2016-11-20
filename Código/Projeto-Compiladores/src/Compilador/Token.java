@@ -50,6 +50,9 @@ public class Token {
         {
             switch (simbolo)
             {
+            //Caso seja um inversor de sinal
+            case "sinv" :
+                 return 0;   
             case "sprograma":
                 return 1;
             case "sinicio":
@@ -124,6 +127,10 @@ public class Token {
                 return 36;
             case "sdoispontos":
                 return 37;
+            case "sverdadeiro":
+                return 38;
+            case "sfalso":
+                return 39;
             }
         }
         catch(Exception ex)
@@ -137,6 +144,9 @@ public class Token {
      {
         switch (simbolo)
         {
+        //Caso seja um inversor de sinal
+        case "sinv" :
+             return 0;   
         case "sprograma":
             return 1;
         case "sinicio":
@@ -211,6 +221,10 @@ public class Token {
             return 36;
         case "sdoispontos":
             return 37;
+        case "sverdadeiro":
+            return 38;
+        case "sfalso":
+            return 39;
         }
         return -1;
      }

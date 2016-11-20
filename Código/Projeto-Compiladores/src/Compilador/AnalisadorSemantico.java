@@ -24,6 +24,15 @@ public class AnalisadorSemantico {
     }
     
     /**
+     * Retorna o nivel atual
+     * @return 
+     */
+    public int getNivel()
+    {
+        return nivel;
+    }
+    
+    /**
      * Retorna o valor do label disponível e incrementa o label dentro do semântico.
      * As chamadas de se e enquanto precisam do label.
      * @return 
@@ -50,6 +59,9 @@ public class AnalisadorSemantico {
             {
                 //se definir um proc ou func ou programa, deve incrementar o nivel.
                 case "proc":
+                    //ao definir um proc o programa atribui um label a ele
+                    s.getType().setInfo(label);
+                    label++;
                 case "programa":
                    nivel++;
                    break;
@@ -68,7 +80,8 @@ public class AnalisadorSemantico {
     }
     
     /**
-     * Coloca tipos na tabela de simbolos
+     * Coloca tipo de variáveis na tabela de simbolos
+     * Deve ser chamado no analisa tipo, e apenas para adicionar tipos em variáveis
      * @param t
      * @throws Exception 
      */
@@ -97,8 +110,11 @@ public class AnalisadorSemantico {
        if(tabelaDeSimbolos.getSimbolo(i) != null)
            throw new Exception("O ultimo simbolo ja tem um tipo, chamada feita na hora errada");
        
+       //Como a funcao é inserida sem tipo, o nivel já foi setado.
        tabelaDeSimbolos.getSimbolo(i).setType(new Rotina(tipo, label));
+       //Incrementa tanto o label quanto o nivel, porque pega um label e, por ser uma função, o nível tmbém aumenta.
        label++;
+       nivel++;
     }
     
     /**
@@ -148,12 +164,22 @@ public class AnalisadorSemantico {
         return tabelaDeSimbolos.verificaTabela(s);
     }
     
+    /**
+     * 
+     * @param t
+     * @return
+     * @throws Exception 
+     */
     public Type getSimboloType(Token t) throws Exception
     {
         Simbolo s = new Simbolo(t);
         return tabelaDeSimbolos.getSimbolo(s).getType();
     }
     
+    /**
+     * Finaliza o escopo de uma função.
+     * @throws Exception 
+     */
     public void finalizaEscopo() throws Exception
     {
         Simbolo aux;
@@ -178,6 +204,12 @@ public class AnalisadorSemantico {
         nivel--;
     }
     
+    /**
+     * 
+     * @param s
+     * @param tipo
+     * @throws Exception 
+     */
     public void setSimboloType(Simbolo s, String tipo) throws Exception
     {
         
@@ -199,14 +231,34 @@ public class AnalisadorSemantico {
         tabelaDeSimbolos.getSimbolo(s).setType(t);
     }
     
-    public void comecaExpressao()
+    /**
+     * Começa uma nova expressão
+     * @throws Exception 
+     */
+    public void comecaExpressao() throws Exception
     {
-        
+        exp.comecaExpressao();
     }
     
-    public void adicionaOperadorNaExpressao(Token t)
+    /**
+     * Adiciona um operador comun na expressão
+     * @param t
+     * @throws Exception 
+     */
+    public void adicionaOperadorNaExpressao(Token t) throws Exception
     {
-        
+        exp.adicionaOperadorNaExpressao(t);
+    }
+    
+    /**
+     * Adiciona o inversor de sinal na expressão
+     * @param t
+     * @throws Exception 
+     */
+    public void adicionaInvNaExpressao(Token t) throws Exception
+    {
+        Token tok = new Token(t.getLexema(), "sinv", t.getLinha());
+        exp.adicionaOperadorNaExpressao(tok);
     }
     
     /**
@@ -214,13 +266,35 @@ public class AnalisadorSemantico {
      * Como a tabela que tem informações de posição na pilha.
      * @param t 
      */
-    public void adicionaFatorNaExpressao(Token t)
+    public void adicionaFatorNaExpressao(Token t) throws Exception
     {
-        
+        if(t.simboloToCode() == 17)
+        {    
+            Simbolo s = tabelaDeSimbolos.getSimbolo(t);
+            exp.adicionaFatorNaExpressao(s);
+        }
+        else // snumero, sverdadeiro e sfalso  
+        {
+            exp.adicionaFatorNaExpressao(t);
+        }
     }
     
-    public void terminaExpressao()
+    /**
+     * 
+     * @throws Exception 
+     */
+    public void terminaExpressao() throws Exception
     {
-        
+        exp.terminaExpressao();
+    }
+    
+    /**
+     * Verifica se a ultima expressão foi booleana.
+     * Usado no analisaSe e no analisaEnquanto.
+     * @return true se sim e false se não
+     */
+    public boolean booleanExp()
+    {
+        return exp.wasBooleanExp();
     }
 }
