@@ -347,7 +347,7 @@ public class ProcessadorDeInstrucao {
     private void jmp(int param)
     {
         //desviar sempre i:=att1
-        varSegura = param;
+        m_instrucao = param;
     }
     
     private void jmpf(int param)
@@ -356,7 +356,7 @@ public class ProcessadorDeInstrucao {
         res = m_pilha.getValor(1);
         if(res == 0)
         {
-            varSegura = param;
+            m_instrucao = param;
         }
         else
             m_pilha.pop();
@@ -364,8 +364,8 @@ public class ProcessadorDeInstrucao {
     
     private void call(int param)
     {
-        m_pilha.push(m_pilha.tamPilha(), varSegura +1);
-        varSegura = param;
+        m_pilha.push(m_pilha.tamPilha(), m_instrucao +1);
+        m_instrucao = param;
     }
     
     private void executaExpressaoDuplamenteComposta(InstrucaoDuplamenteComposta instrucao)

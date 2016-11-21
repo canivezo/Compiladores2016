@@ -99,17 +99,17 @@ public class Arquivo
 	{
             Vector<Instrucao> instrucoes = new Vector<Instrucao>();
             Vector<Label> labels = new Vector<Label>();
-            int parametro1, parametro2 = 0;
+            int parametro1 =0, parametro2 = 0;
             for(int i = 0; i < arquivo.size(); i++)
             {
                 String [] l = arquivo.get(i).split("\t");
                 String toRes = "";
                 if(!l[0].equals(""))
                 {
+                    System.out.println(l[0]);
                     labels.add(new Label(i, l[0]));
                 }
-                
-                for(int j = 1; j < l.length; j++)
+                for(int j = 0; j < l.length; j++)
                 {    
                     toRes += l[j];
                     toRes += "\t";

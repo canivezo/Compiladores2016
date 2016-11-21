@@ -28,9 +28,9 @@ public class Label {
     
     private void setLinha(int lin) throws Exception
     {
-        if(lin <= 0)
+        if(lin < 0)
             throw new Exception("linha inválida");
-        
+        else
         linha = lin;
     }
     

@@ -65,7 +65,7 @@ public class Interface extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        textoSaida = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
         botaoBreak = new javax.swing.JButton();
         botaoContinuar = new javax.swing.JButton();
@@ -152,9 +152,9 @@ public class Interface extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Instruções");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane3.setViewportView(jTextArea1);
+        textoSaida.setColumns(20);
+        textoSaida.setRows(5);
+        jScrollPane3.setViewportView(textoSaida);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Break Point's");
@@ -352,6 +352,7 @@ public class Interface extends javax.swing.JFrame {
                 pilha = processador.getPilha();
                 zerarTabPilha(pilha.tamPilha());
                 preencherTabPilha(pilha.tamPilha());
+                exibirSaida();
                 i++;
             }
         }
@@ -364,18 +365,11 @@ public class Interface extends javax.swing.JFrame {
             {
             if(!processador.isFim())
                 {
-                try 
-                {
-                    processador = new ProcessadorDeInstrucao(urlArquivo);
-                } 
-                catch (Exception ex) 
-                {
-                    Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-                }
                 processador.runInstruction();
                 pilha = processador.getPilha();
                 zerarTabPilha(pilha.tamPilha());
                 preencherTabPilha(pilha.tamPilha());
+                exibirSaida();
                 }
                 else
                 JOptionPane.showMessageDialog(null, "Compilação chegou ao fim!", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -438,11 +432,11 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JFileChooser seletorDeArquivo;
     private javax.swing.JTable tabelaInstrucao;
     private javax.swing.JTable tabelaPilha;
+    private javax.swing.JTextArea textoSaida;
     // End of variables declaration//GEN-END:variables
 
     
@@ -510,6 +504,14 @@ public class Interface extends javax.swing.JFrame {
                 {
                     System.out.println("chegou ao fim");
                     fim = 1;
+                try 
+                {
+                    processador = new ProcessadorDeInstrucao(urlArquivo);
+                } 
+                catch (Exception ex) 
+                {
+                    Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 }
                 tabInstrucao.addRow(new String[]{str1,str2,str3,str4});
             }
@@ -550,6 +552,15 @@ public class Interface extends javax.swing.JFrame {
         for(int a=tam; a>0; a--)
         {
             tabPilha.addRow(new Integer[]{pilha.getEnd(a),pilha.getValor(a)});
+        }
+    }
+    
+    public void exibirSaida()
+    {
+        if(processador.getSaida() != null)
+        {
+            textoSaida.append(processador.getSaida()+"\n");
+            processador.setSaida();
         }
     }
     

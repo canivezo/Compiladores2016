@@ -29,6 +29,7 @@ public enum nomeInstrucao {
     
     public static nomeInstrucao getNomeInstrucao(String i) throws Exception
     {
+        System.out.println("Teste: "+i);
         switch (i.toUpperCase()) 
         {
             case "ADD":   return ADD;
