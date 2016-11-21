@@ -123,52 +123,52 @@ public class ProcessadorDeInstrucao {
     private void add()
     {
         // M[s-1] := M[s-1] + M[s]; s := s-1
-        res = m_pilha.getValor(m_pilha.tamPilha()-2) + m_pilha.getValor(m_pilha.tamPilha()-1);
-        m_pilha.setValor(m_pilha.tamPilha()-2, res);
+        res = m_pilha.getValor(2) + m_pilha.getValor(1);
+        m_pilha.setValor(2, res);
         m_pilha.pop();
     }
     
     private void sub()
     {
         //M[s-1]:=M[s-1] - M[s]; s:=s - 1
-        res = m_pilha.getValor(m_pilha.tamPilha()-2) - m_pilha.getValor(m_pilha.tamPilha()-1);
-        m_pilha.setValor(m_pilha.tamPilha()-2, res);
+        res = m_pilha.getValor(2) - m_pilha.getValor(1);
+        m_pilha.setValor(2, res);
         m_pilha.pop();
     }
     
     private void mult()
     {
         //M[s-1]:=M[s-1] * M[s]; s:=s - 1
-        res = m_pilha.getValor(m_pilha.tamPilha()-2) * m_pilha.getValor(m_pilha.tamPilha()-1);
-        m_pilha.setValor(m_pilha.tamPilha()-2, res);
+        res = m_pilha.getValor(2) * m_pilha.getValor(1);
+        m_pilha.setValor(2, res);
         m_pilha.pop();
     }
     
     private void divi()
     {
         //M[s-1]:=M[s-1] div M[s]; s:=s - 1
-        res = m_pilha.getValor(m_pilha.tamPilha()-2) / m_pilha.getValor(m_pilha.tamPilha()-1);
-        m_pilha.setValor(m_pilha.tamPilha()-2, res);
+        res = m_pilha.getValor(2) / m_pilha.getValor(1);
+        m_pilha.setValor(2, res);
         m_pilha.pop();
     }
     
     private void inv()
     {
         //M[s]:= -M[s]
-        res = -m_pilha.getValor(m_pilha.tamPilha()-1);
-        m_pilha.setValor(m_pilha.tamPilha()-1, res);
+        res = -m_pilha.getValor(1);
+        m_pilha.setValor(1, res);
     }
     
     private void and()
     {
         //se M [s-1] = 1 e M[s] = 1 então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1
-        if((m_pilha.getValor(m_pilha.tamPilha()-2) == 1) && (m_pilha.getValor(m_pilha.tamPilha()-1) == 1))
+        if((m_pilha.getValor(2) == 1) && (m_pilha.getValor(1) == 1))
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 1);
+            m_pilha.setValor(2, 1);
         }
         else
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 0);
+            m_pilha.setValor(2, 0);
         }
         m_pilha.pop();
     }
@@ -176,13 +176,13 @@ public class ProcessadorDeInstrucao {
     private void or()
     {
         //se M[s-1] = 1 ou M[s] = 1 então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1
-        if((m_pilha.getValor(m_pilha.tamPilha()-2) == 1) || (m_pilha.getValor(m_pilha.tamPilha()-1) == 1))
+        if((m_pilha.getValor(2) == 1) || (m_pilha.getValor(1) == 1))
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 1);
+            m_pilha.setValor(2, 1);
         }
         else
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 0);
+            m_pilha.setValor(2, 0);
         }
         m_pilha.pop();
     }
@@ -190,20 +190,20 @@ public class ProcessadorDeInstrucao {
     private void neg()
     {
         //M[s]:= 1-M[s]
-        res = 1 - m_pilha.getValor(m_pilha.tamPilha()-1);
+        res = 1 - m_pilha.getValor(1);
         m_pilha.setValor(m_pilha.tamPilha()-1, res);
     }
     
     private void cme()
     {
         //se M[s-1] < M[s] então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1
-        if((m_pilha.getValor(m_pilha.tamPilha()-2)) < (m_pilha.getValor(m_pilha.tamPilha()-1)))
+        if((m_pilha.getValor(2)) < (m_pilha.getValor(1)))
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 1);
+            m_pilha.setValor(2, 1);
         }
         else
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 0);
+            m_pilha.setValor(2, 0);
         }
         m_pilha.pop();
     }
@@ -211,13 +211,13 @@ public class ProcessadorDeInstrucao {
     private void cma()
     {
         //se M[s-1] > M[s] então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1
-        if((m_pilha.getValor(m_pilha.tamPilha()-2)) > (m_pilha.getValor(m_pilha.tamPilha()-1)))
+        if((m_pilha.getValor(2)) > (m_pilha.getValor(1)))
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 1);
+            m_pilha.setValor(2, 1);
         }
         else
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 0);
+            m_pilha.setValor(2, 0);
         }
         m_pilha.pop();
     }
@@ -225,13 +225,13 @@ public class ProcessadorDeInstrucao {
     private void ceq()
     {
         //se M[s-1] = M[s] então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1
-        if((m_pilha.getValor(m_pilha.tamPilha()-2)) == (m_pilha.getValor(m_pilha.tamPilha()-1)))
+        if((m_pilha.getValor(2)) == (m_pilha.getValor(1)))
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 1);
+            m_pilha.setValor(2, 1);
         }
         else
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 0);
+            m_pilha.setValor(2, 0);
         }
         m_pilha.pop();
     }
@@ -239,13 +239,13 @@ public class ProcessadorDeInstrucao {
     private void cdif()
     {
         //se M[s-1] != M[s] então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1
-        if((m_pilha.getValor(m_pilha.tamPilha()-2)) != (m_pilha.getValor(m_pilha.tamPilha()-1)))
+        if((m_pilha.getValor(2)) != (m_pilha.getValor(1)))
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 1);
+            m_pilha.setValor(2, 1);
         }
         else
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 0);
+            m_pilha.setValor(2, 0);
         }
         m_pilha.pop();
     }
@@ -253,13 +253,13 @@ public class ProcessadorDeInstrucao {
     private void cmeq()
     {
         //se M[s-1] <= M[s] então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1
-        if((m_pilha.getValor(m_pilha.tamPilha()-2)) <= (m_pilha.getValor(m_pilha.tamPilha()-1)))
+        if((m_pilha.getValor(2)) <= (m_pilha.getValor(1)))
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 1);
+            m_pilha.setValor(2, 1);
         }
         else
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 0);
+            m_pilha.setValor(2, 0);
         }
         m_pilha.pop();
     }   
@@ -267,13 +267,13 @@ public class ProcessadorDeInstrucao {
     private void cmaq()
     {
         //se M[s-1] >= M[s] então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1
-        if((m_pilha.getValor(m_pilha.tamPilha()-2)) >= (m_pilha.getValor(m_pilha.tamPilha()-1)))
+        if((m_pilha.getValor(2)) >= (m_pilha.getValor(1)))
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 1);
+            m_pilha.setValor(2, 1);
         }
         else
         {
-            m_pilha.setValor(m_pilha.tamPilha()-2, 0);
+            m_pilha.setValor(2, 0);
         }
         m_pilha.pop();
     }
@@ -305,13 +305,13 @@ public class ProcessadorDeInstrucao {
     private void prn()
     {
         //M[s];s:=s-1;
-        saida = String.valueOf(m_pilha.getValor(m_pilha.tamPilha()-1));
+        saida = String.valueOf(m_pilha.getValor(1));
         m_pilha.pop();
     }
     
     private void ret()
     {
-        varSegura = m_pilha.getValor(m_pilha.tamPilha()-1);
+        varSegura = m_pilha.getValor(1);
         m_pilha.pop();
     }
     
@@ -341,7 +341,7 @@ public class ProcessadorDeInstrucao {
     private void str(int param)
     {
         //M[n]:=M[s]; s;=s-1;
-        m_pilha.setValor(param, m_pilha.getValor(m_pilha.tamPilha()-1));
+        m_pilha.setValor(param, m_pilha.getValor(1));
     }
     
     private void jmp(int param)
@@ -353,7 +353,7 @@ public class ProcessadorDeInstrucao {
     private void jmpf(int param)
     {
         // desviar caso falso  se M[s]=0, entao i:=att1, senao i:=i+1
-        res = m_pilha.getValor(m_pilha.tamPilha()-1);
+        res = m_pilha.getValor(1);
         if(res == 0)
         {
             varSegura = param;
@@ -377,11 +377,21 @@ public class ProcessadorDeInstrucao {
     
     private void alloc(int p1, int p2)
     {
-        
+        //{s:=s + 1; M[s]:=M[m+k]}
+        for(int k=0; k<(p2);k++)
+        {
+            m_pilha.push(m_pilha.tamPilha(), 0);
+            m_pilha.setValor(1, p1+k);
+        }
     }
     
     private void dalloc(int p1, int p2)
     {
-        
+        //{M[m+k]:=M[s]; s:=s - 1}
+         for(int k =(p2-1);k>=0;k--)
+         {
+             m_pilha.setValor(p1+k, m_pilha.getValor(p1+k));
+             m_pilha.pop();
+         }
     }
 }
