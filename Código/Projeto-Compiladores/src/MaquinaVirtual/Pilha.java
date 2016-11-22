@@ -51,10 +51,12 @@ public class Pilha
             aux.setAdress(end);
             aux.setValor(valor);
             conteudo.add(aux);
+            posicao++;
     }
     
     public DadosPilha pop()
     {
+        posicao--;
         return conteudo.remove(conteudo.size() -1);
     }
     
@@ -65,8 +67,7 @@ public class Pilha
     
     public int getValor(int pos)
     {
-        return conteudo.get(conteudo.size()-pos).getValor();
-
+        return conteudo.get((conteudo.size()-pos)).getValor();
     }
     
     

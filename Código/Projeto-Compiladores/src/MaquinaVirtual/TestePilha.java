@@ -21,7 +21,7 @@ public class TestePilha
         //Popula a pilha para o teste
         for(int a=0; a<5; a++)
         {
-            pilha.push(a, a);
+            pilha.push(pilha.tamPilha(), a);
             System.out.println("Empilhando: end: "+(pilha.tamPilha())+" valor: "+a);
         }
         //Tamanho da pilha

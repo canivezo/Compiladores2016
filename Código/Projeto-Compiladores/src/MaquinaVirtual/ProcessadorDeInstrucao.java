@@ -66,8 +66,9 @@ public class ProcessadorDeInstrucao {
     
     public void runInstruction()
     {
-        if(!(m_instrucao < 0 || m_instrucao < m_instrucoes.size()))
+        if(m_instrucao < 0 || m_instrucao < m_instrucoes.size())
         {
+            System.out.println(m_instrucoes.get(m_instrucao));
             executaInstrucao(m_instrucoes.get(m_instrucao));
             m_instrucao++;
         }
@@ -319,12 +320,12 @@ public class ProcessadorDeInstrucao {
     private void executaExpressaoComposta(InstrucaoComposta instrucao)
     {
         nomeInstrucao i = instrucao.getInstrucao();
-        if(i == nomeInstrucao.ADD)  ldc(instrucao.getParam1());
-        if(i == nomeInstrucao.SUB)  ldv(instrucao.getParam1());
-        if(i == nomeInstrucao.MULT) str(instrucao.getParam1());
-        if(i == nomeInstrucao.DIVI) jmp(instrucao.getParam1());
-        if(i == nomeInstrucao.INV)  jmpf(instrucao.getParam1());
-        if(i == nomeInstrucao.AND)  call(instrucao.getParam1());
+        if(i == nomeInstrucao.LDC)  ldc(instrucao.getParam1());
+        if(i == nomeInstrucao.LDV)  ldv(instrucao.getParam1());
+        if(i == nomeInstrucao.STR) str(instrucao.getParam1());
+        if(i == nomeInstrucao.JMP) jmp(instrucao.getParam1());
+        if(i == nomeInstrucao.JMPF)  jmpf(instrucao.getParam1());
+        if(i == nomeInstrucao.CALL)  call(instrucao.getParam1());
     }
     
     private void ldc(int param)

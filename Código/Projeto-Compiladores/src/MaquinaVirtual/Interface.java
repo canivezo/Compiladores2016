@@ -294,31 +294,31 @@ public class Interface extends javax.swing.JFrame {
      seletorDeArquivo.setVisible(true);
      int returnVal = seletorDeArquivo.showOpenDialog(this);
      if (returnVal == JFileChooser.APPROVE_OPTION) 
-     {
+    {
         File file = seletorDeArquivo.getSelectedFile();
-         try 
-         {
+        try 
+        {
             // What to do with the file, e.g. display it in a TextArea
             System.out.println(file.getAbsolutePath());
-             this.urlArquivo = file.getAbsolutePath();
-          } 
-          catch (Exception ex) 
-          {
-             System.out.println("problem accessing file"+file.getAbsolutePath());
-          }
-          try 
-          {
-             inicializarTabelaArquivo();
-          } 
-          catch (FileNotFoundException ex) 
-          {
-             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-          }
-     } 
-     else 
-         {
-            System.out.println("File access cancelled by user.");
-         }
+            this.urlArquivo = file.getAbsolutePath();
+        } 
+        catch (Exception ex) 
+        {
+            System.out.println("problem accessing file"+file.getAbsolutePath());
+        }
+        try 
+        {
+            inicializarTabelaArquivo();
+        } 
+        catch (FileNotFoundException ex) 
+        {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    } 
+    else 
+    {
+        System.out.println("File access cancelled by user.");
+    }
     }//GEN-LAST:event_BotaoAbrirArqvActionPerformed
 
     private void botaoBreakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoBreakActionPerformed
@@ -449,15 +449,15 @@ public class Interface extends javax.swing.JFrame {
                 {
                     case 0:
                         InstrucaoSimples simples = (InstrucaoSimples) processador.getInstrucoes().get(i);
-                        tabInstrucao.addRow(new String[]{"", simples.getInstrucao().toString(), "", ""});
+                        tabInstrucao.addRow(new String[]{String.valueOf(i+1), simples.getInstrucao().toString(), "", ""});
                         break;
                     case 1:
                         InstrucaoComposta composta = (InstrucaoComposta) processador.getInstrucoes().get(i);
-                        tabInstrucao.addRow(new String[]{"", composta.getInstrucao().toString(), Integer.toString(composta.getParam1()), ""});
+                        tabInstrucao.addRow(new String[]{String.valueOf(i+1), composta.getInstrucao().toString(), Integer.toString(composta.getParam1()), ""});
                         break;
                     case 2:
                         InstrucaoDuplamenteComposta dupla = (InstrucaoDuplamenteComposta) processador.getInstrucoes().get(i);
-                        tabInstrucao.addRow(new String[]{"", dupla.getInstrucao().toString(), Integer.toString(dupla.getParam1()), Integer.toString(dupla.getParam2())});
+                        tabInstrucao.addRow(new String[]{String.valueOf(i+1), dupla.getInstrucao().toString(), Integer.toString(dupla.getParam1()), Integer.toString(dupla.getParam2())});
                         break;
                 }
                 i++;
@@ -492,17 +492,26 @@ public class Interface extends javax.swing.JFrame {
     
     public void zerarTabPilha(int tam)
     {
-        for(int a=0; a<tam; a++)
+        System.out.println("Linhas: "+tabPilha.getRowCount());
+        if(tabPilha.getRowCount() > 0)
         {
-            tabPilha.removeRow(tabPilha.getRowCount()-1);
+        int rows = tabPilha.getRowCount();
+        for(int a=rows; a>0; a--)
+        {
+            tabPilha.removeRow(a-1);
+        }
         }
     }
     
     public void preencherTabPilha(int tam)
     {
-        for(int a=tam; a>0; a--)
+        if(tam>1)
         {
+        for(int a=tam; a>1; a--)
+        {
+            System.out.println(pilha.getEnd(a)+pilha.getValor(a));
             tabPilha.addRow(new Integer[]{pilha.getEnd(a),pilha.getValor(a)});
+        }
         }
     }
     
