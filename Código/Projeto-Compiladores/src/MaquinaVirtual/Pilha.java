@@ -48,10 +48,11 @@ public class Pilha
     
     public void push(int end, int valor)
     {
-            aux.setAdress(end);
-            aux.setValor(valor);
-            conteudo.add(aux);
-            posicao++;
+        aux = new DadosPilha();
+        aux.setAdress(end);
+        aux.setValor(valor);
+        conteudo.add(aux);
+        this.posicao++;
     }
     
     public DadosPilha pop()
@@ -73,7 +74,8 @@ public class Pilha
     
     public void setValor(int pos, int val)
     {
-        int a = conteudo.get(conteudo.size()-pos).adress;
+        aux = new DadosPilha();
+        int a = conteudo.get(conteudo.size()-pos).getAdress();
         aux.setAdress(a);
         aux.setValor(val);
         conteudo.set(conteudo.size()-pos, aux);

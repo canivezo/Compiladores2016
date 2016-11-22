@@ -68,7 +68,6 @@ public class ProcessadorDeInstrucao {
     {
         if(m_instrucao < 0 || m_instrucao < m_instrucoes.size())
         {
-            System.out.println(m_instrucoes.get(m_instrucao));
             executaInstrucao(m_instrucoes.get(m_instrucao));
             m_instrucao++;
         }
