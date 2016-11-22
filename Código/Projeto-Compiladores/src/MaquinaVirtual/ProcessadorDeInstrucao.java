@@ -68,6 +68,7 @@ public class ProcessadorDeInstrucao {
     {
         if(!(m_instrucao < 0 || m_instrucao < m_instrucoes.size()))
         {
+            executaInstrucao(m_instrucoes.get(m_instrucao));
             m_instrucao++;
         }
         else

@@ -95,7 +95,7 @@ public class Arquivo
             }
 	}
 
-	public Vector<Instrucao> parsearPalavras () throws Exception
+	public Vector<Instrucao> parsearPalavras() throws Exception
 	{
             Vector<Instrucao> instrucoes = new Vector<Instrucao>();
             Vector<Label> labels = new Vector<Label>();
@@ -106,10 +106,9 @@ public class Arquivo
                 String toRes = "";
                 if(!l[0].equals(""))
                 {
-                    System.out.println(l[0]);
                     labels.add(new Label(i, l[0]));
                 }
-                for(int j = 0; j < l.length; j++)
+                for(int j = 1; j < l.length; j++)
                 {    
                     toRes += l[j];
                     toRes += "\t";

@@ -295,7 +295,7 @@ public class Interface extends javax.swing.JFrame {
      int returnVal = seletorDeArquivo.showOpenDialog(this);
      if (returnVal == JFileChooser.APPROVE_OPTION) 
      {
-     File file = seletorDeArquivo.getSelectedFile();
+        File file = seletorDeArquivo.getSelectedFile();
          try 
          {
             // What to do with the file, e.g. display it in a TextArea
@@ -308,7 +308,7 @@ public class Interface extends javax.swing.JFrame {
           }
           try 
           {
-             inicializarTabelaArquivo(urlArquivo);
+             inicializarTabelaArquivo();
           } 
           catch (FileNotFoundException ex) 
           {
@@ -337,14 +337,6 @@ public class Interface extends javax.swing.JFrame {
     private void BotaoCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCompilarActionPerformed
         if(urlArquivo != null)
         {
-            try 
-            {
-                processador = new ProcessadorDeInstrucao(urlArquivo);
-            } 
-            catch (Exception ex) 
-            {
-                Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-            }
             int i = 0;
             while(processador.getInstrucoes().size() > i || !processador.isFim())
             {
@@ -362,19 +354,19 @@ public class Interface extends javax.swing.JFrame {
 
     private void botaoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoContinuarActionPerformed
         if(urlArquivo != null)
-            {
+        {
             if(!processador.isFim())
-                {
+            {
                 processador.runInstruction();
                 pilha = processador.getPilha();
                 zerarTabPilha(pilha.tamPilha());
                 preencherTabPilha(pilha.tamPilha());
                 exibirSaida();
-                }
-                else
-                JOptionPane.showMessageDialog(null, "Compilação chegou ao fim!", "Erro", JOptionPane.ERROR_MESSAGE);
             }
             else
+                JOptionPane.showMessageDialog(null, "Compilação chegou ao fim!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        else
             JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_botaoContinuarActionPerformed
 
@@ -441,80 +433,39 @@ public class Interface extends javax.swing.JFrame {
 
     
         //funcao para abrir arquivo
-    private void inicializarTabelaArquivo (String path) throws FileNotFoundException
+    private void inicializarTabelaArquivo () throws FileNotFoundException
     {
         //declarações
-        int leituraCaracter =0, linha =1, fim=0;
-        char caracterLido = '0';
-        InputStreamReader leituracaracteres = null;
-        String str1 = "", str2 = "",str3 = "", str4 = "";
-        String condfim = new String("HLT");
-        FileInputStream abertura = new FileInputStream(path); //abertura seria o objeto responsáel pela abertura do arquivo
+        FileInputStream abertura = new FileInputStream(urlArquivo); //abertura seria o objeto responsável pela abertura do arquivo
         this.leituracaracteres = new InputStreamReader(abertura);
         tabInstrucao = (DefaultTableModel) tabelaInstrucao.getModel();
-        
-        while(fim != 1)
+        try 
         {
-                str1 = "";
-                str2 = "";
-                str3 = "";
-                str4 = "";
-            leituraCaracter = lerCaracter();
-            if(leituraCaracter == -1)
+            int i = 0;
+            processador = new ProcessadorDeInstrucao(urlArquivo);
+            while(i < processador.getInstrucoes().size())
             {
-                fim = 1;
-                break;
-            }
-            caracterLido = (char) leituraCaracter;
-            if(caracterLido == '\n' || caracterLido == '\r')
-            {
-                linha++;
-            }
-            else
-            {
-                str1 = String.valueOf(linha);
-                while(Character.isWhitespace(caracterLido) == false)
-                    {
-                        System.out.println(caracterLido);
-                        str2 =  str2 + caracterLido;
-                        caracterLido = (char) lerCaracter();
-                    }
-                if(caracterLido != '\n')
-                    {
-                    caracterLido = (char) lerCaracter(); 
-                    while(Character.isDigit(caracterLido) == true || Character.isAlphabetic(caracterLido) == true)
-                        {
-                            System.out.println(caracterLido);
-                            str3 = str3 + caracterLido;
-                            caracterLido = (char) lerCaracter();
-                        }
-                    if(caracterLido != '\n')
-                        {
-                            caracterLido = (char) lerCaracter(); 
-                            while(Character.isWhitespace(caracterLido) == false)
-                                {
-                                    System.out.println(caracterLido);
-                                    str4 =  str4 + caracterLido;
-                                    caracterLido = (char) lerCaracter();
-                                }
-                        }
-                    }
-                linha++;
-                if(str2.equals(condfim))
+                switch(nomeInstrucao.getInstructionType(processador.getInstrucoes().get(i).getInstrucao()))
                 {
-                    System.out.println("chegou ao fim");
-                    fim = 1;
-                try 
-                {
-                    processador = new ProcessadorDeInstrucao(urlArquivo);
-                } 
-                catch (Exception ex) 
-                {
-                    Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+                    case 0:
+                        InstrucaoSimples simples = (InstrucaoSimples) processador.getInstrucoes().get(i);
+                        tabInstrucao.addRow(new String[]{"", simples.getInstrucao().toString(), "", ""});
+                        break;
+                    case 1:
+                        InstrucaoComposta composta = (InstrucaoComposta) processador.getInstrucoes().get(i);
+                        tabInstrucao.addRow(new String[]{"", composta.getInstrucao().toString(), Integer.toString(composta.getParam1()), ""});
+                        break;
+                    case 2:
+                        InstrucaoDuplamenteComposta dupla = (InstrucaoDuplamenteComposta) processador.getInstrucoes().get(i);
+                        tabInstrucao.addRow(new String[]{"", dupla.getInstrucao().toString(), Integer.toString(dupla.getParam1()), Integer.toString(dupla.getParam2())});
+                        break;
                 }
-                }
-                tabInstrucao.addRow(new String[]{str1,str2,str3,str4});
+                i++;
             }
+        } 
+        catch (Exception ex) 
+        {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
