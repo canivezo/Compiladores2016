@@ -322,12 +322,7 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_BotaoAbrirArqvActionPerformed
 
     private void botaoBreakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoBreakActionPerformed
-        try {
-            // TODO add your handling code here:
-            tabelaPilhaRemove();
-        } catch (Exception ex) {
-            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }//GEN-LAST:event_botaoBreakActionPerformed
 
     /**
@@ -342,7 +337,7 @@ public class Interface extends javax.swing.JFrame {
             {
                 processador.runInstruction();
                 pilha = processador.getPilha();
-                zerarTabPilha(pilha.tamPilha());
+                zerarTabPilha();
                 preencherTabPilha(pilha.tamPilha());
                 exibirSaida();
                 i++;
@@ -359,7 +354,7 @@ public class Interface extends javax.swing.JFrame {
             {
                 processador.runInstruction();
                 pilha = processador.getPilha();
-                zerarTabPilha(pilha.tamPilha());
+                zerarTabPilha();
                 preencherTabPilha(pilha.tamPilha());
                 exibirSaida();
             }
@@ -443,6 +438,8 @@ public class Interface extends javax.swing.JFrame {
         {
             int i = 0;
             processador = new ProcessadorDeInstrucao(urlArquivo);
+            zerarTabInstrucao();
+            zerarTabPilha();
             while(i < processador.getInstrucoes().size())
             {
                 switch(nomeInstrucao.getInstructionType(processador.getInstrucoes().get(i).getInstrucao()))
@@ -468,29 +465,8 @@ public class Interface extends javax.swing.JFrame {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-        //Push da pilha mostrando na tabela
-    public void tabelaPilhaAdd(int end, int val)
-    {
-        pilha.push(end, val);  //empilha
-        tabPilha = (DefaultTableModel) tabelaPilha.getModel();
-        tabPilha.addRow(new Integer[]{end,val});
-    }
-        
-        //Pop da pilha removendo da tabela
-    public void tabelaPilhaRemove() throws Exception
-    {
-        if(!pilha.pilhaVazia())
-        {
-            DadosPilha retorno = pilha.pop();
-            tabPilha.removeRow(tabPilha.getRowCount()-1);
-            System.out.println(retorno.getAdress()+", "+retorno.getValor());
-        }
-        else
-            throw new Exception("Erro, pilha vazia");
-    }
     
-    public void zerarTabPilha(int tam)
+    public void zerarTabPilha()
     {
         System.out.println("Linhas: "+tabPilha.getRowCount());
         if(tabPilha.getRowCount() > 0)
@@ -509,8 +485,20 @@ public class Interface extends javax.swing.JFrame {
         {
         for(int a=tam; a>1; a--)
         {
-            System.out.println(pilha.getEnd(a)+pilha.getValor(a));
-            tabPilha.addRow(new Integer[]{pilha.getEnd(a),pilha.getValor(a)});
+            System.out.println(pilha.getEnd(a-1)+pilha.getValor(a-1));
+            tabPilha.addRow(new Integer[]{pilha.getEnd(a-1),pilha.getValor(a-1)});
+        }
+        }
+    }
+    
+        public void zerarTabInstrucao()
+    {
+        if(tabInstrucao.getRowCount() > 0)
+        {
+        int rows = tabInstrucao.getRowCount();
+        for(int a=rows; a>0; a--)
+        {
+            tabInstrucao.removeRow(a-1);
         }
         }
     }
@@ -559,12 +547,12 @@ public class Interface extends javax.swing.JFrame {
         @Override
         public boolean accept(File file) 
         {
-            return file.isDirectory() || file.getAbsolutePath().endsWith(".txt");
+            return file.isDirectory() || file.getAbsolutePath().endsWith(".obj");
         }
         @Override
         public String getDescription() {
             // This description will be displayed in the dialog,
             // hard-coded = ugly, should be done via I18N
-            return "Text documents (*.txt)";
+            return "MV File(*.obj)";
         }
     } 
