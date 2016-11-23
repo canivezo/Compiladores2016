@@ -100,7 +100,11 @@ public class Arquivo
             Vector<Instrucao> instrucoes = new Vector<Instrucao>();
             Vector<Label> labels = new Vector<Label>();
             int parametro1 =0, parametro2 = 0;
-            for(int i = 0; i < arquivo.size(); i++)
+            
+            /*
+             * parseando o arquivo para os labels 
+             */
+            for(int i = 0; i < arquivo.size();i++)
             {
                 String [] l = arquivo.get(i).split("\t");
                 String toRes = "";
@@ -112,9 +116,16 @@ public class Arquivo
                 {    
                     toRes += l[j];
                     toRes += "\t";
+                    arquivo.set(i, toRes);
                 }
-                
-                String [] result = toRes.split("\t");
+            }
+            
+            /*
+             * pegando os comandos
+             */
+            for(int i = 0; i < arquivo.size(); i++)
+            {
+                String [] result = arquivo.get(i).split("\t");
                 if(numeroDeAtributos(result[0]) == 0)  
                 {
                     InstrucaoSimples e = new InstrucaoSimples(nomeInstrucao.getNomeInstrucao(result[0]), i);
@@ -133,6 +144,7 @@ public class Arquivo
                        }
                        if(j == labels.capacity())
                            throw new Exception("label invalido");
+                       
                        parametro1 = labels.get(j).getLinha();
                     }
                     else

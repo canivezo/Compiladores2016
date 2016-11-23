@@ -18,7 +18,17 @@ public class AnalisadorSintatico
     private int finalDoVetor = 0;
     private AnalisadorLexical lexico;
     private AnalisadorSemantico semantico;
-
+    
+    /**
+     * Recebe o caminho do arquivo e começa a compilação.
+     * programa teste;
+     * bloco()
+     * fim
+     * .
+     * Vai para o analisa bloco após ler programa e o nome do programa
+     * @param caminhoArquivo
+     * @throws Exception 
+     */
     public AnalisadorSintatico(String caminhoArquivo) throws Exception
     {
         lexico = new AnalisadorLexical(caminhoArquivo);
@@ -52,6 +62,10 @@ public class AnalisadorSintatico
         else erro.erroSintatico(token.getLinha(),4);
     }
     
+    /**
+     * Função auxiliar que pega o próximo token
+     * @throws Exception 
+     */
     private void proximoToken() throws Exception
     {
         if(posicaoAtualNoVetor <= finalDoVetor)
@@ -64,6 +78,10 @@ public class AnalisadorSintatico
             throw new Exception("Erro, Final do vetor de tokens atingido.");
     }
     
+    /**
+     * É chamado pelo começo do programa, e as sub-rotinas
+     * @throws Exception 
+     */
     public void analisaBloco () throws Exception
     {
         proximoToken();
@@ -72,6 +90,10 @@ public class AnalisadorSintatico
         analisaComandos();
     }
     
+    /**
+     * Função que lê as variáveis.
+     * @throws Exception 
+     */
     public void analisaEtVariaveis() throws Exception
     {
         if(token.simboloToCode() == 14) //svar
@@ -99,6 +121,11 @@ public class AnalisadorSintatico
         }
     }
     
+    /**
+     * Este método lê cada um dos identificadores das variáveis.
+     * Aqui são adicionasdas todas as variáveis no semântico.
+     * @throws Exception 
+     */
     public void analisaVariaveis() throws Exception
     {
         do
@@ -133,6 +160,12 @@ public class AnalisadorSintatico
         analisaTipo();
     }
     
+    /**
+     * Depois de ler uma liha de declaração de variáveis, o analisa tipo é chamado. 
+     * Por isso ele chama a tabela de símbolos e adiciona os tipos de todas as variáveis 
+     * que foram adicionadas anteriormente.
+     * @throws Exception 
+     */
     public void analisaTipo() throws Exception
     {
         if((token.simboloToCode() != 15) && (token.simboloToCode() != 16))  //sinteiro e sbooleano
@@ -146,6 +179,10 @@ public class AnalisadorSintatico
         }
     }
     
+    /**
+     * Só começa e termina um escopo
+     * @throws Exception 
+     */
     public void analisaComandos() throws Exception
     {
         if(token.simboloToCode() == 2)  //sinicio
@@ -175,6 +212,10 @@ public class AnalisadorSintatico
         }
     }
     
+    /**
+     * Chama cada comando conforme o símbolo lido.
+     * @throws Exception 
+     */
     public void analisaComandoSimples() throws Exception
     {
         switch (token.simboloToCode())
@@ -201,8 +242,9 @@ public class AnalisadorSintatico
     }
     
     /**
-     * Guardar o simbolo para fazer o str
-     * Verificar se o identificador existe
+     * Guardar o token para fazer o str.
+     * Verificar se o identificador existe.
+     * Gera um str no endereço de memória dele.
      * @throws Exception 
      */
     public void analisaAtribChProcedimento() throws Exception   
@@ -212,9 +254,13 @@ public class AnalisadorSintatico
         proximoToken();
         if(token.simboloToCode() == 11)  // satribuicao
         {
-            //pesquisa na tabelaDeSimbolos
-            analisaAtribuicao();
-            //Gerar o str
+            if(semantico.pesquisaDeclVarTabela(t))
+            {
+                analisaAtribuicao();
+                //Gerar o str
+            }
+            else
+                throw new Exception("Var não existe");
         }
         else
         {            
@@ -222,6 +268,11 @@ public class AnalisadorSintatico
         }
     }
     
+    /**
+     * Apenas começa e termina a expressão.
+     * O resultado da expressão vai estar no topo da pilha.
+     * @throws Exception 
+     */
     public void analisaAtribuicao() throws Exception
     {
         proximoToken();
@@ -230,6 +281,10 @@ public class AnalisadorSintatico
         semantico.terminaExpressao();
     }
     
+    /**
+     * Gera o rd e dá um str no endereço da variável.
+     * @throws Exception 
+     */
     public void analisaLeia() throws Exception
     {
         proximoToken();
@@ -261,6 +316,10 @@ public class AnalisadorSintatico
             
     }
     
+    /**
+     * Gera um LDV ou um CALL e LDV 0 (Esses comandos quem gera é o aanalisaChamadaDeFunc) e gera o comando de escrita da MV.
+     * @throws Exception 
+     */
     public void analisaEscreva() throws Exception
     {
         proximoToken();
@@ -291,6 +350,10 @@ public class AnalisadorSintatico
         }
     }
     
+    /**
+     * Gera os labels para o salto se verdadeiro ou o salto se falso.
+     * @throws Exception 
+     */
     public void analisaEnquanto() throws Exception
     {
         int label1 = semantico.getLabel(), label2 = semantico.getLabel();
@@ -327,6 +390,10 @@ public class AnalisadorSintatico
         }
     }
     
+    /**
+     * Gera os labels do salto.
+     * @throws Exception 
+     */
     public void analisaSe() throws Exception
     {
         proximoToken();
@@ -363,6 +430,10 @@ public class AnalisadorSintatico
         }
     }
     
+    /**
+     * Gera os labels de salto para a rotina onde está sendo declarada essa rotina.
+     * @throws Exception 
+     */
     public void analisaSubRotinas() throws Exception
     {
         int flag = 0;
@@ -399,6 +470,10 @@ public class AnalisadorSintatico
         }
     }
     
+    /**
+     * 
+     * @throws Exception 
+     */
     public void analisaDeclaracaoProcedimento() throws Exception
     {
         proximoToken();
@@ -435,6 +510,10 @@ public class AnalisadorSintatico
         GeradorDeCodigo.getInstance().geraComando(Comandos.RETURN);
     }
     
+    /**
+     * 
+     * @throws Exception 
+     */
     public void analisaDeclaracaoFuncao() throws Exception
     {
         proximoToken();
@@ -486,6 +565,10 @@ public class AnalisadorSintatico
         GeradorDeCodigo.getInstance().geraComando(Comandos.RETURN);
     }
     
+    /**
+     * Apenas passa a responsabilidade para ae funções de analise de expressão.
+     * @throws Exception 
+     */
     public void analisaExpressao() throws Exception
     {
         analisaExpressaoSimples();
@@ -497,6 +580,10 @@ public class AnalisadorSintatico
         }
     }
     
+    /**
+     * Deve adicionar os operadores na tabela de símbolos.
+     * @throws Exception 
+     */
     public void analisaExpressaoSimples() throws Exception
     {
         if((token.simboloToCode() == 30) || (token.simboloToCode() == 31))  //smais ou smenos
@@ -514,6 +601,10 @@ public class AnalisadorSintatico
         
     }
     
+    /**
+     * Deve adicionar os operadores na tabela de simbolos.
+     * @throws Exception 
+     */
     public void analisaTermo() throws Exception
     {
         analisaFator();
@@ -524,6 +615,11 @@ public class AnalisadorSintatico
         }
     }
     
+    /**
+     * Vai adicionando os identificadore ou números na tabela de síbolos.
+     * Também adiciona abre e fecha parentesis.
+     * @throws Exception 
+     */
     public void analisaFator () throws Exception
     {
         if(token.simboloToCode() == 17)  //sidentificador
@@ -611,6 +707,7 @@ public class AnalisadorSintatico
     
     /**
      * Chamado pelo analisa expressão, adiciona uma função no validaExpressao dentro do semantico.
+     * Deve gerar o call e o LDV 0.
      * @throws Exception 
      */
     public void analisaChamadaFuncao() throws Exception

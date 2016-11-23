@@ -288,35 +288,35 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void BotaoAbrirArqvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoAbrirArqvActionPerformed
-     // Abrir seletor de Arquivo.
-     seletorDeArquivo.setVisible(true);
-     int returnVal = seletorDeArquivo.showOpenDialog(this);
-     if (returnVal == JFileChooser.APPROVE_OPTION) 
-    {
-        File file = seletorDeArquivo.getSelectedFile();
-        try 
+        // Abrir seletor de Arquivo.
+        seletorDeArquivo.setVisible(true);
+        int returnVal = seletorDeArquivo.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) 
         {
-            // What to do with the file, e.g. display it in a TextArea
-            System.out.println(file.getAbsolutePath());
-            this.urlArquivo = file.getAbsolutePath();
+            File file = seletorDeArquivo.getSelectedFile();
+            try 
+            {
+                // What to do with the file, e.g. display it in a TextArea
+                System.out.println(file.getAbsolutePath());
+                this.urlArquivo = file.getAbsolutePath();
+            } 
+            catch (Exception ex) 
+            {
+                System.out.println("problem accessing file"+file.getAbsolutePath());
+            }
+            try 
+            {
+                inicializarTabelaArquivo();
+            } 
+            catch (FileNotFoundException ex) 
+            {
+                Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } 
-        catch (Exception ex) 
+        else 
         {
-            System.out.println("problem accessing file"+file.getAbsolutePath());
+            System.out.println("File access cancelled by user.");
         }
-        try 
-        {
-            inicializarTabelaArquivo();
-        } 
-        catch (FileNotFoundException ex) 
-        {
-            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    } 
-    else 
-    {
-        System.out.println("File access cancelled by user.");
-    }
     }//GEN-LAST:event_BotaoAbrirArqvActionPerformed
 
     private void botaoBreakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoBreakActionPerformed
@@ -340,6 +340,7 @@ public class Interface extends javax.swing.JFrame {
                 exibirSaida();
                 i++;
             }
+            botaoContinuar.setEnabled(false);
         }
         else
            JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
@@ -357,7 +358,10 @@ public class Interface extends javax.swing.JFrame {
                 exibirSaida();
             }
             else
+            {
+                botaoContinuar.setEnabled(false);
                 JOptionPane.showMessageDialog(null, "Compilação chegou ao fim!", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
         else
             JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
@@ -426,7 +430,7 @@ public class Interface extends javax.swing.JFrame {
 
     
         //funcao para abrir arquivo
-    private void inicializarTabelaArquivo () throws FileNotFoundException
+    private void inicializarTabelaArquivo() throws FileNotFoundException
     {
         //declarações
         FileInputStream abertura = new FileInputStream(urlArquivo); //abertura seria o objeto responsável pela abertura do arquivo
@@ -438,6 +442,8 @@ public class Interface extends javax.swing.JFrame {
             processador = new ProcessadorDeInstrucao(urlArquivo);
             zerarTabInstrucao();
             zerarTabPilha();
+            zerarSaida();
+            botaoContinuar.setEnabled(true);
             while(i < processador.getInstrucoes().size())
             {
                 switch(nomeInstrucao.getInstructionType(processador.getInstrucoes().get(i).getInstrucao()))
@@ -466,7 +472,6 @@ public class Interface extends javax.swing.JFrame {
     
     public void zerarTabPilha()
     {
-        System.out.println("Linhas: "+tabPilha.getRowCount());
         if(tabPilha.getRowCount() > 0)
         {
             int rows = tabPilha.getRowCount();
@@ -479,12 +484,11 @@ public class Interface extends javax.swing.JFrame {
     
     public void preencherTabPilha(int tam)
     {
-        if(tam>1)
+        if(tam > 0)
         {
-            for(int a=tam; a>1; a--)
+            for(int a=tam; a>0; a--)
             {
-                System.out.println(pilha.getEnd(a-1)+pilha.getValor(a-1));
-                tabPilha.addRow(new Integer[]{pilha.getEnd(a-1),pilha.getValor(a-1)});
+                tabPilha.addRow(new Integer[]{pilha.getEnd(a),pilha.getValor(a)});
             }
         }
     }
@@ -497,7 +501,7 @@ public class Interface extends javax.swing.JFrame {
             for(int a=rows; a>0; a--)
             {
                 tabInstrucao.removeRow(a-1);
-            }
+            }   
         }
     }
     
@@ -510,31 +514,9 @@ public class Interface extends javax.swing.JFrame {
         }
     }
     
-    public void tabelaInstrucaoAdd()
+    public void zerarSaida()
     {
-        tabInstrucao.addRow(new String[]{"1","Mov","atr1","atr2","teste"});
-    }
-    
-    public int lerCaracter()
-    {
-        try
-        {
-            if(this.caracter != -1)
-            {
-                this.caracter = leituracaracteres.read(); //método read que retorna um inteiro que representa o caracter 
-                return caracter;
-            }
-            else
-            {
-                tamanhoArq = 1;
-                return caracter;
-            }
-        }
-        catch (Exception ex)
-        {
-            System.out.println(ex.getMessage()); 
-        }
-        return 0;
+        textoSaida.setText("");
     }
 }
 

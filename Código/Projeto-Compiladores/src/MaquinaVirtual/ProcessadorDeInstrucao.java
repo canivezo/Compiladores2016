@@ -26,7 +26,6 @@ public class ProcessadorDeInstrucao {
     public ProcessadorDeInstrucao(String arquivo) throws Exception
     {
         m_instrucoes = new Arquivo(arquivo).parsearPalavras();
-        m_pilha = new Pilha();
         m_instrucao = 0;
     }
     
@@ -282,7 +281,7 @@ public class ProcessadorDeInstrucao {
     private void start()
     {
         //S:=-1
-        m_pilha.push(m_pilha.tamPilha(), -1);
+        m_pilha = new Pilha();
     }
     
     private void hlt()
