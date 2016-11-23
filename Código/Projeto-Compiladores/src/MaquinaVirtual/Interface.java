@@ -9,12 +9,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -471,11 +469,11 @@ public class Interface extends javax.swing.JFrame {
         System.out.println("Linhas: "+tabPilha.getRowCount());
         if(tabPilha.getRowCount() > 0)
         {
-        int rows = tabPilha.getRowCount();
-        for(int a=rows; a>0; a--)
-        {
-            tabPilha.removeRow(a-1);
-        }
+            int rows = tabPilha.getRowCount();
+            for(int a=rows; a>0; a--)
+            {
+                tabPilha.removeRow(a-1);
+            }
         }
     }
     
@@ -483,23 +481,23 @@ public class Interface extends javax.swing.JFrame {
     {
         if(tam>1)
         {
-        for(int a=tam; a>1; a--)
-        {
-            System.out.println(pilha.getEnd(a-1)+pilha.getValor(a-1));
-            tabPilha.addRow(new Integer[]{pilha.getEnd(a-1),pilha.getValor(a-1)});
-        }
+            for(int a=tam; a>1; a--)
+            {
+                System.out.println(pilha.getEnd(a-1)+pilha.getValor(a-1));
+                tabPilha.addRow(new Integer[]{pilha.getEnd(a-1),pilha.getValor(a-1)});
+            }
         }
     }
     
-        public void zerarTabInstrucao()
+    public void zerarTabInstrucao()
     {
         if(tabInstrucao.getRowCount() > 0)
         {
-        int rows = tabInstrucao.getRowCount();
-        for(int a=rows; a>0; a--)
-        {
-            tabInstrucao.removeRow(a-1);
-        }
+            int rows = tabInstrucao.getRowCount();
+            for(int a=rows; a>0; a--)
+            {
+                tabInstrucao.removeRow(a-1);
+            }
         }
     }
     
@@ -538,21 +536,20 @@ public class Interface extends javax.swing.JFrame {
         }
         return 0;
     }
-    
-
-
 }
 
- class FiltroDeArquivo extends javax.swing.filechooser.FileFilter {
+ class FiltroDeArquivo extends javax.swing.filechooser.FileFilter 
+ {
         @Override
         public boolean accept(File file) 
         {
             return file.isDirectory() || file.getAbsolutePath().endsWith(".obj");
         }
         @Override
-        public String getDescription() {
+        public String getDescription() 
+        {
             // This description will be displayed in the dialog,
             // hard-coded = ugly, should be done via I18N
             return "MV File(*.obj)";
         }
-    } 
+} 
