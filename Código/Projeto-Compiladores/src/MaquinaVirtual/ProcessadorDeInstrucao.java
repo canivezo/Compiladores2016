@@ -15,7 +15,7 @@ public class ProcessadorDeInstrucao {
     private Vector<Instrucao> m_instrucoes = null;
     private Pilha m_pilha = null;
     private boolean fim = false;
-    private int res = 0, varSegura = -1; //Recebe o resultado do procedimento ret();
+    private int res = 0;
     private String saida = null;
     int m_instrucao = 0;
     /**
@@ -311,7 +311,7 @@ public class ProcessadorDeInstrucao {
     
     private void ret()
     {
-        varSegura = m_pilha.getValor(1);
+        m_instrucao = (m_pilha.getValor(1))-1;
         m_pilha.pop();
     }
     
@@ -328,25 +328,26 @@ public class ProcessadorDeInstrucao {
     
     private void ldc(int param)
     {
-        //S:=s + 1 ; M [s]: = k
+        //S:=s+1 ; M[s]:=k
         m_pilha.push(m_pilha.tamPilha(), param);
     }
     
     private void ldv(int param)
     {
-        //S:=s + 1 ; M[s]:=M[n]
-        m_pilha.push(m_pilha.tamPilha(), param);
+        //S:=s+1 ; M[s]:=M[n]
+        m_pilha.pushPos(param);
     }
     
     private void str(int param)
     {
         //M[n]:=M[s]; s;=s-1;
-        m_pilha.setValor(param, m_pilha.getValor(1));
+        m_pilha.setValorFixo(param, m_pilha.getValor(1));
+        m_pilha.pop();
     }
     
     private void jmp(int param)
     {
-        //desviar sempre i:=att1
+        //desviar sempre instrucao:=param
         m_instrucao = param;
     }
     
@@ -355,11 +356,8 @@ public class ProcessadorDeInstrucao {
         // desviar caso falso  se M[s]=0, entao i:=att1, senao i:=i+1
         res = m_pilha.getValor(1);
         if(res == 0)
-        {
             m_instrucao = param;
-        }
-        else
-            m_pilha.pop();
+        m_pilha.pop();
     }
     
     private void call(int param)
@@ -381,16 +379,16 @@ public class ProcessadorDeInstrucao {
         for(int k=0; k<(p2);k++)
         {
             m_pilha.push(m_pilha.tamPilha(), 0);
-            m_pilha.setValor(1, p1+k);
+            m_pilha.setValor(1, m_pilha.getValorFixo(p1+k));
         }
     }
     
     private void dalloc(int p1, int p2)
     {
         //{M[m+k]:=M[s]; s:=s - 1}
-         for(int k =(p2-1);k>=0;k--)
+         for(int k =(p2-1); k>=0; k--)
          {
-             m_pilha.setValor(p1+k, m_pilha.getValor(p1+k));
+             m_pilha.setValorFixo(p1+k, m_pilha.getValor(1));
              m_pilha.pop();
          }
     }

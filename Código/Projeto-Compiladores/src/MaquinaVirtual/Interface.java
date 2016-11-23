@@ -5,6 +5,7 @@
  */
 package MaquinaVirtual;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -352,6 +353,8 @@ public class Interface extends javax.swing.JFrame {
             if(!processador.isFim())
             {
                 processador.runInstruction();
+                tabelaInstrucao.setSelectionBackground(Color.lightGray);
+                tabelaInstrucao.setRowSelectionInterval(processador.m_instrucao-1, processador.m_instrucao-1);
                 pilha = processador.getPilha();
                 zerarTabPilha();
                 preencherTabPilha(pilha.tamPilha());

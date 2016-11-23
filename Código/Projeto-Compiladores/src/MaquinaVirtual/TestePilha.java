@@ -35,7 +35,7 @@ public class TestePilha
         
         //Desempilha a pilha com o valor do segundo elemento da pilha alterado
         System.out.println("Desempilhando.");
-        for(int a=0; a<5; a++)
+        /*for(int a=0; a<5; a++)
         {
             res = pilha.pop();
             System.out.println("Desempilhando: end: "+res.getAdress()+" valor: "+res.valor);
@@ -43,9 +43,22 @@ public class TestePilha
             {
                 System.out.println("Tamanho da pilha: "+pilha.tamPilha());
             }
-        }
+        }*/
         //Tamanho da pilha
         System.out.println("Tamanho da pilha: "+pilha.tamPilha());
+    }
+    
+    public void teste2()
+    {
+        pilha.pushPos(2);
+        pilha.pushPos(1);
+        //pilha.push(pilha.tamPilha()+7, 9);
+        
+        for(int b=1; b<=pilha.tamPilha(); b++)
+        {
+            System.out.println("End: "+pilha.getEnd(b)+ " Valor: " + pilha.getValor(b));
+        }
+        
     }
     
 }
@@ -60,5 +73,6 @@ class Testinho
     {
         TestePilha teste = new TestePilha();
         teste.teste();
+        teste.teste2();
     }
 }

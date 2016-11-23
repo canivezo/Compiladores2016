@@ -18,7 +18,13 @@ public class DadosPilha {
     {
        this.valor = 0;
        this.adress = 0;
-    }    
+    }
+    
+    public DadosPilha(int a, int v)
+    {
+       this.valor = v;
+       this.adress =a;
+    }      
     
     public int getValor() 
     {

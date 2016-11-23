@@ -6,6 +6,7 @@
 package MaquinaVirtual;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 
 /**
@@ -15,7 +16,7 @@ public class Pilha
 {
     
     public int posicao = 0;
-    private ArrayList<DadosPilha> conteudo = new ArrayList<DadosPilha>();
+    private Vector<DadosPilha> conteudo = new Vector<DadosPilha>();
     private DadosPilha aux = new DadosPilha();
     
     /**
@@ -55,6 +56,15 @@ public class Pilha
         this.posicao++;
     }
     
+    public void pushPos(int end)
+    {
+        posicao++;
+        aux = new DadosPilha();
+        aux.setAdress(conteudo.size());
+        aux.setValor(conteudo.get(end).valor);
+        conteudo.add(aux);
+    }
+    
     public DadosPilha pop()
     {
         posicao--;
@@ -71,6 +81,11 @@ public class Pilha
         return conteudo.get((conteudo.size()-pos)).getValor();
     }
     
+        public int getValorFixo(int pos)
+    {
+        return conteudo.get(pos).getValor();
+    }
+    
     
     public void setValor(int pos, int val)
     {
@@ -79,6 +94,14 @@ public class Pilha
         aux.setAdress(a);
         aux.setValor(val);
         conteudo.set(conteudo.size()-pos, aux);
+    }
+    
+        public void setValorFixo(int pos, int val)
+    {
+        aux = new DadosPilha();
+        aux.setAdress(pos);
+        aux.setValor(val);
+        conteudo.set(pos, aux);
     }
     
 }
