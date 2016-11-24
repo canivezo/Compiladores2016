@@ -33,7 +33,7 @@ public class GeradorDeCodigo {
         
 	private GeradorDeCodigo(File source) throws Exception 
         {
-            arquivo = new File(source.getPath() + ".vmobj");
+            arquivo = new File(source.getPath() + ".obj");
             if(arquivo.exists())
                 arquivo.delete();
             
@@ -67,14 +67,14 @@ public class GeradorDeCodigo {
         
 	public void geraComando(String operador, String primeiroArg, String segundoArg) 
         {
-            System.out.println("\t" + operador + "\t" + primeiroArg + "\t" + segundoArg +  "\n");
-            out.format("\t" + operador + "\t" + primeiroArg + "\t" + segundoArg + "%n");
+            System.out.println("\t" + operador + "\t" + primeiroArg + "," + segundoArg +  "\n");
+            out.format("\t" + operador + "\t" + primeiroArg + "," + segundoArg + "%n");
 	}
         
         public void geraComando(String operador, int primeiroArg, int segundoArg) 
         {
-            System.out.println("\t" + operador + "\t" + primeiroArg + "\t" + segundoArg +  "\n");
-            out.format("\t" + operador + "\t" + primeiroArg + "\t" + segundoArg + "%n");
+            System.out.println("\t" + operador + "\t" + primeiroArg + "," + segundoArg +  "\n");
+            out.format("\t" + operador + "\t" + primeiroArg + "," + segundoArg + "%n");
 	}
 	
 	public void close() 
