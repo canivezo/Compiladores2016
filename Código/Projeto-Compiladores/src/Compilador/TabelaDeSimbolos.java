@@ -72,7 +72,7 @@ public class TabelaDeSimbolos
         //
         //Faz ao contrário para retornar o símbolo mais próximo ao escopo.
         //
-        for(int i = simbolos.size(); i >= 0; i--)
+        for(int i = simbolos.size() - 1; i >= 0; i--)
         {
             if(simbolos.get(i).equals(s))
             {

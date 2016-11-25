@@ -40,7 +40,7 @@ public class Simbolo
      */
     public void setNivel(int n) throws Exception
     {
-        if(n < -1)
+        if(n < 0)
             throw new Exception("Nivel invalido");
         
         nivel = n;
@@ -95,7 +95,7 @@ public class Simbolo
         if(o.getClass() == this.getClass())
         {
             Simbolo s = (Simbolo) o;
-            if(s.getToken().getSimbolo().equals(this.token.getSimbolo()) && s.getToken().getSimbolo().equals(this.token.getSimbolo()))
+            if(s.getToken().getSimbolo().equals(this.token.getSimbolo()) && s.getToken().getLexema().equals(this.token.getLexema()))
             {
                 return true;
             }

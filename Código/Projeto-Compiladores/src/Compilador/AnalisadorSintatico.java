@@ -41,7 +41,8 @@ public class AnalisadorSintatico
         if(token.simboloToCode() == 1)  //sprograma
         {
             proximoToken();
-            //Gera START
+            GeradorDeCodigo.getInstance().geraComando(Comandos.Start);
+            GeradorDeCodigo.getInstance().geraComando(Comandos.Allocate, 0, 1);
             if(token.simboloToCode() == 17)  //sidentificador
             {
                 semantico.insereTabela(new Simbolo(new Rotina("programa"), token));
@@ -51,6 +52,8 @@ public class AnalisadorSintatico
                     analisaBloco();
                     if(token.simboloToCode() == 19)  //sponto
                     {
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.DALLOC, 0, 1);
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.HALT);
                         System.out.println("Sucesso!");
                     }
                     else erro.erroSintatico(token.getLinha(),1);
@@ -257,7 +260,7 @@ public class AnalisadorSintatico
             if(semantico.pesquisaDeclVarTabela(t))
             {
                 analisaAtribuicao();
-                //Gerar o str
+                GeradorDeCodigo.getInstance().geraComando(Comandos.STR, semantico.getSimboloType(t).getInfo());
             }
             else
                 throw new Exception("Var não existe");
@@ -386,7 +389,7 @@ public class AnalisadorSintatico
         }
         else
         {
-            //erro semantico exp nao eh booleana
+            throw new Exception("Expressao invalida, nao e booleana");
         }
     }
     
@@ -498,7 +501,7 @@ public class AnalisadorSintatico
             }
             else
             {
-                //Erro semantico, var nao declarada
+                throw new Exception("Sidentificador invalido, var no declarada");
             }
         }
         else
@@ -553,7 +556,7 @@ public class AnalisadorSintatico
             }
             else
             {
-                //Erro semantico, func existe
+                throw new Exception("Sidentificador invalido, funcao já existe");
             }
         }
         else
@@ -575,6 +578,7 @@ public class AnalisadorSintatico
         // smaior ou smaiorig ou sig ou smenor ou smenorig ou sdif
         if((token.simboloToCode() == 24) || (token.simboloToCode() == 25) || (token.simboloToCode() == 26) || (token.simboloToCode() == 27) || (token.simboloToCode() == 28) || (token.simboloToCode() == 29))
         {
+            semantico.adicionaOperadorNaExpressao(token);
             proximoToken();
             analisaExpressaoSimples();
         }
@@ -595,6 +599,7 @@ public class AnalisadorSintatico
         analisaTermo();
         while((token.simboloToCode() == 30) || (token.simboloToCode() == 31) || (token.simboloToCode() == 35))  //smais ou smenos ou sou
         {
+            semantico.adicionaOperadorNaExpressao(token);
             proximoToken();
             analisaTermo();
         }
@@ -610,6 +615,7 @@ public class AnalisadorSintatico
         analisaFator();
         while((token.simboloToCode() == 32) || (token.simboloToCode() == 33) || (token.simboloToCode() == 34))  //smult ou sdiv ou se
         {
+            semantico.adicionaOperadorNaExpressao(token);
             proximoToken();
             analisaFator();
         }
@@ -637,7 +643,7 @@ public class AnalisadorSintatico
             }
             else
             {
-                //erro semantico, nao existe sidentificador
+                throw new Exception("Sidentificador invalido");
             }
         }
         else
@@ -701,7 +707,7 @@ public class AnalisadorSintatico
         }
         else
         {
-            //erro semantico
+            throw new Exception("Sidentificador invalido, procedimento nao encontrado");
         }
     }
     

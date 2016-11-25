@@ -26,14 +26,14 @@ public class GeradorDeCodigo {
          * @param source
          * @throws Exception 
          */
-        public static void init(File source) throws Exception
+        public static void init(String source) throws Exception
         {
             singleToN = new GeradorDeCodigo(source);
         }
         
-	private GeradorDeCodigo(File source) throws Exception 
+	private GeradorDeCodigo(String source) throws Exception 
         {
-            arquivo = new File(source.getPath() + ".obj");
+            arquivo = new File(source);
             if(arquivo.exists())
                 arquivo.delete();
             
@@ -43,38 +43,38 @@ public class GeradorDeCodigo {
 	
 	public void geraLabel(int n) 
         {
-            out.format(Comandos.Label + n + "\tNULL%n");
-            System.out.println(Comandos.Label + n + "\tNULL\n");
+            out.format(Comandos.Label + n + "\tNULL\n");
+            out.flush();
         }
 	
 	public void geraComando(String operador) 
         {
-            System.out.println("\t" + operador + "\n");
-            out.format("\t" + operador + "%n");    
+            out.format("\t" + operador + "\n");
+            out.flush();
         }
 
 	public void geraComando(String operador, String primeiroArg) 
         {
-            System.out.println("\t" + operador + "\t" + primeiroArg + "\n");
-            out.format("\t" + operador + "\t" + primeiroArg + "%n");
+            out.format("\t" + operador + "\t" + primeiroArg + "\n");
+            out.flush();
 	}
 	
         public void geraComando(String operador, int primeiroArg) 
         {
-            System.out.println("\t" + operador + "\t" +  primeiroArg + "\n");
-            out.format("\t" + operador + "\t" +  primeiroArg + "%n");
+            out.format("\t" + operador + "\t" +  primeiroArg + "\n");
+            out.flush();
 	}
         
 	public void geraComando(String operador, String primeiroArg, String segundoArg) 
         {
-            System.out.println("\t" + operador + "\t" + primeiroArg + "," + segundoArg +  "\n");
-            out.format("\t" + operador + "\t" + primeiroArg + "," + segundoArg + "%n");
+            out.format("\t" + operador + "\t" + primeiroArg + "," + segundoArg + "\n");
+            out.flush();
 	}
         
         public void geraComando(String operador, int primeiroArg, int segundoArg) 
         {
-            System.out.println("\t" + operador + "\t" + primeiroArg + "," + segundoArg +  "\n");
-            out.format("\t" + operador + "\t" + primeiroArg + "," + segundoArg + "%n");
+            out.format("\t" + operador + "\t" + primeiroArg + "," + segundoArg + "\n");
+            out.flush();
 	}
 	
 	public void close() 

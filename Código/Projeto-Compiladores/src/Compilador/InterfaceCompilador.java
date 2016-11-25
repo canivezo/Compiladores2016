@@ -195,6 +195,7 @@ public class InterfaceCompilador extends javax.swing.JFrame {
         
         try
         {
+            GeradorDeCodigo.init("C:\\Users\\lucas\\Desktop\\gerado.obj");
             System.getProperty("user.dir");
             analisador = new AnalisadorSintatico(urlArquivo);
             saidaTexto.append("Sucesso!\n");

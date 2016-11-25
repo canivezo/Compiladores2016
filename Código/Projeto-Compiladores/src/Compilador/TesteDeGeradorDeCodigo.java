@@ -15,7 +15,7 @@ public class TesteDeGeradorDeCodigo {
         try 
         {
             GeradorDeCodigo gerador;
-            GeradorDeCodigo.init(new File("C:\\Users\\Rubens\\Documents\\MV"));
+            GeradorDeCodigo.init("C:\\Users\\Rubens\\Documents\\MV.obj");
             GeradorDeCodigo.getInstance().geraComando(Comandos.Start);
             GeradorDeCodigo.getInstance().geraComando(Comandos.Allocate,"0","2");
             GeradorDeCodigo.getInstance().geraLabel(1);

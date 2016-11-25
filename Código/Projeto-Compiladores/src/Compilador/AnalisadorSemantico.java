@@ -14,7 +14,7 @@ public class AnalisadorSemantico {
     private TabelaDeSimbolos tabelaDeSimbolos;
     private VerificaExpressao exp;
     private int label = 0;
-    private int posPilha = 0;
+    private int posPilha = 1;
     private int nivel = 0;
     
     public AnalisadorSemantico() 
@@ -88,14 +88,17 @@ public class AnalisadorSemantico {
     public void colocaTipoTabela(Type t) throws Exception
     {
         int i = tabelaDeSimbolos.getSize() - 1;
-        //Zero tabela é o próprio programa
+        int posInit = posPilha;
+        int alloc = 0;
         while(i > 0 && tabelaDeSimbolos.getSimbolo(i).getType() == null)
         {
             Type tipo = new Var(t.getType(), posPilha);
             tabelaDeSimbolos.getSimbolo(i).setType(tipo);
             posPilha++;
+            alloc++;
             i--;
         }
+        GeradorDeCodigo.getInstance().geraComando(Comandos.Allocate, posInit, alloc);
     }
     
     /**
@@ -199,8 +202,7 @@ public class AnalisadorSemantico {
             tabelaDeSimbolos.excluiSimbolo(count);
         }
         posPilha = posPilha - dealloc;
-        //gerar o dealloc
-        //o nivel é decrementado já que acabou uma funcao
+        GeradorDeCodigo.getInstance().geraComando(Comandos.DALLOC, posPilha, dealloc);
         nivel--;
     }
     
