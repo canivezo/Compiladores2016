@@ -101,7 +101,7 @@ public class VerificaExpressao {
     
     /**
      * Verifica se um operador deve ser adicionado na pilha.
-     * Um operador não deve ser adicionado caso t tenha maior precedencia do que está na pilha.
+     * Um operador não deve ser adicionado caso t tenha menor precedencia do que está na pilha.
      * Outras coisas podem fazer com que essa funcao retorne false, por exemplo pilha == null.
      * @param t
      * @return true se for para adicionar, false se não.
@@ -137,7 +137,7 @@ public class VerificaExpressao {
     
     /**
      * Codifica cada tipo de operador conforme sua precedencia. 
-     * 8 para a mais alta e 1 para a mais baixa.
+     * 7 para a mais alta e 0 para a mais baixa.
      * Abre e fecha parentesis são tratados no adicionaOperadorNaExpressao
      * @param i
      * @return retorna o código de precedencia.
@@ -145,11 +145,11 @@ public class VerificaExpressao {
      */
     private int codigoDePrecedencia(int i) throws Exception
     {   
-        if(i == 22 || i == 23) return 8; // abre e fecha parentesis.
-        
         if(i == 36 || i == 0) return 7; //Nao e INV. O zero seria um menos como um operador de sinal, INV.
         
-        if(i == 32 || i == 33) return 5; //+ e -.
+        if(i == 32 || i == 33) return 6; //* e /.
+        
+        if(i == 30 || i == 31) return 5; //+ e -.
         
         if(i == 24 || i == 25 || i == 27 || i == 28) return 4;// > , >= , < , <=.
         
@@ -158,6 +158,8 @@ public class VerificaExpressao {
         if(i == 34) return 2; // AND.
         
         if(i == 35) return 1; // OR.
+        
+        if(i == 22 || i == 23) return 0; // abre e fecha parentesis.
         
         throw new Exception("codigo inválido");
     }
@@ -325,6 +327,8 @@ public class VerificaExpressao {
                     if(posPilha < 0)
                         throw new Exception("Fecha parentesis nao encontrado. Expresao invalida");
                 }
+                //removendo o abre parentesis
+                pilha.remove(posPilha);
             }
             else
             {
