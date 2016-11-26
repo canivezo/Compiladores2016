@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -33,9 +34,11 @@ public class Interface extends javax.swing.JFrame {
     DefaultTableModel tabPilha, tabInstrucao;
     Pilha pilha = new Pilha();
     int nume = 256, tamanhoArq =0;
-    private int caracter = 0;
+    private int caracter = 0, primeiroClk = 0;
     private InputStreamReader leituracaracteres;
     private ProcessadorDeInstrucao processador;
+    private ArrayList<String> breakp = new ArrayList<String> ();
+    private boolean temBreak = false;
 
     
     //Construtor da classe
@@ -45,6 +48,9 @@ public class Interface extends javax.swing.JFrame {
         initComponents();
         tabPilha = (DefaultTableModel) tabelaPilha.getModel();
         tabInstrucao = (DefaultTableModel) tabelaInstrucao.getModel();
+        textoBreak.setText("Digite as linhas de Break Point separadas por espaço");
+        textoBreak.setLineWrap(true);
+        textoSaida.setLineWrap(true);
     }
 
     /**
@@ -69,14 +75,12 @@ public class Interface extends javax.swing.JFrame {
         botaoBreak = new javax.swing.JButton();
         botaoContinuar = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        textoBreak = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         BarraDeMenu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         BotaoAbrirArqv = new javax.swing.JMenuItem();
-        BotaoSalvarArqv = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        BotaoCompilar = new javax.swing.JMenuItem();
+        BotaoExecutarArqv = new javax.swing.JMenuItem();
 
         seletorDeArquivo.setFileFilter(new FiltroDeArquivo());
 
@@ -153,28 +157,35 @@ public class Interface extends javax.swing.JFrame {
 
         textoSaida.setColumns(20);
         textoSaida.setRows(5);
+        textoSaida.setWrapStyleWord(true);
         jScrollPane3.setViewportView(textoSaida);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Break Point's");
 
-        botaoBreak.setText("Breakpoint");
+        botaoBreak.setText("Continuar Break");
         botaoBreak.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaoBreakActionPerformed(evt);
             }
         });
 
-        botaoContinuar.setText("Continuar");
+        botaoContinuar.setText("Executar");
         botaoContinuar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaoContinuarActionPerformed(evt);
             }
         });
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane4.setViewportView(jTextArea2);
+        textoBreak.setColumns(20);
+        textoBreak.setRows(5);
+        textoBreak.setWrapStyleWord(true);
+        textoBreak.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                textoBreakMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(textoBreak);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel6.setText("Saida");
@@ -194,22 +205,15 @@ public class Interface extends javax.swing.JFrame {
         });
         jMenu1.add(BotaoAbrirArqv);
 
-        BotaoSalvarArqv.setText("Salvar arquivo");
-        jMenu1.add(BotaoSalvarArqv);
-
-        BarraDeMenu.add(jMenu1);
-
-        jMenu2.setText("Executar");
-
-        BotaoCompilar.setText("Compilar Código");
-        BotaoCompilar.addActionListener(new java.awt.event.ActionListener() {
+        BotaoExecutarArqv.setText("Executar arquivo");
+        BotaoExecutarArqv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BotaoCompilarActionPerformed(evt);
+                BotaoExecutarArqvActionPerformed(evt);
             }
         });
-        jMenu2.add(BotaoCompilar);
+        jMenu1.add(BotaoExecutarArqv);
 
-        BarraDeMenu.add(jMenu2);
+        BarraDeMenu.add(jMenu1);
 
         setJMenuBar(BarraDeMenu);
 
@@ -231,7 +235,7 @@ public class Interface extends javax.swing.JFrame {
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(botaoBreak, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                            .addComponent(botaoBreak, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(botaoContinuar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -324,34 +328,12 @@ public class Interface extends javax.swing.JFrame {
 
     }//GEN-LAST:event_botaoBreakActionPerformed
 
-    /**
-     * 
-     * @param evt 
-     */
-    private void BotaoCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCompilarActionPerformed
-        if(urlArquivo != null)
-        {
-            int i = 0;
-            while(processador.getInstrucoes().size() > i || !processador.isFim())
-            {
-                processador.runInstruction();
-                pilha = processador.getPilha();
-                zerarTabPilha();
-                preencherTabPilha(pilha.tamPilha());
-                exibirSaida();
-                i++;
-            }
-            botaoContinuar.setEnabled(false);
-        }
-        else
-           JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_BotaoCompilarActionPerformed
-
     private void botaoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoContinuarActionPerformed
         if(urlArquivo != null)
         {
             if(!processador.isFim())
             {
+                botaoBreak.setEnabled(false);
                 processador.runInstruction();
                 tabelaInstrucao.setSelectionBackground(Color.lightGray);
                 tabelaInstrucao.setRowSelectionInterval(processador.m_instrucao-1, processador.m_instrucao-1);
@@ -369,6 +351,36 @@ public class Interface extends javax.swing.JFrame {
         else
             JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_botaoContinuarActionPerformed
+
+    private void BotaoExecutarArqvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoExecutarArqvActionPerformed
+        if(urlArquivo != null)
+        {
+            int i = 0;
+            setBreaks();
+            textoBreak.setEditable(false);
+            while(processador.getInstrucoes().size() > i || !processador.isFim())
+            {
+                processador.runInstruction();
+                pilha = processador.getPilha();
+                zerarTabPilha();
+                preencherTabPilha(pilha.tamPilha());
+                exibirSaida();
+                i++;
+            }
+            botaoContinuar.setEnabled(false);
+        }
+        else
+           JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
+    
+    }//GEN-LAST:event_BotaoExecutarArqvActionPerformed
+
+    private void textoBreakMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textoBreakMouseClicked
+        if(primeiroClk == 0)
+        {
+        textoBreak.setText("");
+        primeiroClk = 1;
+        }
+    }//GEN-LAST:event_textoBreakMouseClicked
 
     /**
      * @param args the command line arguments
@@ -401,6 +413,7 @@ public class Interface extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 janelaP.setVisible(true);
+                janelaP.setTitle("Maquina Virtual MLR");
                 janelaP.setLocationRelativeTo(null);
                 janelaP.setResizable(false);
             }
@@ -410,8 +423,7 @@ public class Interface extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar BarraDeMenu;
     private javax.swing.JMenuItem BotaoAbrirArqv;
-    private javax.swing.JMenuItem BotaoCompilar;
-    private javax.swing.JMenuItem BotaoSalvarArqv;
+    private javax.swing.JMenuItem BotaoExecutarArqv;
     private javax.swing.JButton botaoBreak;
     private javax.swing.JButton botaoContinuar;
     private javax.swing.JLabel jLabel1;
@@ -419,15 +431,14 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JFileChooser seletorDeArquivo;
     private javax.swing.JTable tabelaInstrucao;
     private javax.swing.JTable tabelaPilha;
+    private javax.swing.JTextArea textoBreak;
     private javax.swing.JTextArea textoSaida;
     // End of variables declaration//GEN-END:variables
 
@@ -447,6 +458,7 @@ public class Interface extends javax.swing.JFrame {
             zerarTabPilha();
             zerarSaida();
             botaoContinuar.setEnabled(true);
+            botaoBreak.setEnabled(true);
             while(i < processador.getInstrucoes().size())
             {
                 switch(nomeInstrucao.getInstructionType(processador.getInstrucoes().get(i).getInstrucao()))
@@ -471,6 +483,38 @@ public class Interface extends javax.swing.JFrame {
         {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void setBreaks()
+    {
+        int fim=0, res, i=0;
+        String aux = "", val;
+        val = String.valueOf(textoBreak.getText());
+        if(val.equals("Digite as linhas de Break Point separadas por espaço") == false)
+        {
+            temBreak = true;
+            System.out.println(val);
+            while(fim != 1)
+            {
+                res = val.charAt(i);
+                i++;
+                if(i >= val.length())
+                {
+                    fim = 1;
+                }
+                if(Character.isDigit(res))
+                {
+                    aux = aux + (res-48);
+                }
+                else
+                {
+                    breakp.add(aux);
+                    aux = "";
+                }
+                
+            }
+        }
+        System.out.println(breakp.get(1));
     }
     
     public void zerarTabPilha()
