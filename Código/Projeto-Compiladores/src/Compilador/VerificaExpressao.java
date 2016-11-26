@@ -248,12 +248,254 @@ public class VerificaExpressao {
                 else
                 {
                     ExpSimb sim = (ExpSimb) expressao.get(pos);
-                    GeradorDeCodigo.getInstance().geraComando(Comandos.LDV, sim.getExp().getType().getInfo());
+                    if(sim.getExp().getType().getClass() == Rotina.class)
+                    {
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.CALL, Comandos.Label+""+sim.getExp().getType().getInfo());
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.LDV, 0);
+                    }
+                    else
+                    {
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.LDV, sim.getExp().getType().getInfo());
+                    }
                 }
             }
             pos++;
         }
-        wasBool = true;
+        
+        /**
+         * Chama a função para verificar o tipo da expressão e se ela é válida.
+         * Caso não seja lança excessão
+         */
+        wasBool = expType();
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    private boolean expType() throws Exception
+    {
+        Vector<Integer> tipo = new Vector<Integer>();
+        /**
+         * tipo 0 = int
+         * tipo 1 = booleano
+         */
+        int pos = 0;
+        while(pos < expressao.size())
+        {
+            //Guardar os tipos conforme aparecem as variáveis
+            //A cada expressão que aparecer, retirar os tipos anteriores e deixar apenas o tipo resultante.
+            //Assim será possível validar tudo.
+            if(expressao.get(pos).getClass() == ExpOp.class)
+            {
+                ExpOp op = (ExpOp) expressao.get(pos);
+                int tipoPos = tipo.size() - 1;
+                switch(op.getExp().simboloToCode())
+                {
+                case 0:     //Inv só aceita o tipo inteiro
+                    if(tipo.get(tipoPos) != 0)
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    break;
+                case 24:    //Maior não pode fazer a comparação se for entre tipos diferentes, Int > Bool
+                    if((tipo.get(tipoPos) == 0 && tipo.get(tipoPos - 1) == 1) || (tipo.get(tipoPos) == 1 && tipo.get(tipoPos - 1) == 0)) 
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 1);
+                    }
+                    break;
+                case 25:    //MaiorIgual
+                    if((tipo.get(tipoPos) == 0 && tipo.get(tipoPos - 1) == 1) || (tipo.get(tipoPos) == 1 && tipo.get(tipoPos - 1) == 0)) 
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 1);
+                    }
+                    break;
+                case 26:    //Igual
+                    if((tipo.get(tipoPos) == 0 && tipo.get(tipoPos - 1) == 1) || (tipo.get(tipoPos) == 1 && tipo.get(tipoPos - 1) == 0)) 
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 1);
+                    }
+                    break;
+                case 27:    //Menor
+                    if((tipo.get(tipoPos) == 0 && tipo.get(tipoPos - 1) == 1) || (tipo.get(tipoPos) == 1 && tipo.get(tipoPos - 1) == 0)) 
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 1);
+                    }
+                    break;
+                case 28:    //MenorIgual
+                    if((tipo.get(tipoPos) == 0 && tipo.get(tipoPos - 1) == 1) || (tipo.get(tipoPos) == 1 && tipo.get(tipoPos - 1) == 0)) 
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 1);
+                    }
+                    break;
+                case 29:    //Diferente
+                    if((tipo.get(tipoPos) == 0 && tipo.get(tipoPos - 1) == 1) || (tipo.get(tipoPos) == 1 && tipo.get(tipoPos - 1) == 0)) 
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 1);
+                    }
+                    break;
+                case 30:    //Mais só aceita o Tipo Int
+                    if(tipo.get(tipoPos) == 1 || tipo.get(tipoPos - 1) == 1)
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 0);
+                    }
+                    break;
+                case 31:    //Menos
+                    if(tipo.get(tipoPos) == 1 || tipo.get(tipoPos - 1) == 1)
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 0);
+                    }
+                    break;
+                case 32:    //Multiplicação
+                    if(tipo.get(tipoPos) == 1 || tipo.get(tipoPos - 1) == 1)
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 0);
+                    }
+                    break;
+                case 33:    //Divisão
+                    if(tipo.get(tipoPos) == 1 || tipo.get(tipoPos - 1) == 1)
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 0);
+                    }
+                    break;
+                case 34:    //And
+                    if(tipo.get(tipoPos) == 0 || tipo.get(tipoPos - 1) == 0)
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 1);
+                    }
+                    break;
+                case 35:    //Or
+                    if(tipo.get(tipoPos) == 0 || tipo.get(tipoPos - 1) == 0)
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                    else
+                    {
+                        //Tira o ultimo, e seta o penultimo para booleano, que é o tipo gerado por essa expressão.
+                        tipo.remove(tipoPos);
+                        tipoPos--;
+                        tipo.set(tipoPos, 1);
+                    }
+                    break;
+                case 36:    //Not
+                    if(tipo.get(tipoPos) != 0)
+                    {
+                        throw new Exception("Expressão inválida");
+                    }
+                }
+            }
+            else //Não é operador. snumero ou sidentificador
+            {
+                if(expressao.get(pos).getClass() == ExpNum.class)
+                {
+                    ExpNum num = (ExpNum) expressao.get(pos);
+                    if(num.getExp().simboloToCode() == 18)
+                    {
+                        //Numeros são inteiros
+                        tipo.add(0);
+                    }
+                    else
+                    {
+                        //Verdadeiro ou falso são booleanos
+                        tipo.add(1);
+                    }
+                }
+                else
+                {
+                    ExpSimb sim = (ExpSimb) expressao.get(pos);
+                    if(sim.getExp().getType().getType().equals("inteiro") || sim.getExp().getType().getType().equals("funcInt")) //inteiro
+                    {
+                        tipo.add(0);
+                    }
+                    else //booleano
+                    {
+                        tipo.add(1);
+                    }
+                }
+            }
+            pos++;
+        }
+        if(tipo.get(0) == 0) 
+            return false;
+        
+        return true;
     }
     
     /**
@@ -320,7 +562,6 @@ public class VerificaExpressao {
                 
                 while(pilha.get(posPilha).simboloToCode() != 22) // enquanto não acha o abre parênteses
                 {
-                    //rever
                     aux = pilha.remove(posPilha);
                     expressao.add(new ExpOp(aux));
                     posPilha--;
@@ -358,6 +599,7 @@ public class VerificaExpressao {
         while(i >= 0)
         {
             expressao.add(new ExpOp(pilha.remove(i)));
+            i--;
         }
         
         //chama o gerador de Expressão

@@ -18,7 +18,8 @@ public class AnalisadorSintatico
     private int finalDoVetor = 0;
     private AnalisadorLexical lexico;
     private AnalisadorSemantico semantico;
-    
+    private boolean isFunc = false;
+    private boolean wasFuncAtrib = false;
     /**
      * Recebe o caminho do arquivo e começa a compilação.
      * programa teste;
@@ -196,6 +197,8 @@ public class AnalisadorSintatico
             {
                 if(token.simboloToCode() == 20)  //spontovirgula
                 {
+                    // Se encontrar mais de uma atribuição no mesmo bloco vai parar aqui
+                    if(wasFuncAtrib) throw new Exception("Atribuição de fução repetida");
                     proximoToken();
                     if(token.simboloToCode() != 3)  //sfim
                     {
@@ -206,6 +209,14 @@ public class AnalisadorSintatico
                 {
                         erro.erroSintatico(token.getLinha(),2);
                 }
+            }
+            if(isFunc)
+            {
+                if(!wasFuncAtrib)
+                {
+                    throw new Exception("Último comando não era a atribuição da função");
+                }
+                wasFuncAtrib = false;
             }
             proximoToken();
         }
@@ -259,8 +270,7 @@ public class AnalisadorSintatico
         {
             if(semantico.pesquisaDeclVarTabela(t))
             {
-                analisaAtribuicao();
-                GeradorDeCodigo.getInstance().geraComando(Comandos.STR, semantico.getSimboloType(t).getInfo());
+                analisaAtribuicao(t);
             }
             else
                 throw new Exception("Var não existe");
@@ -274,14 +284,56 @@ public class AnalisadorSintatico
     /**
      * Apenas começa e termina a expressão.
      * O resultado da expressão vai estar no topo da pilha.
+     * Aqui fica o STR 0 da Func
+     * @param t
      * @throws Exception 
      */
-    public void analisaAtribuicao() throws Exception
+    public void analisaAtribuicao(Token t) throws Exception
     {
+        //Verificar se a atribuição é válida
         proximoToken();
         semantico.comecaExpressao();
         analisaExpressao();
         semantico.terminaExpressao();
+        if(semantico.getSimboloType(t).getType().equals("inteiro") || semantico.getSimboloType(t).getType().equals("booleano")) //Var
+        {
+            if(semantico.booleanExp() && semantico.getSimboloType(t).getType().equals("booleano")) //expressão booleana e var booleana
+            {
+                GeradorDeCodigo.getInstance().geraComando(Comandos.STR, semantico.getSimboloType(t).getInfo());
+            }
+            else
+            {
+                if(!semantico.booleanExp() && semantico.getSimboloType(t).getType().equals("inteiro")) //expressão inteira e var inteira
+                {
+                    GeradorDeCodigo.getInstance().geraComando(Comandos.STR, semantico.getSimboloType(t).getInfo());
+                }
+                else
+                {
+                    throw new Exception("Tipo da Expressão inválida");
+                }
+            }
+        }
+        else // booleano
+        {
+            //Aqui é gerado o str0
+            if(semantico.booleanExp() && semantico.getSimboloType(t).getType().equals("funcBool")) //expressão booleana e função booleana
+            {
+                wasFuncAtrib = true;
+                GeradorDeCodigo.getInstance().geraComando(Comandos.STR, 0);
+            }
+            else
+            {
+                if(!semantico.booleanExp() && semantico.getSimboloType(t).getType().equals("funcInt")) //expressão inteira e função inteira
+                {
+                    wasFuncAtrib = true;
+                    GeradorDeCodigo.getInstance().geraComando(Comandos.STR, 0);
+                }
+                else
+                {
+                    throw new Exception("Tipo da Expressão inválida");
+                }
+            }
+        }
     }
     
     /**
@@ -296,7 +348,12 @@ public class AnalisadorSintatico
             proximoToken();
             if(token.simboloToCode() == 17)  //sidentificador
             {
-                //pesquisa_declvar_tabela(token.lexema) SEMANTICO
+                if(!semantico.pesquisaDeclVarTabela(token))
+                {
+                    throw new Exception("sidentificador nao encontrado");
+                }
+                GeradorDeCodigo.getInstance().geraComando(Comandos.RD);
+                GeradorDeCodigo.getInstance().geraComando(Comandos.STR, Comandos.Label+""+semantico.getSimboloType(token).getInfo());
                 proximoToken();
                 if(token.simboloToCode() == 23)  //sfechaparenteses
                 {
@@ -331,7 +388,22 @@ public class AnalisadorSintatico
             proximoToken();
             if(token.simboloToCode() == 17) //sidentificador
             {
-                //SEMANTICO
+                if(!semantico.pesquisaDeclVarFunc(token))
+                {
+                    throw new Exception("Identificador não existe");
+                }
+                else
+                {
+                    if(semantico.getSimboloType(token).getClass() == Rotina.class)
+                    {
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.CALL, Comandos.Label+""+semantico.getSimboloType(token).getInfo());
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.LDV, 0);
+                    }
+                    else
+                    {
+                        GeradorDeCodigo.getInstance().geraComando(Comandos.LDV, semantico.getSimboloType(token).getInfo());
+                    }
+                }
                 proximoToken();
                 if(token.simboloToCode() == 23)  //sfechaparenteses
                 {
@@ -408,12 +480,12 @@ public class AnalisadorSintatico
             //Está errado
             int labelSenao = semantico.getLabel();
             int labelSe = semantico.getLabel();
-            GeradorDeCodigo.getInstance().geraComando(Comandos.JMPF, labelSenao);
+            GeradorDeCodigo.getInstance().geraComando(Comandos.JMPF, Comandos.Label+""+labelSenao);
             if(token.simboloToCode() == 7)  //sentao
             {
                 proximoToken();
                 analisaComandoSimples();
-                GeradorDeCodigo.getInstance().geraComando(Comandos.JUMP, labelSe);
+                GeradorDeCodigo.getInstance().geraComando(Comandos.JUMP, Comandos.Label+""+labelSe);
                 GeradorDeCodigo.getInstance().geraLabel(labelSenao);
                 if(token.simboloToCode() == 8)  //ssenao
                 {
@@ -429,7 +501,7 @@ public class AnalisadorSintatico
         }
         else
         {
-            //erro semantico exp nao eh booleana
+            throw new Exception("Expressã não é booleana");
         }
     }
     
@@ -542,8 +614,9 @@ public class AnalisadorSintatico
                         proximoToken();
                         if(token.simboloToCode() == 20)  //spontovirgula
                         {
-                            //Mexer para garantir que o ultimo comando é atribuição da função
+                            isFunc = true;//Mexer para garantir que o ultimo comando é atribuição da função
                             analisaBloco();
+                            isFunc = false;
                         }
                         else
                         {
@@ -633,6 +706,7 @@ public class AnalisadorSintatico
             //Só vai retornar true se achar uma var ou func
             if(semantico.pesquisaDeclVarFunc(token))
             {
+                //Aqui o sintático garante que não serão adicionados procedimentos na expressão
                 if(semantico.getSimboloType(token).getClass() == Rotina.class)
                     analisaChamadaFuncao();
                 else
@@ -703,7 +777,7 @@ public class AnalisadorSintatico
     {
         if(semantico.pesquisaDeclProc(t))
         {
-            GeradorDeCodigo.getInstance().geraComando(Comandos.CALL, semantico.getSimboloType(t).getInfo());
+            GeradorDeCodigo.getInstance().geraComando(Comandos.CALL, Comandos.Label+""+semantico.getSimboloType(t).getInfo());
         }
         else
         {
@@ -713,7 +787,7 @@ public class AnalisadorSintatico
     
     /**
      * Chamado pelo analisa expressão, adiciona uma função no validaExpressao dentro do semantico.
-     * Deve gerar o call e o LDV 0.
+     * O geraExp que vai gerar o call e o LDV 0
      * @throws Exception 
      */
     public void analisaChamadaFuncao() throws Exception
