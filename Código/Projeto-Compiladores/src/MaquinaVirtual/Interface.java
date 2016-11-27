@@ -39,6 +39,8 @@ public class Interface extends javax.swing.JFrame {
     private ProcessadorDeInstrucao processador;
     private ArrayList<String> breakp = new ArrayList<String> ();
     private boolean temBreak = false;
+    private int numBreaks = 0, contadorDeBreaks =0;
+    private boolean bp=false;
 
     
     //Construtor da classe
@@ -48,7 +50,7 @@ public class Interface extends javax.swing.JFrame {
         initComponents();
         tabPilha = (DefaultTableModel) tabelaPilha.getModel();
         tabInstrucao = (DefaultTableModel) tabelaInstrucao.getModel();
-        textoBreak.setText("Digite as linhas de Break Point separadas por espaço");
+        textoBreak.setText("Digite as linhas de Break Point separadas por espaço.");
         textoBreak.setLineWrap(true);
         textoSaida.setLineWrap(true);
     }
@@ -155,6 +157,7 @@ public class Interface extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Instruções");
 
+        textoSaida.setEditable(false);
         textoSaida.setColumns(20);
         textoSaida.setRows(5);
         textoSaida.setWrapStyleWord(true);
@@ -163,7 +166,7 @@ public class Interface extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Break Point's");
 
-        botaoBreak.setText("Continuar Break");
+        botaoBreak.setText("Executar c/ Break");
         botaoBreak.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaoBreakActionPerformed(evt);
@@ -289,7 +292,7 @@ public class Interface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void BotaoAbrirArqvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoAbrirArqvActionPerformed
@@ -325,7 +328,44 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_BotaoAbrirArqvActionPerformed
 
     private void botaoBreakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoBreakActionPerformed
-
+        if(urlArquivo != null)
+        {
+            if(numBreaks == 0)
+            {
+                setBreaks();
+                textoBreak.setEditable(false);
+                botaoContinuar.setEnabled(false);
+                BotaoExecutarArqv.setEnabled(false);
+            }
+            while(!processador.isFim())
+            {
+                if(bp)
+                    break;
+                
+                processador.runInstruction();
+                tabelaInstrucao.setSelectionBackground(Color.lightGray);
+                tabelaInstrucao.setRowSelectionInterval(processador.m_instrucao-1, processador.m_instrucao-1);
+                pilha = processador.getPilha();
+                zerarTabPilha();
+                preencherTabPilha(pilha.tamPilha());
+                exibirSaida();
+                for(int a=0;a<numBreaks;a++)
+                {
+                    if(processador.m_instrucao+1 == Integer.parseInt(breakp.get(a)))
+                    {
+                        bp = true;
+                    }
+                }    
+            }
+            bp=false;
+            if(processador.isFim())
+            {
+                botaoBreak.setEnabled(false);
+                JOptionPane.showMessageDialog(null, "Compilação chegou ao fim!", "Alerta", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else
+           JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_botaoBreakActionPerformed
 
     private void botaoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoContinuarActionPerformed
@@ -345,7 +385,7 @@ public class Interface extends javax.swing.JFrame {
             else
             {
                 botaoContinuar.setEnabled(false);
-                JOptionPane.showMessageDialog(null, "Compilação chegou ao fim!", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Compilação chegou ao fim!", "Alerta", JOptionPane.ERROR_MESSAGE);
             }
         }
         else
@@ -356,8 +396,8 @@ public class Interface extends javax.swing.JFrame {
         if(urlArquivo != null)
         {
             int i = 0;
-            setBreaks();
             textoBreak.setEditable(false);
+            System.out.println(breakp.get(0));
             while(processador.getInstrucoes().size() > i || !processador.isFim())
             {
                 processador.runInstruction();
@@ -371,7 +411,6 @@ public class Interface extends javax.swing.JFrame {
         }
         else
            JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
-    
     }//GEN-LAST:event_BotaoExecutarArqvActionPerformed
 
     private void textoBreakMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textoBreakMouseClicked
@@ -487,34 +526,30 @@ public class Interface extends javax.swing.JFrame {
     
     public void setBreaks()
     {
-        int fim=0, res, i=0;
+        int res, i=0;
         String aux = "", val;
         val = String.valueOf(textoBreak.getText());
-        if(val.equals("Digite as linhas de Break Point separadas por espaço") == false)
+        if(val.equals("Digite as linhas de Break Point separadas por espaço.") == false)
         {
             temBreak = true;
             System.out.println(val);
-            while(fim != 1)
+            while(i < val.length())
             {
                 res = val.charAt(i);
                 i++;
-                if(i >= val.length())
-                {
-                    fim = 1;
-                }
                 if(Character.isDigit(res))
                 {
-                    aux = aux + (res-48);
+                    aux = aux + (res-48); //res vem com o int correspondente da tabela ASCII, subtraindo 48 da o numero exato
                 }
                 else
                 {
                     breakp.add(aux);
                     aux = "";
                 }
-                
             }
+            breakp.add(aux);
         }
-        System.out.println(breakp.get(1));
+        numBreaks = breakp.size();
     }
     
     public void zerarTabPilha()
