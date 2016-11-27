@@ -195,7 +195,12 @@ public class InterfaceCompilador extends javax.swing.JFrame {
         
         try
         {
-            GeradorDeCodigo.init("C:\\Users\\Rubens\\Desktop\\gerado.obj");
+            String MVFile;
+            javax.swing.JFileChooser a = new javax.swing.JFileChooser();
+            a.showDialog(menu, "MVFile");
+            a.setFileFilter(new FiltroDeArquivo());
+            MVFile = a.getSelectedFile().toString();
+            GeradorDeCodigo.init(MVFile);
             System.getProperty("user.dir");
             analisador = new AnalisadorSintatico(urlArquivo);
             saidaTexto.append("Sucesso!\n");
@@ -300,4 +305,19 @@ public class InterfaceCompilador extends javax.swing.JFrame {
         //editorTexto.setLineWrap(true);
     }
 
+    class FiltroDeArquivo extends javax.swing.filechooser.FileFilter 
+    {
+        @Override
+        public boolean accept(File file) 
+        {
+            return file.isDirectory() || file.getAbsolutePath().endsWith(".obj");
+        }
+        @Override
+        public String getDescription() 
+        {
+            // This description will be displayed in the dialog,
+            // hard-coded = ugly, should be done via I18N
+            return "MV File(*.obj)";
+        }
+    } 
 }
