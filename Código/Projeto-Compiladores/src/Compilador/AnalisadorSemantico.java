@@ -109,8 +109,8 @@ public class AnalisadorSemantico {
      */
     public void colocaTipoFuncTabela(String tipo) throws Exception
     {
-       int i = tabelaDeSimbolos.getSize();
-       if(tabelaDeSimbolos.getSimbolo(i) != null)
+       int i = tabelaDeSimbolos.getSize() - 1;
+       if(tabelaDeSimbolos.getSimbolo(i).getType() != null)
            throw new Exception("O ultimo simbolo ja tem um tipo, chamada feita na hora errada");
        
        //Como a funcao é inserida sem tipo, o nivel já foi setado.
@@ -197,6 +197,10 @@ public class AnalisadorSemantico {
                 if(aux.getType().getClass() == Var.class)
                 {
                     dealloc++;
+                }
+                if(nivel > aux.getNivel())
+                {
+                    break;
                 }
             }
             tabelaDeSimbolos.excluiSimbolo(count);

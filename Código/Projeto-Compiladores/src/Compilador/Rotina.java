@@ -40,7 +40,7 @@ public class Rotina implements Type{
     @Override
     public int getInfo() 
     {
-        return 0;
+        return label;
     }
 
     @Override

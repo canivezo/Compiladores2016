@@ -50,7 +50,7 @@ public class AnalisadorSintatico
                 proximoToken();
                 if(token.simboloToCode() == 20) //spontovirgula
                 {
-                    analisaBloco();
+                    analisaBloco(null);
                     if(token.simboloToCode() == 19)  //sponto
                     {
                         semantico.finalizaEscopo();
@@ -87,12 +87,12 @@ public class AnalisadorSintatico
      * É chamado pelo começo do programa, e as sub-rotinas
      * @throws Exception 
      */
-    public void analisaBloco () throws Exception
+    public void analisaBloco (Token func) throws Exception
     {
         proximoToken();
         analisaEtVariaveis();
         analisaSubRotinas();
-        analisaComandos();
+        analisaComandos(func);
     }
     
     /**
@@ -188,22 +188,22 @@ public class AnalisadorSintatico
      * Só começa e termina um escopo
      * @throws Exception 
      */
-    public void analisaComandos() throws Exception
+    public void analisaComandos(Token func) throws Exception
     {
         if(token.simboloToCode() == 2)  //sinicio
         {
             proximoToken();
-            analisaComandoSimples();
+            analisaComandoSimples(func);
             while(token.simboloToCode()!= 3)  //sfim  
             {
                 if(token.simboloToCode() == 20)  //spontovirgula
                 {
-                    // Se encontrar mais de uma atribuição no mesmo bloco vai parar aqui
-                    if(wasFuncAtrib) throw new Exception("Atribuição de fução repetida");
                     proximoToken();
                     if(token.simboloToCode() != 3)  //sfim
                     {
-                        analisaComandoSimples();
+                        // Se encontrar mais de uma atribuição no mesmo bloco vai parar aqui
+                        if(wasFuncAtrib) throw new Exception("Atribuição de função repetida");
+                        analisaComandoSimples(func);
                     }
                 }
                 else
@@ -211,13 +211,16 @@ public class AnalisadorSintatico
                         erro.erroSintatico(token.getLinha(),2);
                 }
             }
-            if(isFunc)
+            if(func != null)
             {
-                if(!wasFuncAtrib)
+                if(semantico.getSimboloType(func).getType().equals("funcInt") || semantico.getSimboloType(func).getType().equals("funcInt"))
                 {
-                    throw new Exception("Último comando não era a atribuição da função");
+                    if(!wasFuncAtrib)
+                    {
+                        throw new Exception("Último comando não era a atribuição da função");
+                    }
+                    wasFuncAtrib = false;
                 }
-                wasFuncAtrib = false;
             }
             proximoToken();
         }
@@ -231,7 +234,7 @@ public class AnalisadorSintatico
      * Chama cada comando conforme o símbolo lido.
      * @throws Exception 
      */
-    public void analisaComandoSimples() throws Exception
+    public void analisaComandoSimples(Token func) throws Exception
     {
         switch (token.simboloToCode())
         {
@@ -239,10 +242,10 @@ public class AnalisadorSintatico
                 analisaAtribChProcedimento();
                 break;
             case 6:    // sse
-                analisaSe();
+                analisaSe(func);
                 break;
             case 9:    //senquanto
-                analisaEnquanto();
+                analisaEnquanto(func);
                 break;
             case 13:    //sleia
                 analisaLeia();
@@ -251,7 +254,7 @@ public class AnalisadorSintatico
                 analisaEscreva();
                 break;
             default:
-                analisaComandos();
+                analisaComandos(func);
                 break;
         }
     }
@@ -269,7 +272,7 @@ public class AnalisadorSintatico
         proximoToken();
         if(token.simboloToCode() == 11)  // satribuicao
         {
-            if(semantico.pesquisaDeclVarTabela(t))
+            if(semantico.pesquisaDeclVarFunc(t))
             {
                 analisaAtribuicao(t);
             }
@@ -431,7 +434,7 @@ public class AnalisadorSintatico
      * Gera os labels para o salto se verdadeiro ou o salto se falso.
      * @throws Exception 
      */
-    public void analisaEnquanto() throws Exception
+    public void analisaEnquanto(Token rotina) throws Exception
     {
         int label1 = semantico.getLabel(), label2 = semantico.getLabel();
         
@@ -450,7 +453,7 @@ public class AnalisadorSintatico
                 //Salto para o label do fim se a condição for falsa
                 GeradorDeCodigo.getInstance().geraComando(Comandos.JMPF, label2);
                 proximoToken();
-                analisaComandoSimples();
+                analisaComandoSimples(rotina);
                 //Salto para o label principal, para validar o while de novo
                 GeradorDeCodigo.getInstance().geraComando(Comandos.JUMP, label2);
                 //Label do fim
@@ -471,7 +474,7 @@ public class AnalisadorSintatico
      * Gera os labels do salto.
      * @throws Exception 
      */
-    public void analisaSe() throws Exception
+    public void analisaSe(Token rotina) throws Exception
     {
         proximoToken();
         semantico.comecaExpressao();
@@ -486,13 +489,13 @@ public class AnalisadorSintatico
             if(token.simboloToCode() == 7)  //sentao
             {
                 proximoToken();
-                analisaComandoSimples();
+                analisaComandoSimples(rotina);
                 GeradorDeCodigo.getInstance().geraComando(Comandos.JUMP, Comandos.Label+""+labelSe);
                 GeradorDeCodigo.getInstance().geraLabel(labelSenao);
                 if(token.simboloToCode() == 8)  //ssenao
                 {
                     proximoToken();
-                    analisaComandoSimples();
+                    analisaComandoSimples(rotina);
                 }
                 GeradorDeCodigo.getInstance().geraLabel(labelSe);
             }
@@ -565,7 +568,7 @@ public class AnalisadorSintatico
                 proximoToken();
                 if(token.simboloToCode() == 20)  //spontovirgula
                 {
-                    analisaBloco();
+                    analisaBloco(null);
                 }
                 else
                 {
@@ -616,9 +619,7 @@ public class AnalisadorSintatico
                         proximoToken();
                         if(token.simboloToCode() == 20)  //spontovirgula
                         {
-                            isFunc = true;//Mexer para garantir que o ultimo comando é atribuição da função
-                            analisaBloco();
-                            isFunc = false;
+                            analisaBloco(func);
                         }
                         else
                         {
@@ -701,7 +702,7 @@ public class AnalisadorSintatico
      * Também adiciona abre e fecha parentesis.
      * @throws Exception 
      */
-    public void analisaFator () throws Exception
+    public void analisaFator() throws Exception
     {
         if(token.simboloToCode() == 17)  //sidentificador
         {
