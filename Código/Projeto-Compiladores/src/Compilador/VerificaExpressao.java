@@ -557,9 +557,7 @@ public class VerificaExpressao {
             {
                 int posPilha = pilha.size() - 1;
                 Token aux = pilha.get(posPilha);
-                if(aux.simboloToCode() == 22)
-                      throw new Exception("Nada entre um abre e fecha parentesis. Expresao invalida");
-                
+                //Pode existir um abre e fecha parentesis sem nenhuma expressão
                 while(pilha.get(posPilha).simboloToCode() != 22) // enquanto não acha o abre parênteses
                 {
                     aux = pilha.remove(posPilha);

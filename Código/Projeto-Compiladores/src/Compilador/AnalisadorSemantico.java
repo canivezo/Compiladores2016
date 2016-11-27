@@ -200,6 +200,7 @@ public class AnalisadorSemantico {
                 }
             }
             tabelaDeSimbolos.excluiSimbolo(count);
+            count--;
         }
         posPilha = posPilha - dealloc;
         GeradorDeCodigo.getInstance().geraComando(Comandos.DALLOC, posPilha, dealloc);
@@ -259,7 +260,7 @@ public class AnalisadorSemantico {
      */
     public void adicionaInvNaExpressao(Token t) throws Exception
     {
-        Token tok = new Token(t.getLexema(), "sinv", t.getLinha());
+        Token tok = new Token("sinv", t.getLexema(), t.getLinha());
         exp.adicionaOperadorNaExpressao(tok);
     }
     

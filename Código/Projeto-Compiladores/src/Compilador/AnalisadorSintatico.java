@@ -53,6 +53,7 @@ public class AnalisadorSintatico
                     analisaBloco();
                     if(token.simboloToCode() == 19)  //sponto
                     {
+                        semantico.finalizaEscopo();
                         GeradorDeCodigo.getInstance().geraComando(Comandos.DALLOC, 0, 1);
                         GeradorDeCodigo.getInstance().geraComando(Comandos.HALT);
                         System.out.println("Sucesso!");
@@ -353,7 +354,7 @@ public class AnalisadorSintatico
                     throw new Exception("sidentificador nao encontrado");
                 }
                 GeradorDeCodigo.getInstance().geraComando(Comandos.RD);
-                GeradorDeCodigo.getInstance().geraComando(Comandos.STR, Comandos.Label+""+semantico.getSimboloType(token).getInfo());
+                GeradorDeCodigo.getInstance().geraComando(Comandos.STR, semantico.getSimboloType(token).getInfo());
                 proximoToken();
                 if(token.simboloToCode() == 23)  //sfechaparenteses
                 {
@@ -403,6 +404,7 @@ public class AnalisadorSintatico
                     {
                         GeradorDeCodigo.getInstance().geraComando(Comandos.LDV, semantico.getSimboloType(token).getInfo());
                     }
+                    GeradorDeCodigo.getInstance().geraComando(Comandos.PRINT);
                 }
                 proximoToken();
                 if(token.simboloToCode() == 23)  //sfechaparenteses
