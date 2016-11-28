@@ -451,11 +451,11 @@ public class AnalisadorSintatico
             if(token.simboloToCode() == 10) //sfaca
             {
                 //Salto para o label do fim se a condição for falsa
-                GeradorDeCodigo.getInstance().geraComando(Comandos.JMPF, label2);
+                GeradorDeCodigo.getInstance().geraComando(Comandos.JMPF, Comandos.Label+""+label2);
                 proximoToken();
                 analisaComandoSimples(rotina);
                 //Salto para o label principal, para validar o while de novo
-                GeradorDeCodigo.getInstance().geraComando(Comandos.JUMP, label2);
+                GeradorDeCodigo.getInstance().geraComando(Comandos.JUMP, Comandos.Label+""+label2);
                 //Label do fim
                 GeradorDeCodigo.getInstance().geraLabel(label2);
             }
@@ -523,7 +523,7 @@ public class AnalisadorSintatico
             flag = 1;
             //Pega um label para pular a rotina
             label = semantico.getLabel();
-            GeradorDeCodigo.getInstance().geraComando(Comandos.JUMP, label);
+            GeradorDeCodigo.getInstance().geraComando(Comandos.JUMP, Comandos.Label+""+label);
         }
         while((token.simboloToCode() == 4) || (token.simboloToCode() == 5))  //sprocedimento ou sfuncao
         {
