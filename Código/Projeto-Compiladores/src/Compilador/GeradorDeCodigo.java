@@ -82,7 +82,7 @@ public class GeradorDeCodigo {
             out.close();
 	}
 
-        private Exception Exception() 
+        private Exception exception() 
         {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }

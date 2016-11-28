@@ -18,7 +18,6 @@ public class AnalisadorSintatico
     private int finalDoVetor = 0;
     private AnalisadorLexical lexico;
     private AnalisadorSemantico semantico;
-    private boolean isFunc = false;
     private boolean wasFuncAtrib = false;
     /**
      * Recebe o caminho do arquivo e começa a compilação.
@@ -87,7 +86,7 @@ public class AnalisadorSintatico
      * É chamado pelo começo do programa, e as sub-rotinas
      * @throws Exception 
      */
-    public void analisaBloco (Token func) throws Exception
+    private void analisaBloco (Token func) throws Exception
     {
         proximoToken();
         analisaEtVariaveis();
@@ -99,7 +98,7 @@ public class AnalisadorSintatico
      * Função que lê as variáveis.
      * @throws Exception 
      */
-    public void analisaEtVariaveis() throws Exception
+    private void analisaEtVariaveis() throws Exception
     {
         if(token.simboloToCode() == 14) //svar
         {
@@ -131,7 +130,7 @@ public class AnalisadorSintatico
      * Aqui são adicionasdas todas as variáveis no semântico.
      * @throws Exception 
      */
-    public void analisaVariaveis() throws Exception
+    private void analisaVariaveis() throws Exception
     {
         do
         {
@@ -171,7 +170,7 @@ public class AnalisadorSintatico
      * que foram adicionadas anteriormente.
      * @throws Exception 
      */
-    public void analisaTipo() throws Exception
+    private void analisaTipo() throws Exception
     {
         if((token.simboloToCode() != 15) && (token.simboloToCode() != 16))  //sinteiro e sbooleano
         {
@@ -188,7 +187,7 @@ public class AnalisadorSintatico
      * Só começa e termina um escopo
      * @throws Exception 
      */
-    public void analisaComandos(Token func) throws Exception
+    private void analisaComandos(Token func) throws Exception
     {
         if(token.simboloToCode() == 2)  //sinicio
         {
@@ -234,7 +233,7 @@ public class AnalisadorSintatico
      * Chama cada comando conforme o símbolo lido.
      * @throws Exception 
      */
-    public void analisaComandoSimples(Token func) throws Exception
+    private void analisaComandoSimples(Token func) throws Exception
     {
         switch (token.simboloToCode())
         {
@@ -265,7 +264,7 @@ public class AnalisadorSintatico
      * Gera um str no endereço de memória dele.
      * @throws Exception 
      */
-    public void analisaAtribChProcedimento() throws Exception   
+    private void analisaAtribChProcedimento() throws Exception   
     {
         //Simbolo onde ocorre o STR, ou o label da chamada de proc
         Token t = token;
@@ -292,7 +291,7 @@ public class AnalisadorSintatico
      * @param t
      * @throws Exception 
      */
-    public void analisaAtribuicao(Token t) throws Exception
+    private void analisaAtribuicao(Token t) throws Exception
     {
         //Verificar se a atribuição é válida
         proximoToken();
@@ -344,7 +343,7 @@ public class AnalisadorSintatico
      * Gera o rd e dá um str no endereço da variável.
      * @throws Exception 
      */
-    public void analisaLeia() throws Exception
+    private void analisaLeia() throws Exception
     {
         proximoToken();
         if(token.simboloToCode() == 22)  // sabreparenteses
@@ -384,7 +383,7 @@ public class AnalisadorSintatico
      * Gera um LDV ou um CALL e LDV 0 (Esses comandos quem gera é o aanalisaChamadaDeFunc) e gera o comando de escrita da MV.
      * @throws Exception 
      */
-    public void analisaEscreva() throws Exception
+    private void analisaEscreva() throws Exception
     {
         proximoToken();
         if(token.simboloToCode() == 22)  //sabreparenteses
@@ -434,7 +433,7 @@ public class AnalisadorSintatico
      * Gera os labels para o salto se verdadeiro ou o salto se falso.
      * @throws Exception 
      */
-    public void analisaEnquanto(Token rotina) throws Exception
+    private void analisaEnquanto(Token rotina) throws Exception
     {
         int label1 = semantico.getLabel(), label2 = semantico.getLabel();
         
@@ -474,7 +473,7 @@ public class AnalisadorSintatico
      * Gera os labels do salto.
      * @throws Exception 
      */
-    public void analisaSe(Token rotina) throws Exception
+    private void analisaSe(Token rotina) throws Exception
     {
         proximoToken();
         semantico.comecaExpressao();
@@ -514,7 +513,7 @@ public class AnalisadorSintatico
      * Gera os labels de salto para a rotina onde está sendo declarada essa rotina.
      * @throws Exception 
      */
-    public void analisaSubRotinas() throws Exception
+    private void analisaSubRotinas() throws Exception
     {
         int flag = 0;
         int label = 0;
@@ -554,7 +553,7 @@ public class AnalisadorSintatico
      * 
      * @throws Exception 
      */
-    public void analisaDeclaracaoProcedimento() throws Exception
+    private void analisaDeclaracaoProcedimento() throws Exception
     {
         proximoToken();
         if(token.simboloToCode() == 17)  //sidentificador
@@ -594,7 +593,7 @@ public class AnalisadorSintatico
      * 
      * @throws Exception 
      */
-    public void analisaDeclaracaoFuncao() throws Exception
+    private void analisaDeclaracaoFuncao() throws Exception
     {
         proximoToken();
         if(token.simboloToCode() == 17)  //sidentificador
@@ -648,7 +647,7 @@ public class AnalisadorSintatico
      * Apenas passa a responsabilidade para ae funções de analise de expressão.
      * @throws Exception 
      */
-    public void analisaExpressao() throws Exception
+    private void analisaExpressao() throws Exception
     {
         analisaExpressaoSimples();
         // smaior ou smaiorig ou sig ou smenor ou smenorig ou sdif
@@ -664,7 +663,7 @@ public class AnalisadorSintatico
      * Deve adicionar os operadores na tabela de símbolos.
      * @throws Exception 
      */
-    public void analisaExpressaoSimples() throws Exception
+    private void analisaExpressaoSimples() throws Exception
     {
         if((token.simboloToCode() == 30) || (token.simboloToCode() == 31))  //smais ou smenos
         {
@@ -686,7 +685,7 @@ public class AnalisadorSintatico
      * Deve adicionar os operadores na tabela de simbolos.
      * @throws Exception 
      */
-    public void analisaTermo() throws Exception
+    private void analisaTermo() throws Exception
     {
         analisaFator();
         while((token.simboloToCode() == 32) || (token.simboloToCode() == 33) || (token.simboloToCode() == 34))  //smult ou sdiv ou se
@@ -702,7 +701,7 @@ public class AnalisadorSintatico
      * Também adiciona abre e fecha parentesis.
      * @throws Exception 
      */
-    public void analisaFator() throws Exception
+    private void analisaFator() throws Exception
     {
         if(token.simboloToCode() == 17)  //sidentificador
         {
@@ -776,7 +775,7 @@ public class AnalisadorSintatico
      * Recebe o sidentificador para pesquisar na tabela de simbolos
      * @param t 
      */
-    public void analisaChamadaProcedimento(Token t) throws Exception
+    private void analisaChamadaProcedimento(Token t) throws Exception
     {
         if(semantico.pesquisaDeclProc(t))
         {
@@ -793,7 +792,7 @@ public class AnalisadorSintatico
      * O geraExp que vai gerar o call e o LDV 0
      * @throws Exception 
      */
-    public void analisaChamadaFuncao() throws Exception
+    private void analisaChamadaFuncao() throws Exception
     {
         semantico.adicionaFatorNaExpressao(token);
         proximoToken();
