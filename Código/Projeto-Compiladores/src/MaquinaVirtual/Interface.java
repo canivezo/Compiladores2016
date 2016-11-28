@@ -341,7 +341,6 @@ public class Interface extends javax.swing.JFrame {
             {
                 if(bp)
                     break;
-                
                 processador.runInstruction();
                 tabelaInstrucao.setSelectionBackground(Color.lightGray);
                 tabelaInstrucao.setRowSelectionInterval(processador.m_instrucao-1, processador.m_instrucao-1);
@@ -371,6 +370,7 @@ public class Interface extends javax.swing.JFrame {
     private void botaoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoContinuarActionPerformed
         if(urlArquivo != null)
         {
+            textoBreak.setEditable(false);
             if(!processador.isFim())
             {
                 botaoBreak.setEnabled(false);
@@ -385,6 +385,8 @@ public class Interface extends javax.swing.JFrame {
             else
             {
                 botaoContinuar.setEnabled(false);
+                botaoBreak.setEnabled(false);
+                BotaoExecutarArqv.setEnabled(false);
                 JOptionPane.showMessageDialog(null, "Compilação chegou ao fim!", "Alerta", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -397,7 +399,6 @@ public class Interface extends javax.swing.JFrame {
         {
             int i = 0;
             textoBreak.setEditable(false);
-            System.out.println(breakp.get(0));
             while(processador.getInstrucoes().size() > i || !processador.isFim())
             {
                 processador.runInstruction();
@@ -408,6 +409,9 @@ public class Interface extends javax.swing.JFrame {
                 i++;
             }
             botaoContinuar.setEnabled(false);
+            botaoBreak.setEnabled(false);
+            BotaoExecutarArqv.setEnabled(false);
+            JOptionPane.showMessageDialog(null, "Compilação chegou ao fim!", "Alerta", JOptionPane.ERROR_MESSAGE);
         }
         else
            JOptionPane.showMessageDialog(null, "Abra um arquivo fonte antes de compilar", "Erro de Caminho", JOptionPane.ERROR_MESSAGE);
@@ -498,6 +502,10 @@ public class Interface extends javax.swing.JFrame {
             zerarSaida();
             botaoContinuar.setEnabled(true);
             botaoBreak.setEnabled(true);
+            BotaoExecutarArqv.setEnabled(true);
+            textoBreak.setEditable(true);
+            textoBreak.setText("Digite as linhas de Break Point separadas por espaço.");
+            primeiroClk = 0;
             while(i < processador.getInstrucoes().size())
             {
                 switch(nomeInstrucao.getInstructionType(processador.getInstrucoes().get(i).getInstrucao()))
