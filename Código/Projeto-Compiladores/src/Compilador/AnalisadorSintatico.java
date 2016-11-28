@@ -79,7 +79,7 @@ public class AnalisadorSintatico
             System.out.println("Simbolo: "+token.getSimbolo()+" Lexema: "+token.getLexema()+ "  linha: "+token.getLinha());
         }
         else
-            throw new Exception("Erro, Final do vetor de tokens atingido.");
+            erro.erroSemantico(token.getLinha(),17);
     }
     
     /**
@@ -201,7 +201,7 @@ public class AnalisadorSintatico
                     if(token.simboloToCode() != 3)  //sfim
                     {
                         // Se encontrar mais de uma atribuição no mesmo bloco vai parar aqui
-                        if(wasFuncAtrib) throw new Exception("Atribuição de função repetida");
+                        if(wasFuncAtrib) erro.erroSemantico(token.getLinha(),18);
                         analisaComandoSimples(func);
                     }
                 }
@@ -216,7 +216,7 @@ public class AnalisadorSintatico
                 {
                     if(!wasFuncAtrib)
                     {
-                        throw new Exception("Último comando não era a atribuição da função");
+                        erro.erroSemantico(token.getLinha(),19);
                     }
                     wasFuncAtrib = false;
                 }
@@ -276,7 +276,7 @@ public class AnalisadorSintatico
                 analisaAtribuicao(t);
             }
             else
-                throw new Exception("Var não existe");
+                erro.erroSemantico(token.getLinha(),20);
         }
         else
         {            
@@ -312,7 +312,7 @@ public class AnalisadorSintatico
                 }
                 else
                 {
-                    throw new Exception("Tipo da Expressão inválida");
+                    erro.erroSemantico(token.getLinha(),21);
                 }
             }
         }
@@ -333,7 +333,7 @@ public class AnalisadorSintatico
                 }
                 else
                 {
-                    throw new Exception("Tipo da Expressão inválida");
+                    erro.erroSemantico(token.getLinha(),22);
                 }
             }
         }
@@ -353,7 +353,7 @@ public class AnalisadorSintatico
             {
                 if(!semantico.pesquisaDeclVarTabela(token))
                 {
-                    throw new Exception("sidentificador nao encontrado");
+                    erro.erroSemantico(token.getLinha(),23);
                 }
                 GeradorDeCodigo.getInstance().geraComando(Comandos.RD);
                 GeradorDeCodigo.getInstance().geraComando(Comandos.STR, semantico.getSimboloType(token).getInfo());
@@ -393,7 +393,7 @@ public class AnalisadorSintatico
             {
                 if(!semantico.pesquisaDeclVarFunc(token))
                 {
-                    throw new Exception("Identificador não existe");
+                    erro.erroSemantico(token.getLinha(),24);
                 }
                 else
                 {
@@ -465,7 +465,7 @@ public class AnalisadorSintatico
         }
         else
         {
-            throw new Exception("Expressao invalida, nao e booleana");
+            erro.erroSemantico(token.getLinha(),25);
         }
     }
     
@@ -505,7 +505,7 @@ public class AnalisadorSintatico
         }
         else
         {
-            throw new Exception("Expressã não é booleana");
+            erro.erroSemantico(token.getLinha(),26);
         }
     }
     
@@ -576,7 +576,7 @@ public class AnalisadorSintatico
             }
             else
             {
-                throw new Exception("Sidentificador invalido, var no declarada");
+                erro.erroSemantico(token.getLinha(),27);
             }
         }
         else
@@ -630,7 +630,7 @@ public class AnalisadorSintatico
             }
             else
             {
-                throw new Exception("Sidentificador invalido, funcao já existe");
+                erro.erroSemantico(token.getLinha(),28);
             }
         }
         else
@@ -718,7 +718,7 @@ public class AnalisadorSintatico
             }
             else
             {
-                throw new Exception("Sidentificador invalido");
+                erro.erroSemantico(token.getLinha(),29);
             }
         }
         else
@@ -782,7 +782,7 @@ public class AnalisadorSintatico
         }
         else
         {
-            throw new Exception("Sidentificador invalido, procedimento nao encontrado");
+            erro.erroSemantico(token.getLinha(),30);
         }
     }
     

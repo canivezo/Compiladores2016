@@ -79,6 +79,34 @@ public class Erro
                return "Erro, palavra não pertence a linguagem.";
            case 16:
                return "Posicao invalida";
+           case 17:
+               return "Erro, Final do vetor de tokens atingido.";
+           case 18:
+               return "Atribuição de função repetida";
+           case 19:
+               return "Último comando não era a atribuição da função";
+           case 20:
+               return "Var não existe";
+           case 21:
+               return "Tipo da Expressão inválida";
+           case 22:
+               return "Tipo da Expressão inválida";
+           case 23:
+               return "Sidentificador não encontrado";
+           case 24:
+               return "Identificador não existe";
+           case 25:
+               return "Expressao inválida, não é booleana";
+           case 26:
+               return "Expressã não é booleana";
+           case 27:
+               return "Sidentificador inválido, var não declarada";
+           case 28:
+               return "Sidentificador inválido, função já existe";
+           case 29:
+               return "Sidentificador inválido";
+           case 30:
+               return "Sidentificador inválido, procedimento não encontrado";
        }
        return "Erro nao encontrado";
    }
