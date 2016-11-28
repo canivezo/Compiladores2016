@@ -573,7 +573,6 @@ public class AnalisadorSintatico
                 {
                     erro.erroSintatico(token.getLinha(),2);
                 }
-                GeradorDeCodigo.getInstance().geraComando(Comandos.RETURN);
             }
             else
             {
