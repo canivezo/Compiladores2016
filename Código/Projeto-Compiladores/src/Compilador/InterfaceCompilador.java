@@ -52,7 +52,6 @@ public class InterfaceCompilador extends javax.swing.JFrame {
         saidaTexto = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         barraDeMenu = new javax.swing.JMenuBar();
         menu = new javax.swing.JMenu();
         fileChooser = new javax.swing.JMenuItem();
@@ -83,9 +82,6 @@ public class InterfaceCompilador extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
         jLabel2.setText("Editor de texto");
-
-        jLabel3.setFont(new java.awt.Font("Century Gothic", 1, 34)); // NOI18N
-        jLabel3.setText("Compilador");
 
         menu.setText("Arquivo");
         menu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -120,21 +116,17 @@ public class InterfaceCompilador extends javax.swing.JFrame {
                                 .addGap(321, 321, 321)
                                 .addComponent(jLabel1))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(275, 275, 275)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(261, 261, 261)
-                        .addComponent(jLabel3))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(299, 299, 299)
-                        .addComponent(botaoCompilar)))
+                        .addComponent(botaoCompilar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(275, 275, 275)
+                        .addComponent(jLabel2)))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(19, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -260,7 +252,6 @@ public class InterfaceCompilador extends javax.swing.JFrame {
     private javax.swing.JMenuItem fileChooser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenu menu;

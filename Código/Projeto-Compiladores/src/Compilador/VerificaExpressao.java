@@ -220,6 +220,7 @@ public class VerificaExpressao {
                         break;
                     case 36:
                         GeradorDeCodigo.getInstance().geraComando(Comandos.NEG);
+                        break;
                     default:
                         throw Exception("Inválido");
                 }
@@ -455,7 +456,7 @@ public class VerificaExpressao {
                     }
                     break;
                 case 36:    //Not
-                    if(tipo.get(tipoPos) != 0)
+                    if(tipo.get(tipoPos) == 0)
                     {
                         throw new Exception("Expressão inválida");
                     }

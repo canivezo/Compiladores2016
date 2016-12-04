@@ -200,8 +200,8 @@ public class AnalisadorSintatico
                     proximoToken();
                     if(token.simboloToCode() != 3)  //sfim
                     {
-                        // Se encontrar mais de uma atribuição no mesmo bloco vai parar aqui
-                        if(wasFuncAtrib) erro.erroSemantico(token.getLinha(),18);
+                        // Se encontrar mais de uma atribuição no mesmo bloco deveria parar aqui
+                        //if(wasFuncAtrib) erro.erroSemantico(token.getLinha(),18);
                         analisaComandoSimples(func);
                     }
                 }
@@ -218,7 +218,7 @@ public class AnalisadorSintatico
                     {
                         erro.erroSemantico(token.getLinha(),19);
                     }
-                    wasFuncAtrib = false;
+                    wasFuncAtrib = true;
                 }
             }
             proximoToken();
